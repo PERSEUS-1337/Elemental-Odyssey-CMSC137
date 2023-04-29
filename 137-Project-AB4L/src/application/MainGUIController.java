@@ -28,7 +28,8 @@ public class MainGUIController {
 
     @FXML
     void onExitButtonClicked(ActionEvent event) {
-
+        // When the exit button is clicked, the program will close
+        System.exit(0);
     }
 
     @FXML
