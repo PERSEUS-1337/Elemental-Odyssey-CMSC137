@@ -32,6 +32,7 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToolBar?>
@@ -56,7 +57,7 @@
                         <Font name="Goudy Old Style Bold" size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnJoin" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#onJoinButtonClicked" prefHeight="30.0" prefWidth="105.0" text="Instructions">
+                  <Button fx:id="btnInstructons" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#onInstructionsButtonClicked" prefHeight="30.0" prefWidth="105.0" text="Instructions">
                      <font>
                         <Font name="Goudy Old Style" size="15.0" />
                      </font>
@@ -82,6 +83,9 @@
                </effect>
             </ToolBar>
       </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
     </AnchorPane>
   </children>
 </VBox>

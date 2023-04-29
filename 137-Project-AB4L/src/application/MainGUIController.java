@@ -20,7 +20,7 @@ public class MainGUIController {
     private Button btnExit;
 
     @FXML
-    private Button btnJoin;
+    private Button btnInstructons;
 
     @FXML
     private Button btnPlay;
@@ -44,8 +44,8 @@ public class MainGUIController {
     }
 
     @FXML
-    void onJoinButtonClicked(ActionEvent event) {
-        System.out.println("Join Button Clicked");
+    void onInstructionsButtonClicked(ActionEvent event) {
+        System.out.println("Instructions Button Clicked");
     }
 
     @FXML
