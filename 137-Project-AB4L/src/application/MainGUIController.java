@@ -59,6 +59,9 @@ public class MainGUIController {
     @FXML
     void onSettingsButtonClicked(ActionEvent event) {
         System.out.println("Settings Button Clicked");
+
+        // When the settings button is clicked, the Settings Stage will be loaded
+        this.loadSettingsStage();
     }
 
     // Method to load the Game Mode Controller
@@ -94,6 +97,26 @@ public class MainGUIController {
             aboutStage.setTitle("About Us");
             aboutStage.setScene(scene);
             aboutStage.show();
+
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Method to load the Settings Stage
+    private void loadSettingsStage() {
+        try {
+
+            Parent root = FXMLLoader.load(getClass().getResource("/views/SettingsStage.fxml"));
+            Scene scene = new Scene(root);
+
+            Stage settingsStage = new Stage();
+            settingsStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
+            settingsStage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
+            settingsStage.setTitle("Settings");
+            settingsStage.setScene(scene);
+            settingsStage.show();
 
             
         } catch (IOException e) {
