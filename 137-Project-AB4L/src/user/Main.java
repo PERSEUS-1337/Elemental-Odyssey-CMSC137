@@ -21,6 +21,7 @@ public class Main extends Application {
             Parent root = FXMLLoader.load(getClass().getResource("/views/MainGUI.fxml"));
             Scene scene = new Scene(root);
 
+            mainStage.setResizable(false); // Disables the ability to resize the window
             mainStage.setTitle("Harmony of the Elements");
             mainStage.setScene(scene);
             mainStage.show();
