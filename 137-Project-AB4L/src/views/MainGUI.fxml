@@ -56,12 +56,12 @@
                         <Font name="Goudy Old Style Bold" size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnJoin" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#onJoinButtonClicked" prefHeight="30.0" prefWidth="105.0" text="Join">
+                  <Button fx:id="btnJoin" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#onJoinButtonClicked" prefHeight="30.0" prefWidth="105.0" text="Instructions">
                      <font>
                         <Font name="Goudy Old Style" size="15.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnAbout" layoutX="66.0" layoutY="12.0" mnemonicParsing="false" onAction="#onAboutButtonClicked" prefHeight="30.0" prefWidth="105.0" text="About">
+                  <Button fx:id="btnAbout" layoutX="66.0" layoutY="12.0" mnemonicParsing="false" onAction="#onAboutButtonClicked" prefHeight="30.0" prefWidth="105.0" text="About Us">
                      <font>
                         <Font name="Goudy Old Style" size="15.0" />
                      </font>
