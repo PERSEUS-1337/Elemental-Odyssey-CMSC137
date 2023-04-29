@@ -31,6 +31,9 @@ public class MainGUIController {
     @FXML
     void onAboutButtonClicked(ActionEvent event) {
         System.out.println("About Us Button Clicked");
+
+        // When the about button is clicked, the About Stage will be loaded
+        this.loadAboutStage();
     }
 
     @FXML
@@ -53,6 +56,11 @@ public class MainGUIController {
         this.loadGameMode();
     }
 
+    @FXML
+    void onSettingsButtonClicked(ActionEvent event) {
+        System.out.println("Settings Button Clicked");
+    }
+
     // Method to load the Game Mode Controller
     private void loadGameMode() {
         try {
@@ -73,9 +81,24 @@ public class MainGUIController {
         }
     }
 
-    @FXML
-    void onSettingsButtonClicked(ActionEvent event) {
-        System.out.println("Settings Button Clicked");
+    // Method to load the About Stage
+    private void loadAboutStage() {
+        try {
+
+            Parent root = FXMLLoader.load(getClass().getResource("/views/AboutStage.fxml"));
+            Scene scene = new Scene(root);
+
+            Stage aboutStage = new Stage();
+            aboutStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
+            aboutStage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
+            aboutStage.setTitle("About Us");
+            aboutStage.setScene(scene);
+            aboutStage.show();
+
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
