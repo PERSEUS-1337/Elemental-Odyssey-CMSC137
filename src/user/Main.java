@@ -2,6 +2,8 @@
 // Players are forced to work together in order to accomplish the puzzles. The concept and levels will be heavily 
 // influenced by Fireboy and Watergirl.
 
+package user;
+
 import java.io.IOException;
 
 import javafx.application.Application;
