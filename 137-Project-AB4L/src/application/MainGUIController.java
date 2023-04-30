@@ -39,8 +39,23 @@ public class MainGUIController {
     @FXML
     void onExitButtonClicked(ActionEvent event) {
         System.out.println("Exit Button Clicked");
-        // When the exit button is clicked, the program will close
-        System.exit(0);
+        // When the exit button is clicked, the Exit Stage will be loaded
+        try {
+
+            Parent root = FXMLLoader.load(getClass().getResource("/views/ExitStage.fxml"));
+            Scene scene = new Scene(root);
+
+            Stage exitStage = new Stage();
+            exitStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
+            exitStage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
+            exitStage.setTitle("Exit");
+            exitStage.setScene(scene);
+            exitStage.show();
+
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
