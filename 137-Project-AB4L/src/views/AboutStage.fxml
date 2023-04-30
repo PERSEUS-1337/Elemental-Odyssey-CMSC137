@@ -5,34 +5,48 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AboutStage">
    <children>
       <AnchorPane prefHeight="430.0" prefWidth="600.0">
          <children>
-            <Label layoutX="188.0" layoutY="35.0" text="About the Developers">
+            <Label layoutX="140.0" layoutY="36.0" text="About the Developers">
                <font>
-                  <Font name="Goudy Old Style" size="26.0" />
+                  <Font name="Goudy Old Style Bold" size="36.0" />
                </font>
             </Label>
-            <Label layoutX="199.0" layoutY="121.0" text="Malazarte, Elijah Gabriel ">
+            <Label layoutX="224.0" layoutY="227.0" text="Malazarte, Elijah Gabriel ">
                <font>
-                  <Font name="Goudy Old Style" size="20.0" />
+                  <Font name="Goudy Old Style" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="242.0" layoutY="159.0" text="Paguila, Ethan">
+            <Label layoutX="255.0" layoutY="262.0" text="Paguila, Ethan">
                <font>
-                  <Font name="Goudy Old Style" size="20.0" />
+                  <Font name="Goudy Old Style" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="209.0" layoutY="200.0" text="Ramillano, Aron Resty">
+            <Label layoutX="225.0" layoutY="300.0" text="Ramillano, Aron Resty">
                <font>
-                  <Font name="Goudy Old Style" size="20.0" />
+                  <Font name="Goudy Old Style" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="208.0" layoutY="241.0" text="Topinio, Mark Genesis">
+            <Label layoutX="225.0" layoutY="336.0" text="Topinio, Mark Genesis">
                <font>
-                  <Font name="Goudy Old Style" size="20.0" />
+                  <Font name="Goudy Old Style" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="35.0" layoutY="88.0" prefHeight="66.0" prefWidth="550.0" text="                    We are students of the University of the Philippines Los Baños taking BS Computer Science. This game serves as a final project requirement in CMSC 137 Data Communications and Networking. Please enjoy our game!" wrapText="true">
+               <font>
+                  <Font name="Goudy Old Style" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="36.0" layoutY="80.0" text="Hello!">
+               <font>
+                  <Font name="Goudy Old Style Bold" size="29.0" />
+               </font>
+            </Label>
+            <Label layoutX="215.0" layoutY="177.0" text="Meet the Devs!">
+               <font>
+                  <Font name="Goudy Old Style Bold" size="30.0" />
                </font>
             </Label>
          </children>
