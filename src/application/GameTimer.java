@@ -9,7 +9,7 @@ import javafx.scene.input.KeyEvent;
 public class GameTimer extends AnimationTimer {
     private GraphicsContext gc;
 	private Scene theScene;
-	private WoodenSprite woodenSprite;
+	private WoodSprite woodSprite;
 
     /*
      * TO ADD:
@@ -29,7 +29,7 @@ public class GameTimer extends AnimationTimer {
          *  Instantiating the timers
          */
 
-        this.woodenSprite = new WoodenSprite("WoodenSprite",190,670);
+        this.woodSprite = new WoodSprite("WoodSprite",190,670);
 
 		//call method to handle mouse click event
 		this.handleKeyPressEvent();
@@ -47,7 +47,7 @@ public class GameTimer extends AnimationTimer {
          *  Timer handling for spawning and despawn
          */
 
-         this.woodenSprite.move();
+         this.woodSprite.move();
 
          /*
          * TO ADD:
@@ -56,14 +56,14 @@ public class GameTimer extends AnimationTimer {
 
 
          //render the sprite
-		this.woodenSprite.render(this.gc);
+		this.woodSprite.render(this.gc);
 
         /*
          * TO ADD:
          *  Rendering other sprites
          */
 
-         // Printing WoodenSprite Details
+         // Printing WoodSprite Details
         this.printSpriteDetails();
 
      } // end of handle method
@@ -89,28 +89,28 @@ public class GameTimer extends AnimationTimer {
 
     //method that will move the sprite depending on the key pressed
 	private void moveMySprite(KeyCode ke) {
-		if(ke==KeyCode.UP || ke==KeyCode.W) this.woodenSprite.setDY(-10);
+		if(ke==KeyCode.UP || ke==KeyCode.W) this.woodSprite.setDY(-10);
 
-		if(ke==KeyCode.LEFT || ke==KeyCode.A) this.woodenSprite.setDX(-10);
+		if(ke==KeyCode.LEFT || ke==KeyCode.A) this.woodSprite.setDX(-10);
 
-		if(ke==KeyCode.DOWN || ke==KeyCode.S) this.woodenSprite.setDY(10);
+		if(ke==KeyCode.DOWN || ke==KeyCode.S) this.woodSprite.setDY(10);
 
-		if(ke==KeyCode.RIGHT || ke==KeyCode.D) this.woodenSprite.setDX(10);
+		if(ke==KeyCode.RIGHT || ke==KeyCode.D) this.woodSprite.setDX(10);
 
    	}
 
     //method that will stop the sprite's movement; set the sprite's DX and DY to 0.
 	private void stopMySprite(KeyCode ke){
-		this.woodenSprite.setDX(0);
-		this.woodenSprite.setDY(0);
+		this.woodSprite.setDX(0);
+		this.woodSprite.setDY(0);
 		// if(ke==KeyCode.SPACE) this.mySpriteShoot(ke);
 	}
 
     //method to print out the details of the sprite
     private void printSpriteDetails(){
         System.out.println("=============== SPRITE DETAILS ==============");
-        System.out.println("WoodenSprite X-coordinate:"+this.woodenSprite.getX());
-        System.out.println("WoodenSprite Y-coordinate:"+this.woodenSprite.getY());
+        System.out.println("WoodSprite X-coordinate:"+this.woodSprite.getX());
+        System.out.println("WoodSprite Y-coordinate:"+this.woodSprite.getY());
     }
     
 }

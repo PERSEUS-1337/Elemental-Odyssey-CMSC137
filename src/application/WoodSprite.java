@@ -4,19 +4,19 @@ import javafx.scene.image.Image;
 
 
 
-public class WoodenSprite extends Sprite{
+public class WoodSprite extends Sprite{
 	private String name;
 
-	public final static Image SPRITE_IMAGE = new Image("assets/WoodSprite_Idle.gif",WoodenSprite.SPRITE_WIDTH*0.70,WoodenSprite.SPRITE_WIDTH,false,false);
+	public final static Image SPRITE_IMAGE = new Image("assets/WoodSprite_Idle.gif",WoodSprite.SPRITE_WIDTH*0.70,WoodSprite.SPRITE_WIDTH,false,false);
 	public final static int SPRITE_WIDTH = 50;
 	public final static int MAX_SPRITE_STRENGTH = 150;
 	public final static int MIN_SPRITE_STRENGTH = 100;
 
-	public WoodenSprite(String name, int x, int y){
+	public WoodSprite(String name, int x, int y){
 		super(x,y);
 		this.name = name;
 
-		this.loadImage(WoodenSprite.SPRITE_IMAGE);
+		this.loadImage(WoodSprite.SPRITE_IMAGE);
 	}
 
 
