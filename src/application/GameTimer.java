@@ -110,25 +110,25 @@ public class GameTimer extends AnimationTimer {
 
     //method that will move the sprite depending on the key pressed
 	private void moveMySprite(KeyCode ke) {
-		if(ke==KeyCode.W) this.woodSprite.setDY(-10);
-		if(ke==KeyCode.A) this.woodSprite.setDX(-10);
-		if(ke==KeyCode.S) this.woodSprite.setDY(10);
-		if(ke==KeyCode.D) this.woodSprite.setDX(10);
+		if(ke==KeyCode.W) this.woodSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
+		if(ke==KeyCode.A) this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+		if(ke==KeyCode.S) this.woodSprite.setDY(PlayerSprite.MOVE_DISTANCE);
+		if(ke==KeyCode.D) this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
 
-        if(ke==KeyCode.T) this.slimeSprite.setDY(-10);
-		if(ke==KeyCode.F) this.slimeSprite.setDX(-10);
-		if(ke==KeyCode.G) this.slimeSprite.setDY(10);
-		if(ke==KeyCode.H) this.slimeSprite.setDX(10);
+        if(ke==KeyCode.T) this.slimeSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
+		if(ke==KeyCode.F) this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+		if(ke==KeyCode.G) this.slimeSprite.setDY(PlayerSprite.MOVE_DISTANCE);
+		if(ke==KeyCode.H) this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE);
 
-        if(ke==KeyCode.I) this.candySprite.setDY(-10);
-		if(ke==KeyCode.J) this.candySprite.setDX(-10);
-		if(ke==KeyCode.K) this.candySprite.setDY(10);
-		if(ke==KeyCode.L) this.candySprite.setDX(10);
+        if(ke==KeyCode.I) this.candySprite.setDY(-PlayerSprite.MOVE_DISTANCE);
+		if(ke==KeyCode.J) this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+		if(ke==KeyCode.K) this.candySprite.setDY(PlayerSprite.MOVE_DISTANCE);
+		if(ke==KeyCode.L) this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE);
 
-        if(ke==KeyCode.UP) this.iceSprite.setDY(-10);
-        if(ke==KeyCode.LEFT) this.iceSprite.setDX(-10);
-		if(ke==KeyCode.DOWN) this.iceSprite.setDY(10);
-		if(ke==KeyCode.RIGHT) this.iceSprite.setDX(10);
+        if(ke==KeyCode.UP) this.iceSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
+        if(ke==KeyCode.LEFT) this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+		if(ke==KeyCode.DOWN) this.iceSprite.setDY(PlayerSprite.MOVE_DISTANCE);
+		if(ke==KeyCode.RIGHT) this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE);
 
    	}
 

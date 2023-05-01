@@ -6,6 +6,7 @@ import sprites.Sprite;
 public class PlayerSprite extends Sprite {
     protected String name;
 
+    public final static int MOVE_DISTANCE = 5;
     public final static int MAX_SPRITE_STRENGTH = 150;
 	public final static int MIN_SPRITE_STRENGTH = 100;
 
