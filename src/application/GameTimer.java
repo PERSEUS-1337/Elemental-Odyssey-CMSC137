@@ -1,5 +1,6 @@
 package application;
 import sprites.*;
+import sprites.objects.TerrainSprite;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -14,6 +15,7 @@ public class GameTimer extends AnimationTimer {
     private SlimeSprite slimeSprite;
     private CandySprite candySprite;
     private IceSprite iceSprite;
+    private TerrainSprite terrainSprite;
 
     /*
      * TO ADD:
@@ -38,6 +40,7 @@ public class GameTimer extends AnimationTimer {
         this.slimeSprite = new SlimeSprite("SlimeSprite",650,750);
         this.candySprite = new CandySprite("CandySprite",690,750);
         this.iceSprite = new IceSprite("IceSprite",730,750);
+        this.terrainSprite = new TerrainSprite("TerrainSprite", 0, 0);
 
 		//call method to handle mouse click event
 		this.handleKeyPressEvent();
@@ -71,6 +74,7 @@ public class GameTimer extends AnimationTimer {
         this.slimeSprite.render(this.gc);
         this.candySprite.render(this.gc);
         this.iceSprite.render(this.gc);
+        this.terrainSprite.render(this.gc);
 
         /*
          * TO ADD:
