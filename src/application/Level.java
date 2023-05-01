@@ -9,6 +9,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sprites.*;
 import sprites.objects.*;
+import sprites.players.*;
 
 public class Level {
     protected int[][] lvldata;
