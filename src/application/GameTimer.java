@@ -34,7 +34,7 @@ public class GameTimer extends AnimationTimer {
          */
 
         // Instantiate the sprite(s). Can comment out the ones not needed
-        this.woodSprite = new WoodSprite("WoodSprite",610,750);
+        this.woodSprite = new WoodSprite("WoodSprite",200,200);
         this.slimeSprite = new SlimeSprite("SlimeSprite",650,750);
         this.candySprite = new CandySprite("CandySprite",690,750);
         this.iceSprite = new IceSprite("IceSprite",730,750);
@@ -46,7 +46,7 @@ public class GameTimer extends AnimationTimer {
 
      @Override
      public void handle(long currentNanoTime) {
-         this.gc.clearRect(0, 0, TutorialStage.WINDOW_WIDTH,TutorialStage.WINDOW_HEIGHT);
+         this.gc.clearRect(0, 0, Level.WINDOW_WIDTH,Level.WINDOW_HEIGHT);
         //  this.gc.drawImage(bg, 0, 0);
 
 

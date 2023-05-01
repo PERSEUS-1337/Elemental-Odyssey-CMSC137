@@ -48,8 +48,8 @@ public class MainGUIController {
     void onInstructionsButtonClicked(ActionEvent event) {
         System.out.println("Instructions Button Clicked");
 
-        TutorialStage tutorialStage = new TutorialStage();
-        tutorialStage.setStage(new Stage());
+        TutorialLevel tutorialLevel = new TutorialLevel();
+        tutorialLevel.setStage(new Stage());
     }
 
     @FXML
