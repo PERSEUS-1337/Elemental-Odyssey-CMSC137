@@ -1,6 +1,5 @@
 package application;
 import sprites.*;
-import sprites.objects.TerrainSprite;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -15,7 +14,7 @@ public class GameTimer extends AnimationTimer {
     private SlimeSprite slimeSprite;
     private CandySprite candySprite;
     private IceSprite iceSprite;
-    private TerrainSprite terrainSprite;
+    private Sprite[][] lvlSprites;
 
     /*
      * TO ADD:
@@ -25,22 +24,29 @@ public class GameTimer extends AnimationTimer {
 
 
 
-     GameTimer(GraphicsContext gc, Scene theScene){
+     GameTimer(GraphicsContext gc, Scene theScene, Sprite[][] lvlSprites){
 		this.gc = gc;
 		this.theScene = theScene;
-
+        this.lvlSprites = lvlSprites;
 
         /*
          * TO ADD:
          *  Instantiating the timers
          */
-
-        // Instantiate the sprite(s). Can comment out the ones not needed
-        this.woodSprite = new WoodSprite("WoodSprite",200,200);
-        this.slimeSprite = new SlimeSprite("SlimeSprite",650,750);
-        this.candySprite = new CandySprite("CandySprite",690,750);
-        this.iceSprite = new IceSprite("IceSprite",730,750);
-        this.terrainSprite = new TerrainSprite("TerrainSprite", 0, 0);
+        
+        // Get variable reference to player sprites
+        for (int i=0; i<Level.LEVEL_HEIGHT; i++){
+            for (int j=0; j<Level.LEVEL_WIDTH; j++){
+                if (lvlSprites[i][j] instanceof WoodSprite) 
+                    this.woodSprite = (WoodSprite) lvlSprites[i][j];
+                else if (lvlSprites[i][j] instanceof SlimeSprite) 
+                    this.slimeSprite = (SlimeSprite) lvlSprites[i][j];
+                else if (lvlSprites[i][j] instanceof CandySprite) 
+                    this.candySprite = (CandySprite) lvlSprites[i][j];
+                else if (lvlSprites[i][j] instanceof IceSprite) 
+                    this.iceSprite = (IceSprite) lvlSprites[i][j];
+            }
+        }
 
 		//call method to handle mouse click event
 		this.handleKeyPressEvent();
@@ -69,17 +75,13 @@ public class GameTimer extends AnimationTimer {
          */
 
 
-         //render the sprite
-		this.woodSprite.render(this.gc);
-        this.slimeSprite.render(this.gc);
-        this.candySprite.render(this.gc);
-        this.iceSprite.render(this.gc);
-        this.terrainSprite.render(this.gc);
-
-        /*
-         * TO ADD:
-         *  Rendering other sprites
-         */
+        //render the sprites
+        for (int i=0; i<Level.LEVEL_HEIGHT; i++){
+            for (int j=0; j<Level.LEVEL_WIDTH; j++){
+                if (lvlSprites[i][j] != null)
+                    lvlSprites[i][j].render(this.gc);
+            }
+        }
 
          // Printing WoodSprite Details
         this.printSpriteDetails();
@@ -87,7 +89,7 @@ public class GameTimer extends AnimationTimer {
      } // end of handle method
 
 
-     	//method that will listen and handle the key press events
+    //method that will listen and handle the key press events
 	private void handleKeyPressEvent() {
 		this.theScene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			public void handle(KeyEvent e){
@@ -97,23 +99,35 @@ public class GameTimer extends AnimationTimer {
 		});
 
 		this.theScene.setOnKeyReleased(new EventHandler<KeyEvent>(){
-		            public void handle(KeyEvent e){
-		            	KeyCode code = e.getCode();
-		                stopMySprite(code);
-		                // mySpriteShoot(code);
-		            }
-		        });
+            public void handle(KeyEvent e){
+                KeyCode code = e.getCode();
+                stopMySprite(code);
+                // mySpriteShoot(code);
+            }
+        });
     }
 
     //method that will move the sprite depending on the key pressed
 	private void moveMySprite(KeyCode ke) {
-		if(ke==KeyCode.UP || ke==KeyCode.W) this.woodSprite.setDY(-10);
+		if(ke==KeyCode.W) this.woodSprite.setDY(-10);
+		if(ke==KeyCode.A) this.woodSprite.setDX(-10);
+		if(ke==KeyCode.S) this.woodSprite.setDY(10);
+		if(ke==KeyCode.D) this.woodSprite.setDX(10);
 
-		if(ke==KeyCode.LEFT || ke==KeyCode.A) this.woodSprite.setDX(-10);
+        if(ke==KeyCode.T) this.slimeSprite.setDY(-10);
+		if(ke==KeyCode.F) this.slimeSprite.setDX(-10);
+		if(ke==KeyCode.G) this.slimeSprite.setDY(10);
+		if(ke==KeyCode.H) this.slimeSprite.setDX(10);
 
-		if(ke==KeyCode.DOWN || ke==KeyCode.S) this.woodSprite.setDY(10);
+        if(ke==KeyCode.I) this.candySprite.setDY(-10);
+		if(ke==KeyCode.J) this.candySprite.setDX(-10);
+		if(ke==KeyCode.K) this.candySprite.setDY(10);
+		if(ke==KeyCode.L) this.candySprite.setDX(10);
 
-		if(ke==KeyCode.RIGHT || ke==KeyCode.D) this.woodSprite.setDX(10);
+        if(ke==KeyCode.UP) this.iceSprite.setDY(-10);
+        if(ke==KeyCode.LEFT) this.iceSprite.setDX(-10);
+		if(ke==KeyCode.DOWN) this.iceSprite.setDY(10);
+		if(ke==KeyCode.RIGHT) this.iceSprite.setDX(10);
 
    	}
 
@@ -121,6 +135,12 @@ public class GameTimer extends AnimationTimer {
 	private void stopMySprite(KeyCode ke){
 		this.woodSprite.setDX(0);
 		this.woodSprite.setDY(0);
+        this.slimeSprite.setDX(0);
+        this.slimeSprite.setDY(0);
+        this.candySprite.setDX(0);
+        this.candySprite.setDY(0);
+        this.iceSprite.setDX(0);
+        this.iceSprite.setDY(0);
 		// if(ke==KeyCode.SPACE) this.mySpriteShoot(ke);
 	}
 

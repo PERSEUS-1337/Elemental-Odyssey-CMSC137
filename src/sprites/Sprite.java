@@ -10,6 +10,10 @@ public class Sprite {
 	protected boolean visible;
 	protected double width;
 	protected double height;
+
+	public static final int SPRITE_DEFAULT_WIDTH = 32;
+	public static final float SCALE = 1.5f;
+	public static final int SPRITE_WIDTH = (int) (SPRITE_DEFAULT_WIDTH * SCALE);
 	
 	public Sprite(int xPos, int yPos){
 		this.x = xPos;
