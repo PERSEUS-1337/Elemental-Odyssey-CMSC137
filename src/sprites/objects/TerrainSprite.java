@@ -13,10 +13,7 @@ public class TerrainSprite extends Sprite {
             Sprite.SPRITE_WIDTH, Sprite.SPRITE_WIDTH, false,
             false);
 
-    public final static int MAX_SPRITE_STRENGTH = 150;
-    public final static int MIN_SPRITE_STRENGTH = 100;
-
-    public TerrainSprite(String string, int x, int y) {
+    public TerrainSprite(String name, int x, int y) {
         super(x, y);
         // this.name = name;
 
