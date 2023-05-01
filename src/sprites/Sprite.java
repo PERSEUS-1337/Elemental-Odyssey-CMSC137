@@ -1,4 +1,4 @@
-package application;
+package sprites;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -26,7 +26,7 @@ public class Sprite {
 	}
 	
 	//method to set the image to the image view node
-	void render(GraphicsContext gc){
+	public void render(GraphicsContext gc){
 		gc.drawImage(this.img, this.x, this.y);
         
     }

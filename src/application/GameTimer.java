@@ -1,4 +1,5 @@
 package application;
+import sprites.*;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -10,6 +11,9 @@ public class GameTimer extends AnimationTimer {
     private GraphicsContext gc;
 	private Scene theScene;
 	private WoodSprite woodSprite;
+    private SlimeSprite slimeSprite;
+    private CandySprite candySprite;
+    private IceSprite iceSprite;
 
     /*
      * TO ADD:
@@ -29,7 +33,11 @@ public class GameTimer extends AnimationTimer {
          *  Instantiating the timers
          */
 
-        this.woodSprite = new WoodSprite("WoodSprite",190,670);
+        // Instantiate the sprite(s). Can comment out the ones not needed
+        this.woodSprite = new WoodSprite("WoodSprite",610,750);
+        this.slimeSprite = new SlimeSprite("SlimeSprite",650,750);
+        this.candySprite = new CandySprite("CandySprite",690,750);
+        this.iceSprite = new IceSprite("IceSprite",730,750);
 
 		//call method to handle mouse click event
 		this.handleKeyPressEvent();
@@ -47,7 +55,10 @@ public class GameTimer extends AnimationTimer {
          *  Timer handling for spawning and despawn
          */
 
-         this.woodSprite.move();
+        this.woodSprite.move();
+        this.slimeSprite.move();
+        this.candySprite.move();
+        this.iceSprite.move();
 
          /*
          * TO ADD:
@@ -57,6 +68,9 @@ public class GameTimer extends AnimationTimer {
 
          //render the sprite
 		this.woodSprite.render(this.gc);
+        this.slimeSprite.render(this.gc);
+        this.candySprite.render(this.gc);
+        this.iceSprite.render(this.gc);
 
         /*
          * TO ADD:
@@ -109,8 +123,8 @@ public class GameTimer extends AnimationTimer {
     //method to print out the details of the sprite
     private void printSpriteDetails(){
         System.out.println("=============== SPRITE DETAILS ==============");
-        System.out.println("WoodSprite X-coordinate:"+this.woodSprite.getX());
-        System.out.println("WoodSprite Y-coordinate:"+this.woodSprite.getY());
+        System.out.println("Sprite X-coordinate:"+this.woodSprite.getX());
+        System.out.println("Sprite Y-coordinate:"+this.woodSprite.getY());
     }
     
 }

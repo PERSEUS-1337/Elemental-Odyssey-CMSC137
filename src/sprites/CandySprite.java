@@ -1,29 +1,30 @@
-package application;
+package sprites;
 
+import application.TutorialStage;
 import javafx.scene.image.Image;
 
 
 
-public class WoodSprite extends Sprite{
+public class CandySprite extends Sprite{
 	private String name;
 
-	public final static Image SPRITE_IMAGE = new Image("assets/WoodSprite_Idle.gif",WoodSprite.SPRITE_WIDTH*0.70,WoodSprite.SPRITE_WIDTH,false,false);
+	public final static Image SPRITE_IMAGE = new Image("assets/CandySprite_Idle.gif",CandySprite.SPRITE_WIDTH*0.70,CandySprite.SPRITE_WIDTH,false,false);
 	public final static int SPRITE_WIDTH = 50;
 	public final static int MAX_SPRITE_STRENGTH = 150;
 	public final static int MIN_SPRITE_STRENGTH = 100;
 
-	public WoodSprite(String name, int x, int y){
+	public CandySprite(String name, int x, int y){
 		super(x,y);
 		this.name = name;
 
-		this.loadImage(WoodSprite.SPRITE_IMAGE);
+		this.loadImage(CandySprite.SPRITE_IMAGE);
 	}
 
 
     
 
 	//method called if up/down/left/right arrow key is pressed.
-	void move() {
+	public void move() {
 		
 		// Only change the x and y position of the sprite if the current x,y position is within the TutorialStage
         //  width and height so that the sprite won't exit the screen
