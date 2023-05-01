@@ -1,7 +1,6 @@
 package application;
 import sprites.*;
 import sprites.players.*;
-import sprites.objects.WallSprite;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;

@@ -79,6 +79,8 @@ public class Level {
                 return new IceSprite("IceSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             case 5:
                 return new TerrainSprite("TerrainSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+            case 6:
+                return new CrateSprite("CrateSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             default:
                 return null;
         }
