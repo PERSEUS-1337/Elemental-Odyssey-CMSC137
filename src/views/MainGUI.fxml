@@ -45,7 +45,7 @@
   <children>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="806.0" VBox.vgrow="ALWAYS">
       <children>
-        <Label alignment="CENTER" layoutX="185.0" layoutY="37.0" prefHeight="48.0" prefWidth="436.0" style="&#10;" text="Harmony of the Elements" textAlignment="CENTER" wrapText="false">
+        <Label alignment="CENTER" layoutX="185.0" layoutY="37.0" prefHeight="48.0" prefWidth="436.0" style="&#10;" text="Elemental Odyssey" textAlignment="CENTER" wrapText="false">
           <font>
             <Font name="High Tower Text" size="30.0" />
           </font>
