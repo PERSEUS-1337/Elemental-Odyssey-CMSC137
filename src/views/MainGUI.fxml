@@ -44,7 +44,7 @@
 
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainGUIController">
   <children>
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="806.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
       <children>
             <ImageView fx:id="imgTitle" fitHeight="262.0" fitWidth="497.0" layoutX="158.0" layoutY="-11.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -56,7 +56,47 @@
                   <Image url="@../assets/gameSubTitle.png" />
                </image>
             </ImageView>
-            <ToolBar layoutX="36.0" layoutY="305.0" orientation="VERTICAL" prefHeight="196.0" prefWidth="174.0">
+            <ImageView fitHeight="36.0" fitWidth="69.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/upperLeftCorner_Wood.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="36.0" fitWidth="69.0" layoutX="752.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/upperRightCorner_Wood.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="36.0" fitWidth="69.0" layoutY="565.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/lowerLeftCorner_Wood.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="36.0" fitWidth="69.0" layoutX="752.0" layoutY="565.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/lowerRightCorner_Wood.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="14.0" fitWidth="736.0" layoutX="47.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/longHorizontalWoodBorder.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="8.0" fitWidth="736.0" layoutX="47.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/longHorizontalWoodBorder.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="554.0" fitWidth="21.0" layoutX="794.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/longVerticalWoodBorder.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="554.0" fitWidth="21.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/longVerticalWoodBorder.png" />
+               </image>
+            </ImageView>
+            <ToolBar layoutX="46.0" layoutY="331.0" orientation="VERTICAL" prefHeight="196.0" prefWidth="174.0">
               <items>
                 <Button fx:id="btnPlay" mnemonicParsing="false" onAction="#onPlayButtonClicked" prefHeight="36.0" prefWidth="163.0" text="Play">
                      <font>
