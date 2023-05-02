@@ -48,52 +48,52 @@
       <children>
             <ImageView fx:id="imgTitle" fitHeight="262.0" fitWidth="497.0" layoutX="158.0" layoutY="-11.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assets/gameTitle.png" />
+                  <Image url="@../assets/texts/gameTitle.png" />
                </image>
             </ImageView>
             <ImageView fx:id="imgSubTitle" fitHeight="213.0" fitWidth="385.0" layoutX="211.0" layoutY="137.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assets/gameSubTitle.png" />
+                  <Image url="@../assets/texts/gameSubTitle.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="36.0" fitWidth="69.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assets/upperLeftCorner_Wood.png" />
+                  <Image url="@../assets/blocks/upperLeftCorner_Wood.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="36.0" fitWidth="69.0" layoutX="752.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assets/upperRightCorner_Wood.png" />
+                  <Image url="@../assets/blocks/upperRightCorner_Wood.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="36.0" fitWidth="69.0" layoutY="565.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assets/lowerLeftCorner_Wood.png" />
+                  <Image url="@../assets/blocks/lowerLeftCorner_Wood.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="36.0" fitWidth="69.0" layoutX="752.0" layoutY="565.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assets/lowerRightCorner_Wood.png" />
+                  <Image url="@../assets/blocks/lowerRightCorner_Wood.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="14.0" fitWidth="736.0" layoutX="47.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assets/longHorizontalWoodBorder.png" />
+                  <Image url="@../assets/blocks/longHorizontalWoodBorder.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="8.0" fitWidth="736.0" layoutX="47.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assets/longHorizontalWoodBorder.png" />
+                  <Image url="@../assets/blocks/longHorizontalWoodBorder.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="554.0" fitWidth="21.0" layoutX="794.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assets/longVerticalWoodBorder.png" />
+                  <Image url="@../assets/blocks/longVerticalWoodBorder.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="554.0" fitWidth="21.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assets/longVerticalWoodBorder.png" />
+                  <Image url="@../assets/blocks/longVerticalWoodBorder.png" />
                </image>
             </ImageView>
             <ToolBar layoutX="46.0" layoutY="331.0" orientation="VERTICAL" prefHeight="196.0" prefWidth="174.0">

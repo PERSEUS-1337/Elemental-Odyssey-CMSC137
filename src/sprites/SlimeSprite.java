@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 public class SlimeSprite extends Sprite{
 	private String name;
 
-	public final static Image SPRITE_IMAGE = new Image("assets/SlimeSprite_Idle.gif",SlimeSprite.SPRITE_WIDTH*0.70,SlimeSprite.SPRITE_WIDTH,false,false);
+	public final static Image SPRITE_IMAGE = new Image("assets/mainCharacters/SlimeSprite_Idle.gif",SlimeSprite.SPRITE_WIDTH*0.70,SlimeSprite.SPRITE_WIDTH,false,false);
 	public final static int SPRITE_WIDTH = 50;
 	public final static int MAX_SPRITE_STRENGTH = 150;
 	public final static int MIN_SPRITE_STRENGTH = 100;

@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 public class IceSprite extends Sprite{
 	private String name;
 
-	public final static Image SPRITE_IMAGE = new Image("assets/IceSprite_Idle.gif",IceSprite.SPRITE_WIDTH*0.70,IceSprite.SPRITE_WIDTH,false,false);
+	public final static Image SPRITE_IMAGE = new Image("assets/mainCharacters/IceSprite_Idle.gif",IceSprite.SPRITE_WIDTH*0.70,IceSprite.SPRITE_WIDTH,false,false);
 	public final static int SPRITE_WIDTH = 50;
 	public final static int MAX_SPRITE_STRENGTH = 150;
 	public final static int MIN_SPRITE_STRENGTH = 100;
