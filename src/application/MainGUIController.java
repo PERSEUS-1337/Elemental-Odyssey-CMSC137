@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -31,6 +32,12 @@ public class MainGUIController {
 
     @FXML
     private Button btnSettings;
+
+    @FXML
+    private ImageView imgSubTitle;
+
+    @FXML
+    private ImageView imgTitle;
 
     @FXML
     void onAboutButtonClicked(ActionEvent event) {
