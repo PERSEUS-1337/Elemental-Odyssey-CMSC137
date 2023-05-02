@@ -87,6 +87,8 @@ public class Level {
                 return new TerrainSpritePoison("TerrainSpritePoison", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             case 9:
                 return new DoorSprite("DoorSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+            case 10:
+                return new ButtonSprite("ButtonSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             default:
                 return null;
         }
