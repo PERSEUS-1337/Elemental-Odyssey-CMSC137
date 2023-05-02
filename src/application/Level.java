@@ -69,6 +69,8 @@ public class Level {
 
     private Sprite spriteGenerator(int value, int x, int y){
         switch (value) {
+            case 0:
+                return new BackgroundSprite("WoodSprite", x * Sprite.SPRITE_WIDTH, y * Sprite.SPRITE_WIDTH);
             case 1:
                 return new WoodSprite("WoodSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             case 2:

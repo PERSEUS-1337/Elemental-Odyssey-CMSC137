@@ -5,6 +5,7 @@ import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -88,7 +89,6 @@ public class GameTimer extends AnimationTimer {
         this.printSpriteDetails();
 
      } // end of handle method
-
 
     //method that will listen and handle the key press events
 	private void handleKeyPressEvent() {
