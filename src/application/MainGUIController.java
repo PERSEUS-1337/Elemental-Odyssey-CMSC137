@@ -13,6 +13,10 @@ import javafx.stage.Stage;
 
 public class MainGUIController {
 
+    public static final String GAME_NAME = "Elemental Odyssey: Beyond the Horizon";
+    public static final Integer WINDOW_WIDTH = 800;
+    public static final Integer WINDOW_HEIGHT = 600;
+
     @FXML
     private Button btnAbout;
 

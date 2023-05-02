@@ -6,6 +6,7 @@ package user;
 
 import java.io.IOException;
 
+import application.MainGUIController;
 import application.MovingBackground;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -30,10 +31,10 @@ public class Main extends Application {
             Group root = new Group();
             root.getChildren().addAll(bg, mainGuiRoot);
             
-            Scene scene = new Scene(root, 800, 600);
+            Scene scene = new Scene(root, MainGUIController.WINDOW_WIDTH, MainGUIController.WINDOW_HEIGHT);
 
             mainStage.setResizable(false); // Disables the ability to resize the window
-            mainStage.setTitle("Harmony of the Elements");
+            mainStage.setTitle(MainGUIController.GAME_NAME);
             mainStage.setScene(scene);
             mainStage.show();
         } catch (IOException e) {
