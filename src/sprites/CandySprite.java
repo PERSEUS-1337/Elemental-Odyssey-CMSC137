@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 public class CandySprite extends Sprite{
 	private String name;
 
-	public final static Image SPRITE_IMAGE = new Image("assets/mainCharacters/CandySprite_Idle.gif",CandySprite.SPRITE_WIDTH*0.70,CandySprite.SPRITE_WIDTH,false,false);
+	public final static Image SPRITE_IMAGE = new Image("assets/players/CandySprite_Idle.gif",CandySprite.SPRITE_WIDTH*0.70,CandySprite.SPRITE_WIDTH,false,false);
 	public final static int SPRITE_WIDTH = 50;
 	public final static int MAX_SPRITE_STRENGTH = 150;
 	public final static int MIN_SPRITE_STRENGTH = 100;
