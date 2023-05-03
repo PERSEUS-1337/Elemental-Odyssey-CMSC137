@@ -40,13 +40,20 @@ public class Sprite {
 		this.width = this.img.getWidth();
 	    this.height = this.img.getHeight();
 	}
+	
 	//method that will check for collision of two sprites
 	public boolean collidesWith(Sprite rect2)	{
+		if (rect2 == null) return false;
+
 		Rectangle2D rectangle1 = this.getBounds();
 		Rectangle2D rectangle2 = rect2.getBounds();
 
+		// this.y -= rect2.height;
+
 		return rectangle1.intersects(rectangle2);
 	}
+	
+
 	//method that will return the bounds of an image
 	private Rectangle2D getBounds(){
 		return new Rectangle2D(this.x, this.y, this.width, this.height);

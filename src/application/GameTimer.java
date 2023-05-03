@@ -1,4 +1,5 @@
 package application;
+
 import sprites.*;
 import sprites.players.*;
 
@@ -12,8 +13,8 @@ import javafx.scene.input.KeyEvent;
 
 public class GameTimer extends AnimationTimer {
     private GraphicsContext gc;
-	private Scene theScene;
-	private WoodSprite woodSprite;
+    private Scene theScene;
+    private WoodSprite woodSprite;
     private SlimeSprite slimeSprite;
     private CandySprite candySprite;
     private IceSprite iceSprite;
@@ -22,41 +23,39 @@ public class GameTimer extends AnimationTimer {
 
     /*
      * TO ADD:
-     *  Timers for sprites
-     *  Background image for game stage and sprites
+     * Timers for sprites
+     * Background image for game stage and sprites
      */
 
-
-
-     GameTimer(GraphicsContext gc, Scene theScene, Sprite[][] lvlSprites){
-		this.gc = gc;
-		this.theScene = theScene;
+    GameTimer(GraphicsContext gc, Scene theScene, Sprite[][] lvlSprites) {
+        this.gc = gc;
+        this.theScene = theScene;
         this.lvlSprites = lvlSprites;
         this.pressed = new ArrayList<KeyCode>();
 
         /*
          * TO ADD:
-         *  Instantiating the timers
+         * Instantiating the timers
          */
-        
+
         // Get variable reference to player sprites
-        for (int i=0; i<Level.LEVEL_HEIGHT; i++){
-            for (int j=0; j<Level.LEVEL_WIDTH; j++){
-                if (lvlSprites[i][j] instanceof WoodSprite) 
+        for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
+            for (int j = 0; j < Level.LEVEL_WIDTH; j++) {
+                if (lvlSprites[i][j] instanceof WoodSprite)
                     this.woodSprite = (WoodSprite) lvlSprites[i][j];
-                else if (lvlSprites[i][j] instanceof SlimeSprite) 
+                else if (lvlSprites[i][j] instanceof SlimeSprite)
                     this.slimeSprite = (SlimeSprite) lvlSprites[i][j];
-                else if (lvlSprites[i][j] instanceof CandySprite) 
+                else if (lvlSprites[i][j] instanceof CandySprite)
                     this.candySprite = (CandySprite) lvlSprites[i][j];
-                else if (lvlSprites[i][j] instanceof IceSprite) 
+                else if (lvlSprites[i][j] instanceof IceSprite)
                     this.iceSprite = (IceSprite) lvlSprites[i][j];
             }
         }
 
-		//call method to handle mouse click event
-		this.handleKeyPressEvent();
+        // call method to handle mouse click event
+        this.handleKeyPressEvent();
 
-     } // end of constructor
+    } // end of constructor
 
      @Override
      public void handle(long currentNanoTime) {
@@ -71,46 +70,40 @@ public class GameTimer extends AnimationTimer {
 
         /*
          * TO ADD:
-         *  Timer handling for spawning and despawn
+         * Timer handling for spawning and despawn
          */
 
-        this.woodSprite.move();
-        this.slimeSprite.move();
-        this.candySprite.move();
-        this.iceSprite.move();
-
-         /*
+        /*
          * TO ADD:
-         *  Moving other sprites
+         * Moving other sprites
          */
 
-
-        //render the sprites
-        for (int i=0; i<Level.LEVEL_HEIGHT; i++){
-            for (int j=0; j<Level.LEVEL_WIDTH; j++){
+        // render the sprites
+        for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
+            for (int j = 0; j < Level.LEVEL_WIDTH; j++) {
                 if (lvlSprites[i][j] != null)
                     lvlSprites[i][j].render(this.gc);
             }
         }
 
-         // Printing WoodSprite Details
+        // Printing WoodSprite Details
         this.printSpriteDetails();
 
-     } // end of handle method
+    } // end of handle method
 
-    //method that will listen and handle the key press events
-	private void handleKeyPressEvent() {
-		this.theScene.setOnKeyPressed(new EventHandler<KeyEvent>(){
-			public void handle(KeyEvent e){
-            	KeyCode code = e.getCode();
+    // method that will listen and handle the key press events
+    private void handleKeyPressEvent() {
+        this.theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent e) {
+                KeyCode code = e.getCode();
             	if (!pressed.contains(code))
             		pressed.add(code);
                 moveMySprite();
-			}
-		});
+            }
+        });
 
-		this.theScene.setOnKeyReleased(new EventHandler<KeyEvent>(){
-            public void handle(KeyEvent e){
+        this.theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent e) {
             	KeyCode code = e.getCode();
             	if (pressed.contains(code))
             		pressed.remove(code);
@@ -178,11 +171,21 @@ public class GameTimer extends AnimationTimer {
 		// else this.mySprite.setDX(0);
    	}
 
-    //method to print out the details of the sprite
-    private void printSpriteDetails(){
-        System.out.println("=============== SPRITE DETAILS ==============");
-        System.out.println("Sprite X-coordinate:"+this.woodSprite.getX());
-        System.out.println("Sprite Y-coordinate:"+this.woodSprite.getY());
+    // method to print out the details of the sprite
+    private void printSpriteDetails() {
+        // System.out.println("=============== SPRITE DETAILS ==============");
+        int xCoord = this.woodSprite.getX();
+        int yCoord = this.woodSprite.getY();
+        int xIndex = xCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+        int yIndex = yCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT) + 1;
+        System.out.println("========================");
+        System.out.println("Sprite X-coordinate:" + xCoord);
+        System.out.println("Sprite Y-coordinate:" + yCoord);
+        System.out.println("Sprite X-index:" + xIndex);
+        System.out.println("Sprite Y-index:" + yIndex);
+        System.out.println("Sprite Collides with:" + this.lvlSprites[yIndex][xIndex]);
+        System.out.println("Collission? " + this.woodSprite.collidesWith(this.lvlSprites[yIndex][xIndex]));
+
     }
-    
+
 }
