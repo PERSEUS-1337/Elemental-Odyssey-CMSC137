@@ -12,8 +12,10 @@ public class Sprite {
 	protected double height;
 
 	public static final int SPRITE_DEFAULT_WIDTH = 32;
+	public static final int SPRITE_DEFAULT_HEIGHT = 32;
 	public static final float SCALE = 1.5f;
 	public static final int SPRITE_WIDTH = (int) (SPRITE_DEFAULT_WIDTH * SCALE);
+	public static final int SPRITE_HEIGHT = (int) (SPRITE_DEFAULT_HEIGHT * SCALE);
 	
 	public Sprite(int xPos, int yPos){
 		this.x = xPos;
@@ -50,7 +52,83 @@ public class Sprite {
 
 		// this.y -= rect2.height;
 
-		return rectangle1.intersects(rectangle2);
+		boolean intersects = rectangle1.intersects(rectangle2);
+
+		if (intersects){
+			double distX = rect2.getCenterX() - this.getCenterX();
+			double distY = rect2.getCenterY() - this.getCenterY();
+
+			// determine which direction
+			double absDx = Math.abs(distX);
+			double absDy = Math.abs(distY);
+
+			if (absDx > absDy){
+				if (distX < 0){
+					//right
+					// setDX(Math.abs(dx));
+					// x = rect2.getCenterX() + Sprite.SPRITE_WIDTH;
+					this.x = (rect2.getX() + (int) this.getWidth());
+				} else {
+					//left
+					// setDX(-Math.abs(dx));
+					// x = rect2.getCenterX() - Sprite.SPRITE_WIDTH;
+					this.x = (rect2.getX() - (int) this.getWidth());
+				}
+
+			} else {
+				if (distY < 0){
+					//bottom
+					// this.setDY(Math.abs(dy));
+					// y = rect2.getCenterY() + Sprite.SPRITE_HEIGHT;
+					this.y = (rect2.getY() + (int) this.getHeight());
+				} else {
+					//top
+					// this.setDY(-Math.abs(dy));
+					// y = rect2.getCenterY() - Sprite.SPRITE_HEIGHT;
+					this.y = (rect2.getY() - (int) this.getHeight());
+				}
+			}
+		}
+
+		// double myLeft = this.getCenterX();
+		// double myRight = this.getCenterX() + Sprite.SPRITE_WIDTH;
+		// double myTop = this.getCenterY();
+		// double myBottom = this.getCenterY() + Sprite.SPRITE_WIDTH;
+		
+		// double otherLeft = rect2.getCenterX();
+		// double otherRight = rect2.getCenterX() + Sprite.SPRITE_WIDTH;
+		// double otherTop = rect2.getCenterY();
+		// double otherBottom = rect2.getCenterY() + Sprite.SPRITE_HEIGHT;
+
+		// if (myBottom <= otherTop) {
+		// 	System.out.println("first");
+		// 	setDY(-Math.abs(dy));
+		// 	y = rect2.getCenterY() - Sprite.SPRITE_HEIGHT;
+		// 	return true;
+		// }
+
+		// if (myTop >= otherBottom) {
+		// 	System.out.println("second");
+		// 	setDY(Math.abs(dy));
+		// 	y = rect2.getCenterY() + Sprite.SPRITE_HEIGHT;
+		// 	return true;
+		// }
+
+		// if (myRight <= otherLeft) {
+		// 	System.out.println("third");
+		// 	setDX(-Math.abs(dx));
+		// 	x = rect2.getCenterX() - Sprite.SPRITE_WIDTH;
+		// 	return true;
+		// }
+
+		// if (myLeft <= otherRight) {
+		// 	System.out.println("fourth");
+		// 	setDX(Math.abs(dx));
+		// 	x = rect2.getCenterX() + Sprite.SPRITE_WIDTH;
+		// 	return true;
+		// }
+
+		return intersects;
 	}
 	
 
@@ -72,6 +150,22 @@ public class Sprite {
     	return this.y;
 	}
 	
+	public int getCenterX(){
+		return this.x + (Sprite.SPRITE_WIDTH / 2);
+	}
+
+	public int getCenterY(){
+		return this.y + (Sprite.SPRITE_HEIGHT / 2);
+	}
+
+	public double getWidth(){
+		return this.width;
+	}
+
+	public double getHeight(){
+		return this.height;
+	}
+
 	public boolean getVisible(){
 		return visible;	
 	}
@@ -100,7 +194,6 @@ public class Sprite {
 	public void setVisible(boolean value){
 		this.visible = value;
 	}
-	
 	
 
 }
