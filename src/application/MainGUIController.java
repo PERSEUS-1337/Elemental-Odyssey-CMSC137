@@ -8,10 +8,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MainGUIController {
+
+    public static final String GAME_NAME = "Elemental Odyssey: Beyond the Horizon";
+    public static final Integer WINDOW_WIDTH = 800;
+    public static final Integer WINDOW_HEIGHT = 600;
 
     @FXML
     private Button btnAbout;
@@ -27,6 +32,12 @@ public class MainGUIController {
 
     @FXML
     private Button btnSettings;
+
+    @FXML
+    private ImageView imgSubTitle;
+
+    @FXML
+    private ImageView imgTitle;
 
     @FXML
     void onAboutButtonClicked(ActionEvent event) {

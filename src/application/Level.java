@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -24,6 +25,9 @@ public class Level {
     public static final int LEVEL_HEIGHT = 15;
     public static final int WINDOW_WIDTH = Sprite.SPRITE_WIDTH * LEVEL_WIDTH;
     public static final int WINDOW_HEIGHT = Sprite.SPRITE_WIDTH * LEVEL_HEIGHT;
+    public final static Image BACKGROUND = new Image("assets/Background.png",
+            Sprite.SPRITE_WIDTH, Sprite.SPRITE_WIDTH, false,
+            false);
 
     // Constructor
 	public Level() {
@@ -69,8 +73,6 @@ public class Level {
 
     private Sprite spriteGenerator(int value, int x, int y){
         switch (value) {
-            case 0:
-                return new BackgroundSprite("WoodSprite", x * Sprite.SPRITE_WIDTH, y * Sprite.SPRITE_WIDTH);
             case 1:
                 return new WoodSprite("WoodSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             case 2:
