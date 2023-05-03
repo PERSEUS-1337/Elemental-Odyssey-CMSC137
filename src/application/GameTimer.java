@@ -73,6 +73,11 @@ public class GameTimer extends AnimationTimer {
          * Timer handling for spawning and despawn
          */
 
+        this.woodSprite.move();
+        this.slimeSprite.move();
+        this.candySprite.move();
+        this.iceSprite.move();
+
         /*
          * TO ADD:
          * Moving other sprites
