@@ -60,7 +60,7 @@ public class MainGUIController {
         System.out.println("Instructions Button Clicked");
 
         TutorialLevel tutorialLevel = new TutorialLevel();
-        tutorialLevel.setStage(new Stage());
+        tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
     }
 
     @FXML

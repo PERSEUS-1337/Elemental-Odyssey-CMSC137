@@ -61,12 +61,6 @@ public class GameTimer extends AnimationTimer {
      public void handle(long currentNanoTime) {
          this.gc.clearRect(0, 0, Level.WINDOW_WIDTH,Level.WINDOW_HEIGHT);
         
-        // Draw background
-        for (int i=0; i<Level.LEVEL_HEIGHT; i++){
-            for (int j=0; j<Level.LEVEL_WIDTH; j++){
-                this.gc.drawImage(Level.BACKGROUND, j*Sprite.SPRITE_WIDTH, i*Sprite.SPRITE_WIDTH);
-            }
-        }
 
         /*
          * TO ADD:

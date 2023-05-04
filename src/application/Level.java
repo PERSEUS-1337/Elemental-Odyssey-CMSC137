@@ -38,11 +38,14 @@ public class Level {
 	}
 
     // Method to add the stage elements
-	public void setStage(Stage stage) {
+	public void setStage(Stage stage, String backgroundColor, Integer windowSize) {
 		Level.stage = stage;
 
+        // Setup the moving background image
+        MovingBackground movingBackground = new MovingBackground(backgroundColor, windowSize);
+
 		//set stage elements here
-		this.root.getChildren().add(canvas);
+		this.root.getChildren().addAll(movingBackground,canvas);
 
 		Level.stage.setTitle("Instructions - Tutorial Level");
         Level.stage.setResizable(false);

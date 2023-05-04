@@ -24,7 +24,7 @@ public class Main extends Application {
         // Get the FXML file for the main menu from the 'views' folder
         try {
             // Adding the background to the main menu
-            MovingBackground bg = new MovingBackground(MovingBackground.brownColor);
+            MovingBackground bg = new MovingBackground(MovingBackground.brownColor, MovingBackground.defaultWindowSize);
             // Getting the FXML file for the main menu
             Parent mainGuiRoot = FXMLLoader.load(getClass().getResource("/views/MainGUI.fxml"));
             // Adding the background and the main menu to the same scene

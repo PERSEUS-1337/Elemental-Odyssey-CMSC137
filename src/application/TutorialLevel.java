@@ -1,6 +1,7 @@
 package application;
 
 public class TutorialLevel extends Level {
+	public static final Integer tutorialWindowSize = 1500;
     
 	public static int[][] LVL0DATA = {
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},

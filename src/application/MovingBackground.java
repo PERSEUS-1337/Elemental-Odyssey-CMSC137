@@ -25,8 +25,11 @@ public class MovingBackground extends Pane {
     public static final String purpleColor = "purple";
     public static final String yellowColor = "yellow";
 
+    public static final Integer defaultWindowSize = 0;
+    public static final Integer adjustedBackgroundSize = 10000; 
 
-    public MovingBackground(String color) {
+
+    public MovingBackground(String color, Integer setWidth) {
 
         Image bgImg = null;
         switch (color) {
@@ -57,6 +60,16 @@ public class MovingBackground extends Pane {
 
         ImageView background1 = new ImageView(bgImg);
         ImageView background2 = new ImageView(bgImg);
+
+        // If not default size, we set the proper background window size for a particular level
+        if(setWidth!=MovingBackground.defaultWindowSize){
+            background1.setFitWidth(setWidth);
+            background2.setFitWidth(setWidth);
+            // Since the width is stretched due to a custom width, we also need to set the window height
+            background1.setFitHeight(MovingBackground.adjustedBackgroundSize);
+            background2.setFitHeight(MovingBackground.adjustedBackgroundSize);
+        } 
+
 
         background1.setY(-7200);
         background2.setY(-7200);
