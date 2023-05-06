@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import sprites.Sprite;
 
 public class SlimeSprite extends PlayerSprite{
-	public final static Image SPRITE_IMAGE = new Image("assets/players/SlimeSprite_Idle.gif",Sprite.SPRITE_WIDTH,Sprite.SPRITE_WIDTH,true,false);
+	public final static Image SPRITE_IMAGE = new Image("assets/players/SlimeSprite_Idle.gif",Sprite.SPRITE_WIDTH,Sprite.SPRITE_WIDTH,false,false);
 
 	public SlimeSprite(String name, int x, int y){
 		super(name, x, y);
