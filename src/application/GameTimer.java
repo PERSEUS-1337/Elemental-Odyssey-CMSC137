@@ -28,6 +28,7 @@ public class GameTimer extends AnimationTimer {
      */
 
     GameTimer(GraphicsContext gc, Scene theScene, Sprite[][] lvlSprites) {
+
         this.gc = gc;
         this.theScene = theScene;
         this.lvlSprites = lvlSprites;
@@ -57,14 +58,23 @@ public class GameTimer extends AnimationTimer {
 
     } // end of constructor
 
-     @Override
-     public void handle(long currentNanoTime) {
-         this.gc.clearRect(0, 0, Level.WINDOW_WIDTH,Level.WINDOW_HEIGHT);
-        
+    private long lastTime = 0;
+    private long fpsCap = 24;
+    private final long targetTime = 1000000000L / fpsCap;
+
+    @Override
+    public void handle(long currentNanoTime) {
+        if (!(currentNanoTime - lastTime >= targetTime)) {
+            return;
+        }
+        lastTime = currentNanoTime;
+
+        this.gc.clearRect(0, 0, Level.WINDOW_WIDTH, Level.WINDOW_HEIGHT);
+
         // Draw background
-        for (int i=0; i<Level.LEVEL_HEIGHT; i++){
-            for (int j=0; j<Level.LEVEL_WIDTH; j++){
-                this.gc.drawImage(Level.BACKGROUND, j*Sprite.SPRITE_WIDTH, i*Sprite.SPRITE_WIDTH);
+        for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
+            for (int j = 0; j < Level.LEVEL_WIDTH; j++) {
+                this.gc.drawImage(Level.BACKGROUND, j * Sprite.SPRITE_WIDTH, i * Sprite.SPRITE_WIDTH);
             }
         }
 
@@ -90,112 +100,155 @@ public class GameTimer extends AnimationTimer {
                     lvlSprites[i][j].render(this.gc);
             }
         }
+        
+        // collision detection (should be improved in the future)
+        this.collissionDetection();
 
         // Printing WoodSprite Details
         this.printSpriteDetails();
-
     } // end of handle method
+
+    private void collissionDetection() {
+        int xCoord = this.woodSprite.getCenterX();
+        int yCoord = this.woodSprite.getCenterY();
+        int xIndex = xCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+        int yIndex = yCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
+        System.out.println("Collission? " +
+        this.woodSprite.collidesWith(this.lvlSprites[yIndex][xIndex]));
+    }
 
     // method that will listen and handle the key press events
     private void handleKeyPressEvent() {
         this.theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             public void handle(KeyEvent e) {
                 KeyCode code = e.getCode();
-            	if (!pressed.contains(code))
-            		pressed.add(code);
+                if (!pressed.contains(code))
+                    pressed.add(code);
                 moveMySprite();
             }
         });
 
         this.theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             public void handle(KeyEvent e) {
-            	KeyCode code = e.getCode();
-            	if (pressed.contains(code))
-            		pressed.remove(code);
+                KeyCode code = e.getCode();
+                if (pressed.contains(code))
+                    pressed.remove(code);
                 moveMySprite();
             }
         });
     }
 
-    //method that will move the sprite depending on the key pressed
-	private void moveMySprite() {
-		// Vertical movement (Wood Sprite)
-		if (pressed.contains(KeyCode.W) && pressed.contains(KeyCode.S)) this.woodSprite.setDY(1);
-		else if (pressed.contains(KeyCode.W)) this.woodSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.S)) this.woodSprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		else this.woodSprite.setDY(1);
-		// Horizontal movement (Wood Sprite)
-		if (pressed.contains(KeyCode.A) && pressed.contains(KeyCode.D)) this.woodSprite.setDX(0);
-		else if (pressed.contains(KeyCode.A)) this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.D)) this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
-		else this.woodSprite.setDX(0);
+    // method that will move the sprite depending on the key pressed
+    private void moveMySprite() {
+        // Vertical movement (Wood Sprite)
+        if (pressed.contains(KeyCode.W) && pressed.contains(KeyCode.S))
+            this.woodSprite.setDY(1);
+        else if (pressed.contains(KeyCode.W))
+            this.woodSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
+        else if (pressed.contains(KeyCode.S))
+            this.woodSprite.setDY(PlayerSprite.MOVE_DISTANCE);
+        else
+            this.woodSprite.setDY(1);
+        // Horizontal movement (Wood Sprite)
+        if (pressed.contains(KeyCode.A) && pressed.contains(KeyCode.D))
+            this.woodSprite.setDX(0);
+        else if (pressed.contains(KeyCode.A))
+            this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+        else if (pressed.contains(KeyCode.D))
+            this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+        else
+            this.woodSprite.setDX(0);
 
         // Vertical movement (Slime Sprite)
-		if (pressed.contains(KeyCode.T) && pressed.contains(KeyCode.G)) this.slimeSprite.setDY(0);
-		else if (pressed.contains(KeyCode.T)) this.slimeSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.G)) this.slimeSprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		else this.slimeSprite.setDY(0);
-		// Horizontal movement (Slime Sprite)
-		if (pressed.contains(KeyCode.F) && pressed.contains(KeyCode.H)) this.slimeSprite.setDX(0);
-		else if (pressed.contains(KeyCode.F)) this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.H)) this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE);
-		else this.slimeSprite.setDX(0);
+        if (pressed.contains(KeyCode.T) && pressed.contains(KeyCode.G))
+            this.slimeSprite.setDY(0);
+        else if (pressed.contains(KeyCode.T))
+            this.slimeSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
+        else if (pressed.contains(KeyCode.G))
+            this.slimeSprite.setDY(PlayerSprite.MOVE_DISTANCE);
+        else
+            this.slimeSprite.setDY(0);
+        // Horizontal movement (Slime Sprite)
+        if (pressed.contains(KeyCode.F) && pressed.contains(KeyCode.H))
+            this.slimeSprite.setDX(0);
+        else if (pressed.contains(KeyCode.F))
+            this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+        else if (pressed.contains(KeyCode.H))
+            this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+        else
+            this.slimeSprite.setDX(0);
 
         // Vertical movement (Candy Sprite)
-		if (pressed.contains(KeyCode.I) && pressed.contains(KeyCode.K)) this.candySprite.setDY(0);
-		else if (pressed.contains(KeyCode.I)) this.candySprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.K)) this.candySprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		else this.candySprite.setDY(0);
-		// Horizontal movement (Candy Sprite)
-		if (pressed.contains(KeyCode.J) && pressed.contains(KeyCode.L)) this.candySprite.setDX(0);
-		else if (pressed.contains(KeyCode.J)) this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.L)) this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE);
-		else this.candySprite.setDX(0);
+        if (pressed.contains(KeyCode.I) && pressed.contains(KeyCode.K))
+            this.candySprite.setDY(0);
+        else if (pressed.contains(KeyCode.I))
+            this.candySprite.setDY(-PlayerSprite.MOVE_DISTANCE);
+        else if (pressed.contains(KeyCode.K))
+            this.candySprite.setDY(PlayerSprite.MOVE_DISTANCE);
+        else
+            this.candySprite.setDY(0);
+        // Horizontal movement (Candy Sprite)
+        if (pressed.contains(KeyCode.J) && pressed.contains(KeyCode.L))
+            this.candySprite.setDX(0);
+        else if (pressed.contains(KeyCode.J))
+            this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+        else if (pressed.contains(KeyCode.L))
+            this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE);
+        else
+            this.candySprite.setDX(0);
 
         // Vertical movement (Ice Sprite)
-		if (pressed.contains(KeyCode.UP) && pressed.contains(KeyCode.DOWN)) this.iceSprite.setDY(0);
-		else if (pressed.contains(KeyCode.UP)) this.iceSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.DOWN)) this.iceSprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		else this.iceSprite.setDY(0);
-		// Horizontal movement (Ice Sprite)
-		if (pressed.contains(KeyCode.LEFT) && pressed.contains(KeyCode.RIGHT)) this.iceSprite.setDX(0);
-		else if (pressed.contains(KeyCode.LEFT)) this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.RIGHT)) this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE);
-		else this.iceSprite.setDX(0);
+        if (pressed.contains(KeyCode.UP) && pressed.contains(KeyCode.DOWN))
+            this.iceSprite.setDY(0);
+        else if (pressed.contains(KeyCode.UP))
+            this.iceSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
+        else if (pressed.contains(KeyCode.DOWN))
+            this.iceSprite.setDY(PlayerSprite.MOVE_DISTANCE);
+        else
+            this.iceSprite.setDY(0);
+        // Horizontal movement (Ice Sprite)
+        if (pressed.contains(KeyCode.LEFT) && pressed.contains(KeyCode.RIGHT))
+            this.iceSprite.setDX(0);
+        else if (pressed.contains(KeyCode.LEFT))
+            this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+        else if (pressed.contains(KeyCode.RIGHT))
+            this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+        else
+            this.iceSprite.setDX(0);
 
         // // Current Player (Multiplayer)
         // // Vertical movement
-		// if (pressed.contains(KeyCode.UP) && pressed.contains(KeyCode.DOWN)) this.mySprite.setDY(0);
-		// else if (pressed.contains(KeyCode.UP)) this.mySprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		// else if (pressed.contains(KeyCode.DOWN)) this.mySprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		// else this.mySprite.setDY(0);
-		// // Horizontal movement
-		// if (pressed.contains(KeyCode.LEFT) && pressed.contains(KeyCode.RIGHT)) this.mySprite.setDX(0);
-		// else if (pressed.contains(KeyCode.LEFT)) this.mySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-		// else if (pressed.contains(KeyCode.RIGHT)) this.mySprite.setDX(PlayerSprite.MOVE_DISTANCE);
-		// else this.mySprite.setDX(0);
-   	}
+        // if (pressed.contains(KeyCode.UP) && pressed.contains(KeyCode.DOWN))
+        // this.mySprite.setDY(0);
+        // else if (pressed.contains(KeyCode.UP))
+        // this.mySprite.setDY(-PlayerSprite.MOVE_DISTANCE);
+        // else if (pressed.contains(KeyCode.DOWN))
+        // this.mySprite.setDY(PlayerSprite.MOVE_DISTANCE);
+        // else this.mySprite.setDY(0);
+        // // Horizontal movement
+        // if (pressed.contains(KeyCode.LEFT) && pressed.contains(KeyCode.RIGHT))
+        // this.mySprite.setDX(0);
+        // else if (pressed.contains(KeyCode.LEFT))
+        // this.mySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+        // else if (pressed.contains(KeyCode.RIGHT))
+        // this.mySprite.setDX(PlayerSprite.MOVE_DISTANCE);
+        // else this.mySprite.setDX(0);
+    }
 
     // method to print out the details of the sprite
     private void printSpriteDetails() {
         // System.out.println("=============== SPRITE DETAILS ==============");
-        int xCoord = this.woodSprite.getCenterX();
-        int yCoord = this.woodSprite.getCenterY();
-        int xIndex = xCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
-        int yIndex = yCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
-        System.out.println("========================");
-        // System.out.println("Sprite X-coordinate:" + xCoord);
-        // System.out.println("Sprite Y-coordinate:" + yCoord);
-        // System.out.println("Sprite X-index:" + xIndex);
-        // System.out.println("Sprite Y-index:" + yIndex);
-        // System.out.println("Sprite Collides with:" + this.lvlSprites[yIndex][xIndex]);
-        // for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
-        //     for (int j = 0; j < Level.LEVEL_WIDTH; j++) {
-        //         System.out.println("Collission? " + this.woodSprite.collidesWith(this.lvlSprites[i][j]));
-        //     }
-        // }
-        System.out.println("Collission? " + this.woodSprite.collidesWith(this.lvlSprites[yIndex][xIndex]));
-
+        // int xCoord = this.woodSprite.getCenterX();
+        // int yCoord = this.woodSprite.getCenterY();
+        // int xIndex = xCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+        // int yIndex = yCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
+        // // System.out.println("Sprite X-coordinate:" + xCoord);
+        // // System.out.println("Sprite Y-coordinate:" + yCoord);
+        // // System.out.println("Sprite X-index:" + xIndex);
+        // // System.out.println("Sprite Y-index:" + yIndex);
+        // // System.out.println("Sprite Collides with:" +
+        // // this.lvlSprites[yIndex][xIndex]);
+        // System.out.println("Collission? " +
+        // this.woodSprite.collidesWith(this.lvlSprites[yIndex][xIndex]));
     }
-
 }
