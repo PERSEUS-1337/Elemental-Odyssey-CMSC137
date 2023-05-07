@@ -37,6 +37,13 @@ public class Main extends Application {
             mainStage.setTitle(MainGUIController.GAME_NAME);
             mainStage.setScene(scene);
             mainStage.show();
+
+            // Play the background music
+           try {
+            MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC);
+           } catch (Exception e) {
+            System.out.println("Error playing music: " + e.getMessage());
+           }
         } catch (IOException e) {
             e.printStackTrace();
         }

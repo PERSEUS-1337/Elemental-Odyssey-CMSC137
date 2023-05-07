@@ -1,5 +1,6 @@
 package application;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -10,14 +11,22 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class MainGUIController {
 
     public static final String GAME_NAME = "Elemental Odyssey: Beyond the Horizon";
+    // Get the mainThemeMusic.wav file, get its targetPath, and filename
+    public static final String MENU_MUSIC = "src\\sounds\\mainThemeMusic.wav";
     public static final Integer WINDOW_WIDTH = 800;
     public static final Integer WINDOW_HEIGHT = 600;
+
+    // media player for the background music
+    private static MediaPlayer mediaPlayer;
 
     @FXML
     private Button btnAbout;
@@ -176,6 +185,18 @@ public class MainGUIController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // Method to play the main menu music
+    public static void playBackgroundMusic(String musicFile) {
+        // Creating a new media player with the music file
+        Media music = new Media(new File(musicFile).toURI().toString());
+        
+        mediaPlayer = new MediaPlayer(music);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Sets the music to loop indefinitely
+        mediaPlayer.setVolume(0.5); // Sets the volume to 50%
+        mediaPlayer.play(); // Plays the music
+        
     }
 
 }
