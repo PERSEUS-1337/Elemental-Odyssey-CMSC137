@@ -15,7 +15,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class MainGUIController {
 
@@ -71,6 +70,14 @@ public class MainGUIController {
 
         TutorialLevel tutorialLevel = new TutorialLevel();
         tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
+
+        // if the tutorial level window is closed, play the background music
+        Level.getStage().setOnCloseRequest(e -> {
+            MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC);
+        });
+
+        // Stop the background music if tutorial level window is open
+        MainGUIController.stopBackgroundMusic();
     }
 
     @FXML
@@ -197,6 +204,11 @@ public class MainGUIController {
         mediaPlayer.setVolume(0.5); // Sets the volume to 50%
         mediaPlayer.play(); // Plays the music
         
+    }
+
+    // Method to stop the main menu music
+    public static void stopBackgroundMusic() {
+        mediaPlayer.stop();
     }
 
 }
