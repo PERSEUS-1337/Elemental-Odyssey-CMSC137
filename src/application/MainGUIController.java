@@ -156,8 +156,14 @@ public class MainGUIController {
     private void loadExitStage() {
         try {
 
-            Parent root = FXMLLoader.load(getClass().getResource("/views/ExitStage.fxml"));
-            Scene scene = new Scene(root);
+            MovingBackground bg = new MovingBackground(MovingBackground.grayColor, MovingBackground.defaultWindowSize);
+            // Getting the FXML file for the main menu
+            Parent exitGuiRoot = FXMLLoader.load(getClass().getResource("/views/ExitStage.fxml"));
+            // Adding the background and the main menu to the same scene
+            Group root = new Group();
+            root.getChildren().addAll(bg, exitGuiRoot);
+            
+            Scene scene = new Scene(root, ExitStage.WINDOW_WIDTH, ExitStage.WINDOW_HEIGHT);
 
             Stage exitStage = new Stage();
             exitStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows

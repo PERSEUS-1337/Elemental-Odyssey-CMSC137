@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
 public class ExitStage {
+    public static final Integer WINDOW_WIDTH = 538;
+    public static final Integer WINDOW_HEIGHT = 235;
 
     @FXML
     private Button btnNo;
