@@ -110,8 +110,14 @@ public class MainGUIController {
     private void loadAboutStage() {
         try {
 
-            Parent root = FXMLLoader.load(getClass().getResource("/views/AboutStage.fxml"));
-            Scene scene = new Scene(root);
+            MovingBackground bg = new MovingBackground(MovingBackground.yellowColor, MovingBackground.defaultWindowSize);
+            // Getting the FXML file for the main menu
+            Parent aboutGuiRoot = FXMLLoader.load(getClass().getResource("/views/AboutStage.fxml"));
+            // Adding the background and the main menu to the same scene
+            Group root = new Group();
+            root.getChildren().addAll(bg, aboutGuiRoot);
+            
+            Scene scene = new Scene(root, AboutStage.WINDOW_WIDTH, AboutStage.WINDOW_HEIGHT);
 
             Stage aboutStage = new Stage();
             aboutStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
