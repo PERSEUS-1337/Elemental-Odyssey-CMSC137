@@ -101,9 +101,9 @@ public class MainGUIController {
         try {
 
             MovingBackground bg = new MovingBackground(MovingBackground.greenColor, MovingBackground.defaultWindowSize);
-            // Getting the FXML file for the main menu
+            // Getting the FXML file for the game mode ui
             Parent gameModeGuiRoot = FXMLLoader.load(getClass().getResource("/views/GameModeGUI.fxml"));
-            // Adding the background and the main menu to the same scene
+            // Adding the background and the game mode ui to the same scene
             Group root = new Group();
             root.getChildren().addAll(bg, gameModeGuiRoot);
             
@@ -127,9 +127,9 @@ public class MainGUIController {
         try {
 
             MovingBackground bg = new MovingBackground(MovingBackground.yellowColor, MovingBackground.defaultWindowSize);
-            // Getting the FXML file for the main menu
+            // Getting the FXML file for the about ui
             Parent aboutGuiRoot = FXMLLoader.load(getClass().getResource("/views/AboutStage.fxml"));
-            // Adding the background and the main menu to the same scene
+            // Adding the background and the about ui to the same scene
             Group root = new Group();
             root.getChildren().addAll(bg, aboutGuiRoot);
             
@@ -152,8 +152,14 @@ public class MainGUIController {
     private void loadSettingsStage() {
         try {
 
-            Parent root = FXMLLoader.load(getClass().getResource("/views/SettingsStage.fxml"));
-            Scene scene = new Scene(root);
+            MovingBackground bg = new MovingBackground(MovingBackground.pinkColor, MovingBackground.defaultWindowSize);
+            // Getting the FXML file for the settings ui
+            Parent settingsGuiRoot = FXMLLoader.load(getClass().getResource("/views/SettingsStage.fxml"));
+            // Adding the background and the settings ui to the same scene
+            Group root = new Group();
+            root.getChildren().addAll(bg, settingsGuiRoot);
+            
+            Scene scene = new Scene(root, SettingsStage.WINDOW_WIDTH, SettingsStage.WINDOW_HEIGHT);
 
             Stage settingsStage = new Stage();
             settingsStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
@@ -173,9 +179,9 @@ public class MainGUIController {
         try {
 
             MovingBackground bg = new MovingBackground(MovingBackground.grayColor, MovingBackground.defaultWindowSize);
-            // Getting the FXML file for the main menu
+            // Getting the FXML file for the exit ui
             Parent exitGuiRoot = FXMLLoader.load(getClass().getResource("/views/ExitStage.fxml"));
-            // Adding the background and the main menu to the same scene
+            // Adding the background and the exit ui to the same scene
             Group root = new Group();
             root.getChildren().addAll(bg, exitGuiRoot);
             
