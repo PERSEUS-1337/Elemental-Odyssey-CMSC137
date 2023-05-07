@@ -81,6 +81,7 @@ public class GameTimer extends AnimationTimer {
          * Timer handling for spawning and despawn
          */
 
+        moveMySprite();
         this.woodSprite.move();
         this.slimeSprite.move();
         this.candySprite.move();
@@ -116,62 +117,42 @@ public class GameTimer extends AnimationTimer {
                 KeyCode code = e.getCode();
             	if (!pressed.contains(code))
             		pressed.add(code);
-                moveMySprite();
             }
         });
 
         this.theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             public void handle(KeyEvent e) {
             	KeyCode code = e.getCode();
-            	if (pressed.contains(code))
-            		pressed.remove(code);
-                moveMySprite();
+            	pressed.remove(code);
             }
         });
     }
 
     //method that will move the sprite depending on the key pressed
 	private void moveMySprite() {
-		// Vertical movement (Wood Sprite)
-		// if (pressed.contains(KeyCode.W) && pressed.contains(KeyCode.S)) this.woodSprite.setDY(0);
-		// else if (pressed.contains(KeyCode.W)) this.woodSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		// else if (pressed.contains(KeyCode.S)) this.woodSprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		// else this.woodSprite.setDY(0);
+		// Wood Sprite movement
         if (pressed.contains(KeyCode.W)) this.woodSprite.jump();
-		// Horizontal movement (Wood Sprite)
 		if (pressed.contains(KeyCode.A) && pressed.contains(KeyCode.D)) this.woodSprite.setDX(0);
 		else if (pressed.contains(KeyCode.A)) this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
 		else if (pressed.contains(KeyCode.D)) this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
 		else this.woodSprite.setDX(0);
 
-        // Vertical movement (Slime Sprite)
-		if (pressed.contains(KeyCode.T) && pressed.contains(KeyCode.G)) this.slimeSprite.setDY(0);
-		else if (pressed.contains(KeyCode.T)) this.slimeSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.G)) this.slimeSprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		else this.slimeSprite.setDY(0);
-		// Horizontal movement (Slime Sprite)
+		// Slime Sprite movement
+        if (pressed.contains(KeyCode.T)) this.slimeSprite.jump();
 		if (pressed.contains(KeyCode.F) && pressed.contains(KeyCode.H)) this.slimeSprite.setDX(0);
 		else if (pressed.contains(KeyCode.F)) this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
 		else if (pressed.contains(KeyCode.H)) this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE);
 		else this.slimeSprite.setDX(0);
 
-        // Vertical movement (Candy Sprite)
-		if (pressed.contains(KeyCode.I) && pressed.contains(KeyCode.K)) this.candySprite.setDY(0);
-		else if (pressed.contains(KeyCode.I)) this.candySprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.K)) this.candySprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		else this.candySprite.setDY(0);
-		// Horizontal movement (Candy Sprite)
+        // Candy Sprite movement
+		if (pressed.contains(KeyCode.I)) this.candySprite.jump();
 		if (pressed.contains(KeyCode.J) && pressed.contains(KeyCode.L)) this.candySprite.setDX(0);
 		else if (pressed.contains(KeyCode.J)) this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
 		else if (pressed.contains(KeyCode.L)) this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE);
 		else this.candySprite.setDX(0);
 
-        // Vertical movement (Ice Sprite)
-		if (pressed.contains(KeyCode.UP) && pressed.contains(KeyCode.DOWN)) this.iceSprite.setDY(0);
-		else if (pressed.contains(KeyCode.UP)) this.iceSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.DOWN)) this.iceSprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		else this.iceSprite.setDY(0);
-		// Horizontal movement (Ice Sprite)
+        // Ice Sprite movement
+        if (pressed.contains(KeyCode.UP)) this.iceSprite.jump();
 		if (pressed.contains(KeyCode.LEFT) && pressed.contains(KeyCode.RIGHT)) this.iceSprite.setDX(0);
 		else if (pressed.contains(KeyCode.LEFT)) this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
 		else if (pressed.contains(KeyCode.RIGHT)) this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE);

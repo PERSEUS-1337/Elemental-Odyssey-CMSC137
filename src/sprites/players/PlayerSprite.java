@@ -27,27 +27,27 @@ public class PlayerSprite extends Sprite {
 	//method called if up/down/left/right arrow key is pressed.
 	public void move() {
 
+		// Update inAir if not on floor but haven't jumped
 		if (!inAir){
 			if (!onFloor()){
 				inAir = true;
-				System.out.println("air");
 			}
-			else System.out.println("ground");
 		}
 
 		if (inAir) {
+			// Jump player
 			if (this.canMoveHere(this.x, this.y+(int)this.dy)) {
 				this.y += this.dy;
 				this.dy += GRAVITY;
 			} else {
+				// Reached floor
 				if (this.dy > 0){
 					this.y = (int) (this.getCenterY() / this.height) * (int) this.height - 1;
-
 					this.inAir = false;
 					this.dy = 0;
+				// Reached ceiling
 				} else {
 					this.y = (int) (this.getCenterY() / this.height) * (int) this.height;
-
 					this.dy = FALLSPEEDAFTERCOLLISION;
 				}
 			}
@@ -56,34 +56,31 @@ public class PlayerSprite extends Sprite {
 		// Check first if sprite can move horizontally
 		if (this.canMoveHere(this.x+(int)this.dx, this.y)){
 			this.x += this.dx;
-			// System.out.println("world");
 		} 
 		else {
 			// Minimize horizontal gap when colliding
 			if (this.dx > 0) this.x = (int) (this.getCenterX() / this.width) * (int) this.width - 1;
 			else this.x = (int) (this.getCenterX() / this.width) * (int) this.width;
-			// System.out.println("hello");
 		}
-
-		// // Check first if sprite can move vertically
-		// if (this.canMoveY(this.y+this.dy)){
-		// 	this.y += this.dy;
-		// }
 	}
 
+	// Check if sprite is on the floor
 	private boolean onFloor() {
-		if (!isSolid(this.x, this.y+(int)this.height+1))
-			if (!isSolid(this.x+(int)this.width, this.y+(int)this.height+1))
+		if (!isSolid(this.x, this.y+(int)this.height))
+			if (!isSolid(this.x+(int)this.width, this.y+(int)this.height))
 				return false;
 		return true;
 	}
 
+	// Jump method sets vertical speed
 	public void jump(){
-		if (inAir) return;
-		this.inAir = true;
-		this.dy = JUMPSPEED;
+		if (!inAir){
+			this.inAir = true;
+			this.dy = JUMPSPEED;
+		} 
 	}
 
+	// Check if player can move to destination
 	private boolean canMoveHere(int destX, int destY){
 		if (!isSolid(destX, destY))
 			if (!isSolid(destX+(int)this.width, destY+(int)this.height))
@@ -93,28 +90,6 @@ public class PlayerSprite extends Sprite {
 
 		return false;
 	}
-
-	// // Check if player can move horizontally to destination
-	// private boolean canMoveX(int destX){
-	// 	if (!isSolid(destX, this.y))
-	// 		if (!isSolid(destX+(int)this.width, this.y+(int)this.height))
-	// 			if (!isSolid(destX+(int)this.width, this.y))
-	// 				if (!isSolid(destX, this.y+(int)this.height))
-	// 					return true;
-
-	// 	return false;
-	// }
-
-	// // Check if player can move vertically to destination
-	// private boolean canMoveY(int destY){
-	// 	if (!isSolid(this.x, destY))
-	// 		if (!isSolid(this.x+(int)this.width, destY+(int)this.height))
-	// 			if (!isSolid(this.x+(int)this.width, destY))
-	// 				if (!isSolid(this.x, destY+(int)this.height))
-	// 					return true;
-
-	// 	return false;
-	// }
 
 	// Check if the sprite in that coordinate is solid (cant move through)
 	private boolean isSolid(int targetX, int targetY){
