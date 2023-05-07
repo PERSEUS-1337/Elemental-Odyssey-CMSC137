@@ -26,5 +26,9 @@ public class TutorialLevel extends Level {
 
 		this.lvldata = TutorialLevel.LVL0DATA;
 	}
+
+	public void stopTimer(){
+		this.gametimer.stop();
+	}
     
 }

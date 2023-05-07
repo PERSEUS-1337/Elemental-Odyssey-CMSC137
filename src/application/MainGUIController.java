@@ -74,6 +74,8 @@ public class MainGUIController {
         // if the tutorial level window is closed, play the background music
         Level.getStage().setOnCloseRequest(e -> {
             MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC);
+            // also stop the game timer
+            tutorialLevel.stopTimer();
         });
 
         // Stop the background music if tutorial level window is open
