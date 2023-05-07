@@ -21,7 +21,7 @@ public class GameTimer extends AnimationTimer {
     private Sprite[][] lvlSprites;
     private ArrayList<KeyCode> pressed;
 
-    public static final int FPS = 60;
+    public static final int FPS = 30;
 
     /*
      * TO ADD:
@@ -66,16 +66,16 @@ public class GameTimer extends AnimationTimer {
 
     } // end of constructor
 
-    private long lastTime = 0;
-    private long fpsCap = 24;
-    private final long targetTime = 1000000000L / fpsCap;
+    // private long lastTime = 0;
+    // private long fpsCap = 60;
+    // private final long targetTime = 1000000000L / fpsCap;
 
     @Override
     public void handle(long currentNanoTime) {
-        if (!(currentNanoTime - lastTime >= targetTime)) {
-            return;
-        }
-        lastTime = currentNanoTime;
+        // if (!(currentNanoTime - lastTime >= targetTime)) {
+        // return;
+        // }
+        // lastTime = currentNanoTime;
 
         this.gc.clearRect(0, 0, Level.WINDOW_WIDTH, Level.WINDOW_HEIGHT);
 
@@ -108,9 +108,25 @@ public class GameTimer extends AnimationTimer {
                     lvlSprites[i][j].render(this.gc);
             }
         }
-        
+        /*
+         * GRAVITY LOGIC PART 1
+         * 
+         * Implemented in game timer so gravity is always active no matter when you
+         * press
+         * 
+         * Capped to inverse of jump_speed, so there is terminal velocity.
+         * 
+         * And this still moves player with the cap
+         * 
+         * TODO: No Gravity Reset yet when hitting a platform
+         */
+        if (PlayerSprite.getVERTICAL_VELOCITY() < (-this.woodSprite.getJUMP_SPEED()))
+            // Need to implement proper setter here
+            PlayerSprite.VERTICAL_VELOCITY += this.woodSprite.getGravity();
+        this.woodSprite.setDY(PlayerSprite.getVERTICAL_VELOCITY());
+
         // collision detection (should be improved in the future)
-        this.collissionDetection();
+        // this.collissionDetection();
 
         // Printing WoodSprite Details
         this.printSpriteDetails();
@@ -118,18 +134,10 @@ public class GameTimer extends AnimationTimer {
         // Put thread to sleep until next frame
         try {
             Thread.sleep((1000 / GameTimer.FPS) - ((System.nanoTime() - currentNanoTime) / 1000000));
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
     } // end of handle method
-
-    private void collissionDetection() {
-        int xCoord = this.woodSprite.getCenterX();
-        int yCoord = this.woodSprite.getCenterY();
-        int xIndex = xCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
-        int yIndex = yCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
-        System.out.println("Collission? " +
-        this.woodSprite.collidesWith(this.lvlSprites[yIndex][xIndex]));
-    }
 
     // method that will listen and handle the key press events
     private void handleKeyPressEvent() {
@@ -140,6 +148,19 @@ public class GameTimer extends AnimationTimer {
                     pressed.add(code);
                 moveMySprite();
             }
+            // public void handle(KeyEvent e) {
+            // KeyCode code = e.getCode();
+            // if (code == KeyCode.W && !wPressed) {
+            // wPressed = true;
+            // pressed.add(code);
+            // moveMySprite();
+            // } else if (code != KeyCode.W) {
+            // if (!pressed.contains(code)) {
+            // pressed.add(code);
+            // moveMySprite();
+            // }
+            // }
+            // }
         });
 
         this.theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -149,21 +170,51 @@ public class GameTimer extends AnimationTimer {
                     pressed.remove(code);
                 moveMySprite();
             }
+            // public void handle(KeyEvent e) {
+            // KeyCode code = e.getCode();
+            // if (code == KeyCode.W) {
+            // wPressed = false;
+            // }
+            // if (pressed.contains(code)) {
+            // pressed.remove(code);
+            // moveMySprite();
+            // }
+            // }
         });
     }
 
-    //method that will move the sprite depending on the key pressed
-	private void moveMySprite() {
-		// Vertical movement (Wood Sprite)
-		if (pressed.contains(KeyCode.W) && pressed.contains(KeyCode.S)) this.woodSprite.setDY(0);
-		else if (pressed.contains(KeyCode.W)) this.woodSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.S)) this.woodSprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		else this.woodSprite.setDY(0);
-		// Horizontal movement (Wood Sprite)
-		if (pressed.contains(KeyCode.A) && pressed.contains(KeyCode.D)) this.woodSprite.setDX(0);
-		else if (pressed.contains(KeyCode.A)) this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.D)) this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
-		else this.woodSprite.setDX(0);
+    // method that will move the sprite depending on the key pressed
+    private void moveMySprite() {
+        // Vertical movement (Wood Sprite)
+        if (pressed.contains(KeyCode.W) && pressed.contains(KeyCode.S))
+            this.woodSprite.setDY(0);
+        else if (pressed.contains(KeyCode.W)) {
+            // When jumping, set jump speed
+            PlayerSprite.setVERTICAL_VELOCITY(this.woodSprite.getJUMP_SPEED());
+            // Make player move to jump speed
+            this.woodSprite.setDY(-PlayerSprite.getVERTICAL_VELOCITY());
+        } else if (pressed.contains(KeyCode.S)) {
+            // this.woodSprite.setDY(PlayerSprite.MOVE_DISTANCE);
+            // PlayerSprite.VERTICAL_VELOCITY -= 2;
+            // this.woodSprite.setDY(PlayerSprite.VERTICAL_VELOCITY);
+        } else {
+            // PlayerSprite.VERTICAL_VELOCITY -= 2;
+            // this.woodSprite.setDY(PlayerSprite.VERTICAL_VELOCITY);
+        }
+
+        // Horizontal movement (Wood Sprite)
+        if (pressed.contains(KeyCode.A) && pressed.contains(KeyCode.D))
+            this.woodSprite.setDX(0);
+        else if (pressed.contains(KeyCode.A))
+            this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+        else if (pressed.contains(KeyCode.D))
+            this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+        else
+            this.woodSprite.setDX(0);
+
+        // if (PlayerSprite.VERTICAL_VELOCITY <= 8)
+        // PlayerSprite.VERTICAL_VELOCITY += 1;
+        // this.woodSprite.setDY(PlayerSprite.VERTICAL_VELOCITY);
 
         // Vertical movement (Slime Sprite)
         if (pressed.contains(KeyCode.T) && pressed.contains(KeyCode.G))
@@ -243,7 +294,9 @@ public class GameTimer extends AnimationTimer {
 
     // method to print out the details of the sprite
     private void printSpriteDetails() {
+
         // System.out.println("=============== SPRITE DETAILS ==============");
+        System.out.println("Velocity: " + (int) PlayerSprite.getVERTICAL_VELOCITY());
         // int xCoord = this.woodSprite.getCenterX();
         // int yCoord = this.woodSprite.getCenterY();
         // int xIndex = xCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
@@ -253,8 +306,10 @@ public class GameTimer extends AnimationTimer {
         // System.out.println("Sprite Y-coordinate:" + yCoord);
         // System.out.println("Sprite X-index:" + xIndex);
         // System.out.println("Sprite Y-index:" + yIndex);
-        // System.out.println("Sprite Collides with:" + this.lvlSprites[yIndex][xIndex]);
-        // System.out.println("Collission? " + this.woodSprite.collidesWith(this.lvlSprites[yIndex][xIndex]));
+        // System.out.println("Sprite Collides with:" +
+        // this.lvlSprites[yIndex][xIndex]);
+        // System.out.println("Collission? " +
+        // this.woodSprite.collidesWith(this.lvlSprites[yIndex][xIndex]));
 
     }
 }

@@ -6,7 +6,8 @@ import javafx.scene.image.Image;
 
 public class Sprite {
 	protected Image img;
-	protected int x, y, dx, dy;
+	protected int x, y, dx;
+	protected double dy;
 	protected boolean visible;
 	protected double width;
 	protected double height;
@@ -80,6 +81,14 @@ public class Sprite {
 		return this.y + (Sprite.SPRITE_HEIGHT / 2);
 	}
 
+	public double getDy() {
+		return dy;
+	}
+
+	public int getDx() {
+		return dx;
+	}
+
 	public double getWidth(){
 		return this.width;
 	}
@@ -101,8 +110,8 @@ public class Sprite {
 		this.dx = dx;
 	}
 	
-	public void setDY(int dy){
-		this.dy = dy;
+	public void setDY(double vERTICAL_VELOCITY){
+		this.dy = vERTICAL_VELOCITY;
 	}
 	
 	public void setWidth(double val){

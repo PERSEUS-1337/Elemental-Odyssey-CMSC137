@@ -6,11 +6,16 @@ import sprites.objects.CrateSprite;
 import sprites.objects.TerrainSprite;
 
 public class PlayerSprite extends Sprite {
-    protected String name;
+	protected String name;
 	protected Sprite[][] lvlSprites;
 
-    public final static int MOVE_DISTANCE = 2;
-    public final static int MAX_SPRITE_STRENGTH = 150;
+	// TODO: This should adjust based on fps, lets fix it later
+	public final int JUMP_SPEED = -8;
+	public final double GRAVITY = 0.3;
+	public static double VERTICAL_VELOCITY = 0;
+
+	public final static int MOVE_DISTANCE = 2;
+	public final static int MAX_SPRITE_STRENGTH = 150;
 	public final static int MIN_SPRITE_STRENGTH = 100;
 
 	public PlayerSprite(String name, int x, int y) {
@@ -22,40 +27,41 @@ public class PlayerSprite extends Sprite {
 	public void move() {
 
 		// Check first if sprite can move horizontally
-		if (this.canMoveX(this.x+this.dx)){
+		if (this.canMoveX(this.x + this.dx)) {
 			this.x += this.dx;
 		}
 
 		// Check first if sprite can move vertically
-		if (this.canMoveY(this.y+this.dy)){
+		if (this.canMoveY((int) (this.y + this.dy))) {
 			this.y += this.dy;
 		}
 	}
 
 	// Check if player can move horizontally to destination
-	private boolean canMoveX(int destX){
+	private boolean canMoveX(int destX) {
 		if (!isSolid(destX, this.y))
-			if (!isSolid(destX+(int)this.width, this.y+(int)this.height))
-				if (!isSolid(destX+(int)this.width, this.y))
-					if (!isSolid(destX, this.y+(int)this.height))
+			if (!isSolid(destX + (int) this.width, this.y + (int) this.height))
+				if (!isSolid(destX + (int) this.width, this.y))
+					if (!isSolid(destX, this.y + (int) this.height))
 						return true;
 
 		return false;
 	}
 
 	// Check if player can move vertically to destination
-	private boolean canMoveY(int destY){
+	private boolean canMoveY(int destY) {
 		if (!isSolid(this.x, destY))
-			if (!isSolid(this.x+(int)this.width, destY+(int)this.height))
-				if (!isSolid(this.x+(int)this.width, destY))
-					if (!isSolid(this.x, destY+(int)this.height))
+			if (!isSolid(this.x + (int) this.width, destY + (int) this.height))
+				if (!isSolid(this.x + (int) this.width, destY))
+					if (!isSolid(this.x, destY + (int) this.height))
 						return true;
 
 		return false;
 	}
 
 	// Check if the sprite in that coordinate is solid (cant move through)
-	private boolean isSolid(int targetX, int targetY){
+	private boolean isSolid(int targetX, int targetY) {
+
 		if (targetX < 0 || targetX >= Level.WINDOW_WIDTH)
 			return true;
 		if (targetY < 0 || targetY >= Level.WINDOW_HEIGHT)
@@ -63,22 +69,38 @@ public class PlayerSprite extends Sprite {
 
 		int xIdx = targetX / Sprite.SPRITE_WIDTH;
 		int yIdx = targetY / Sprite.SPRITE_HEIGHT;
-		
+
 		Sprite sprite = lvlSprites[yIdx][xIdx];
 
-		if (sprite instanceof TerrainSprite || sprite instanceof CrateSprite){
+		if (sprite instanceof TerrainSprite || sprite instanceof CrateSprite) {
 			return true;
 		}
 
 		return false;
 	}
 
-	public void setLevelData(Sprite[][] lvlSprites){
+	public void setLevelData(Sprite[][] lvlSprites) {
 		this.lvlSprites = lvlSprites;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return this.name;
+	}
+
+	public static double getVERTICAL_VELOCITY() {
+		return VERTICAL_VELOCITY;
+	}
+
+	public static void setVERTICAL_VELOCITY(int vERTICAL_VELOCITY) {
+		VERTICAL_VELOCITY = vERTICAL_VELOCITY;
+	}
+
+	public double getGravity() {
+		return GRAVITY;
+	}
+
+	public int getJUMP_SPEED() {
+		return JUMP_SPEED;
 	}
 
 }
