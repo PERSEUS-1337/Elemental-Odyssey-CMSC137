@@ -75,8 +75,8 @@
                   <Image url="@../assets/texts/soundText.png" />
                </image>
             </ImageView>
-            <Slider fx:id="sliderMaster" layoutX="199.0" layoutY="139.0" prefHeight="5.0" prefWidth="300.0" />
-            <Slider fx:id="sliderMusic" layoutX="199.0" layoutY="180.0" prefHeight="5.0" prefWidth="300.0" />
+            <Slider fx:id="sliderMaster" layoutX="199.0" layoutY="139.0" onDragDetected="#changeMasterVolume" onDragExited="#changeMasterVolume" onMouseClicked="#changeMasterVolume" prefHeight="5.0" prefWidth="300.0" value="50.0" />
+            <Slider fx:id="sliderMusic" layoutX="199.0" layoutY="180.0" onDragDetected="#changeMusicVolume" onMouseClicked="#changeMusicVolume" prefHeight="5.0" prefWidth="300.0" value="50.0" />
             <Slider fx:id="sliderSound" layoutX="199.0" layoutY="221.0" prefHeight="5.0" prefWidth="300.0" />
          </children>
       </AnchorPane>
