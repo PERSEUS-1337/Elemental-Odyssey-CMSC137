@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -83,8 +84,14 @@ public class MainGUIController {
     private void loadGameMode() {
         try {
 
-            Parent root = FXMLLoader.load(getClass().getResource("/views/GameModeGUI.fxml"));
-            Scene scene = new Scene(root);
+            MovingBackground bg = new MovingBackground(MovingBackground.greenColor, MovingBackground.defaultWindowSize);
+            // Getting the FXML file for the main menu
+            Parent gameModeGuiRoot = FXMLLoader.load(getClass().getResource("/views/GameModeGUI.fxml"));
+            // Adding the background and the main menu to the same scene
+            Group root = new Group();
+            root.getChildren().addAll(bg, gameModeGuiRoot);
+            
+            Scene scene = new Scene(root, GameModeController.WINDOW_WIDTH, GameModeController.WINDOW_HEIGHT);
 
             Stage gameModeStage = new Stage();
             gameModeStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
