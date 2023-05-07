@@ -133,10 +133,11 @@ public class GameTimer extends AnimationTimer {
     //method that will move the sprite depending on the key pressed
 	private void moveMySprite() {
 		// Vertical movement (Wood Sprite)
-		if (pressed.contains(KeyCode.W) && pressed.contains(KeyCode.S)) this.woodSprite.setDY(0);
-		else if (pressed.contains(KeyCode.W)) this.woodSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.S)) this.woodSprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		else this.woodSprite.setDY(0);
+		// if (pressed.contains(KeyCode.W) && pressed.contains(KeyCode.S)) this.woodSprite.setDY(0);
+		// else if (pressed.contains(KeyCode.W)) this.woodSprite.setDY(-PlayerSprite.MOVE_DISTANCE);
+		// else if (pressed.contains(KeyCode.S)) this.woodSprite.setDY(PlayerSprite.MOVE_DISTANCE);
+		// else this.woodSprite.setDY(0);
+        if (pressed.contains(KeyCode.W)) this.woodSprite.jump();
 		// Horizontal movement (Wood Sprite)
 		if (pressed.contains(KeyCode.A) && pressed.contains(KeyCode.D)) this.woodSprite.setDX(0);
 		else if (pressed.contains(KeyCode.A)) this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
