@@ -72,9 +72,17 @@ public class MainGUIController {
         TutorialLevel tutorialLevel = new TutorialLevel();
         tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
 
-        // if the tutorial level window is closed, play the background music
+         // Play the background music for tutorial
+         try {
+            TutorialLevel.playBackgroundMusic(TutorialLevel.TRACK_01, SettingsStage.musicVolume);
+           } catch (Exception e) {
+            System.out.println("Error playing music: " + e.getMessage());
+           }
+
+        // if the tutorial level window is closed, play the background music for the menu and stop its music
         Level.getStage().setOnCloseRequest(e -> {
-            MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC);
+            TutorialLevel.stopBackgroundMusic();
+            MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC, SettingsStage.musicVolume);
             // also stop the game timer
             tutorialLevel.stopTimer();
         });
@@ -204,13 +212,13 @@ public class MainGUIController {
     }
 
     // Method to play the main menu music
-    public static void playBackgroundMusic(String musicFile) {
+    public static void playBackgroundMusic(String musicFile, double volume) {
         // Creating a new media player with the music file
         Media music = new Media(new File(musicFile).toURI().toString());
         
         mediaPlayer = new MediaPlayer(music);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Sets the music to loop indefinitely
-        mediaPlayer.setVolume(0.5); // Sets the volume to 50%
+        mediaPlayer.setVolume(volume); // Sets the volume to 50%
         mediaPlayer.play(); // Plays the music
         
     }

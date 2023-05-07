@@ -40,7 +40,7 @@ public class Main extends Application {
 
             // Play the background music
            try {
-            MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC);
+            MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC, MainGUIController.DEFAULT_MASTER_VOLUME);
            } catch (Exception e) {
             System.out.println("Error playing music: " + e.getMessage());
            }

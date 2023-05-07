@@ -1,9 +1,13 @@
 package application;
 
+import java.io.File;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -24,6 +28,11 @@ public class Level {
     public static final int LEVEL_HEIGHT = 15;
     public static final int WINDOW_WIDTH = Sprite.SPRITE_WIDTH * LEVEL_WIDTH;
     public static final int WINDOW_HEIGHT = Sprite.SPRITE_WIDTH * LEVEL_HEIGHT;
+
+    // Music and sounds stuff
+    public static final String TRACK_01 = "src\\sounds\\musicTrack01.wav";
+    // media player for the background music
+    private static MediaPlayer mediaPlayer;
 
     // Constructor
 	public Level() {
@@ -100,5 +109,31 @@ public class Level {
 	static Stage getStage(){
 		return(Level.stage);
 	}
+
+    
+	public void stopTimer(){
+		this.gametimer.stop();
+	}
+
+    // Method to play the main menu music
+    public static void playBackgroundMusic(String musicFile, double volume) {
+        // Creating a new media player with the music file
+        Media music = new Media(new File(musicFile).toURI().toString());
+        
+        mediaPlayer = new MediaPlayer(music);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Sets the music to loop indefinitely
+        mediaPlayer.setVolume(volume); // Sets the volume to 50%
+        mediaPlayer.play(); // Plays the music
+        
+    }
+
+    // Method to stop the main menu music
+    public static void stopBackgroundMusic() {
+        mediaPlayer.stop();
+    }
+
+    public static void changeMusicVolume(double volume) {
+        mediaPlayer.setVolume(volume);
+    }
 
 }
