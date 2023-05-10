@@ -139,6 +139,9 @@ public class GameTimer extends AnimationTimer {
         // Also pass the time it took for the player to reach the end of the level
         this.checkDoorCollision(passedTime);
 
+        // Check if the game is over. If it is over, we update the end time
+        System.out.println(this.isGameOver(passedTime));
+
         // Put thread to sleep until next frame
         try {
             Thread.sleep((1000 / GameTimer.FPS) - ((System.nanoTime() - currentNanoTime) / 1000000));
@@ -280,6 +283,11 @@ public class GameTimer extends AnimationTimer {
             this.isIceSpriteFinished = true;
         }
 
-        System.out.println(this.playerRanking);
+    }
+
+    // method to check if the game is over, which means all the players have finished the level
+    private boolean isGameOver(int timeFinished) {
+        this.endTime = timeFinished;
+        return this.isWoodSpriteFinished && this.isSlimeSpriteFinished && this.isCandySpriteFinished && this.isIceSpriteFinished;
     }
 }
