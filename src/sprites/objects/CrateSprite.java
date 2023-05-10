@@ -5,7 +5,7 @@ import sprites.Sprite;
 
 public class CrateSprite extends Sprite {
     private String name;
-
+    public final static String SPRITE_NAME = "CrateSprite";
     public final static Image SPRITE_IMAGE = new Image("assets/objects/CrateSprite_1.png", 
             Sprite.SPRITE_WIDTH, Sprite.SPRITE_WIDTH, false,
             false);

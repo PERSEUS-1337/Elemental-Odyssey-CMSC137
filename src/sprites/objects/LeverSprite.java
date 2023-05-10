@@ -5,7 +5,7 @@ import sprites.Sprite;
 
 public class LeverSprite extends Sprite {
     private String name;
-
+    public final static String SPRITE_NAME = "LeverSprite";
     public final static Image SPRITE_IMAGE = new Image("assets/objects/LeverLeft.png",
             Sprite.SPRITE_WIDTH, Sprite.SPRITE_WIDTH, false,
             false);

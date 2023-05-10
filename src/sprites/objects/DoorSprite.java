@@ -5,7 +5,7 @@ import sprites.Sprite;
 
 public class DoorSprite extends Sprite {
     private String name;
-
+    public final static String SPRITE_NAME = "DoorSprite";
     public final static Image SPRITE_IMAGE = new Image("assets/objects/DoorSprite_Closed.png", 
             Sprite.SPRITE_WIDTH, Sprite.SPRITE_WIDTH, false,
             false);

@@ -5,7 +5,7 @@ import sprites.Sprite;
 
 public class TerrainSpritePoison extends Sprite {
     private String name;
-
+    public final static String SPRITE_NAME = "TerrainSpritePoison";
     public final static Image SPRITE_IMAGE = new Image("assets/objects/TerrainPoison.png", 
             Sprite.SPRITE_WIDTH, Sprite.SPRITE_WIDTH, false,
             false);
