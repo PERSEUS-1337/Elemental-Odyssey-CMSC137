@@ -4,6 +4,8 @@ import sprites.*;
 import sprites.players.*;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -21,6 +23,13 @@ public class GameTimer extends AnimationTimer {
     private Sprite[][] lvlSprites;
     private ArrayList<KeyCode> pressed;
 
+    // GameOver-related variables
+    private boolean gameOver;
+    private ArrayList<String> playerRanking;
+    // We need to keep track of the time from the start of the game to the end of the game
+    private long startTime;
+    private long endTime;
+
     public static final int FPS = 60;
 
     /*
@@ -35,10 +44,11 @@ public class GameTimer extends AnimationTimer {
         this.lvlSprites = lvlSprites;
         this.pressed = new ArrayList<KeyCode>();
 
-        /*
-         * TO ADD:
-         * Instantiating the timers
-         */
+        // Initialize GameOver-related variables
+        this.gameOver = false;
+        this.playerRanking = new ArrayList<String>();
+        this.startTime = System.nanoTime();
+        this.endTime = 0;
 
         // Get variable reference to player sprites
         for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
@@ -69,12 +79,15 @@ public class GameTimer extends AnimationTimer {
      public void handle(long currentNanoTime) {
          this.gc.clearRect(0, 0, Level.WINDOW_WIDTH,Level.WINDOW_HEIGHT);
         
+        // Update the time
+        long currentSec = TimeUnit.NANOSECONDS.toSeconds(currentNanoTime);
+		long gameStartSec = TimeUnit.NANOSECONDS.toSeconds(this.startTime);
+		int passedTime = (int) (currentSec - gameStartSec);
 
-        /*
-         * TO ADD:
-         * Timer handling for spawning and despawn
-         */
+        System.out.println("Passed Time: " + passedTime + " seconds");
+        
 
+        // Move the sprites
         moveMySprite();
         this.woodSprite.move();
         this.slimeSprite.move();
