@@ -108,19 +108,10 @@ public class GameTimer extends AnimationTimer {
 
         // Move the sprites
         moveMySprite();
-        if(!isWoodSpriteFinished) {
-            this.woodSprite.move();
-        }
-        if (!isSlimeSpriteFinished) {
-            this.slimeSprite.move();
-        }
-        if (!isCandySpriteFinished) {
-            this.candySprite.move();
-        }
-        if (!isIceSpriteFinished) {
-            this.iceSprite.move();
-        }
-
+        this.woodSprite.move();
+        this.slimeSprite.move();
+        this.candySprite.move();
+        this.iceSprite.move();
 
         /*
          * TO ADD:
@@ -130,7 +121,13 @@ public class GameTimer extends AnimationTimer {
         // render the sprites
         for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
             for (int j = 0; j < Level.LEVEL_WIDTH; j++) {
-                if (lvlSprites[i][j] != null)
+                if(lvlSprites[i][j] instanceof WoodSprite && isWoodSpriteFinished 
+                || lvlSprites[i][j] instanceof SlimeSprite && isSlimeSpriteFinished 
+                || lvlSprites[i][j] instanceof CandySprite && isCandySpriteFinished 
+                || lvlSprites[i][j] instanceof IceSprite && isIceSpriteFinished){
+                    // do not render the sprite if it is finished and the player has reached the end of the level
+                }
+                else if (lvlSprites[i][j] != null)
                     lvlSprites[i][j].render(this.gc);
             }
         }
