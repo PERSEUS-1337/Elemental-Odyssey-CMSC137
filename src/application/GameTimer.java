@@ -22,7 +22,6 @@ public class GameTimer extends AnimationTimer {
     private SlimeSprite slimeSprite;
     private CandySprite candySprite;
     private IceSprite iceSprite;
-    private DoorSprite doorSprite;  // endpoint indicator
     private Sprite[][] lvlSprites;
     private ArrayList<KeyCode> pressed;
 
@@ -63,8 +62,6 @@ public class GameTimer extends AnimationTimer {
 
         // Get the index of the door based on the lvldata to get the door sprite
         this.locateDoor();
-        System.out.println("Door index: " + this.doorIndexY + ", " + this.doorIndexX);
-        this.doorSprite = (DoorSprite) lvlSprites[this.doorIndexY][this.doorIndexX];
 
         // Initialize the isFinished variables
         this.isWoodSpriteFinished = false;
@@ -241,26 +238,48 @@ public class GameTimer extends AnimationTimer {
 
     // method to check if the sprite is colliding with the door. If it is, add the sprite to the player ranking and update the time for the sprite to finish the level
     private void checkDoorCollision(int timeFinished) {
-        if (this.woodSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains(WoodSprite.SPRITE_NAME)) {
+        // Calculate first the yIndex and xIndex of each player sprite
+        int woodSpriteXCoord = this.woodSprite.getCenterX();
+        int woodSpriteYCoord = this.woodSprite.getCenterY();
+        int woodSpriteXIndex = woodSpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+        int woodSpriteYIndex = woodSpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
+
+        int slimeSpriteXCoord = this.slimeSprite.getCenterX();
+        int slimeSpriteYCoord = this.slimeSprite.getCenterY();
+        int slimeSpriteXIndex = slimeSpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+        int slimeSpriteYIndex = slimeSpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
+
+        int candySpriteXCoord = this.candySprite.getCenterX();
+        int candySpriteYCoord = this.candySprite.getCenterY();
+        int candySpriteXIndex = candySpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+        int candySpriteYIndex = candySpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
+
+        int iceSpriteXCoord = this.iceSprite.getCenterX();
+        int iceSpriteYCoord = this.iceSprite.getCenterY();
+        int iceSpriteXIndex = iceSpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+        int iceSpriteYIndex = iceSpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
+
+        if (woodSpriteYIndex == this.doorIndexY && woodSpriteXIndex == this.doorIndexX && !this.playerRanking.contains(WoodSprite.SPRITE_NAME)) {
             this.playerRanking.add(WoodSprite.SPRITE_NAME);
             this.playerTimeFinished.put(WoodSprite.SPRITE_NAME, timeFinished);
             this.isWoodSpriteFinished = true;
         }
-        else if (this.slimeSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains(SlimeSprite.SPRITE_NAME)) {
+        if (slimeSpriteYIndex == this.doorIndexY && slimeSpriteXIndex == this.doorIndexX && !this.playerRanking.contains(SlimeSprite.SPRITE_NAME)) {
             this.playerRanking.add(SlimeSprite.SPRITE_NAME);
             this.playerTimeFinished.put(SlimeSprite.SPRITE_NAME, timeFinished);
             this.isSlimeSpriteFinished = true;
         }
-        else if (this.candySprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains(CandySprite.SPRITE_NAME)) {
+        if (candySpriteYIndex == this.doorIndexY && candySpriteXIndex == this.doorIndexX && !this.playerRanking.contains(CandySprite.SPRITE_NAME)) {
             this.playerRanking.add(CandySprite.SPRITE_NAME);
             this.playerTimeFinished.put(CandySprite.SPRITE_NAME, timeFinished);
             this.isCandySpriteFinished = true;
         }
-        else if (this.iceSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains(IceSprite.SPRITE_NAME)) {
+        if (iceSpriteYIndex == this.doorIndexY && iceSpriteXIndex == this.doorIndexX && !this.playerRanking.contains(IceSprite.SPRITE_NAME)) {
             this.playerRanking.add(IceSprite.SPRITE_NAME);
             this.playerTimeFinished.put(IceSprite.SPRITE_NAME, timeFinished);
             this.isIceSpriteFinished = true;
         }
+
         System.out.println(this.playerRanking);
     }
 }
