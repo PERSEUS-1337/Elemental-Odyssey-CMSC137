@@ -1,6 +1,7 @@
 package application;
 
 import sprites.*;
+import sprites.objects.DoorSprite;
 import sprites.players.*;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class GameTimer extends AnimationTimer {
     private SlimeSprite slimeSprite;
     private CandySprite candySprite;
     private IceSprite iceSprite;
+    private DoorSprite doorSprite;  // endpoint indicator
     private Sprite[][] lvlSprites;
     private ArrayList<KeyCode> pressed;
 
@@ -29,6 +31,8 @@ public class GameTimer extends AnimationTimer {
     // We need to keep track of the time from the start of the game to the end of the game
     private long startTime;
     private long endTime;
+    private int doorIndexX;
+    private int doorIndexY;
 
     public static final int FPS = 60;
 
@@ -49,6 +53,11 @@ public class GameTimer extends AnimationTimer {
         this.playerRanking = new ArrayList<String>();
         this.startTime = System.nanoTime();
         this.endTime = 0;
+
+        // Get the index of the door based on the lvldata
+        this.locateDoor();
+        System.out.println("Door index: " + this.doorIndexY + ", " + this.doorIndexX);
+        this.doorSprite = (DoorSprite) lvlSprites[this.doorIndexY][this.doorIndexX];
 
         // Get variable reference to player sprites
         for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
@@ -107,8 +116,8 @@ public class GameTimer extends AnimationTimer {
             }
         }
 
-        // Printing WoodSprite Details
-        this.printSpriteDetails();
+        // After the sprites have been rendered, check if the player sprites have reached the end of the level, which is colliding with the Door sprite
+        this.checkDoorCollision();
 
         // Put thread to sleep until next frame
         try {
@@ -193,5 +202,33 @@ public class GameTimer extends AnimationTimer {
         // System.out.println("Sprite Collides with:" + this.lvlSprites[yIndex][xIndex]);
         // System.out.println("Collission? " + this.woodSprite.collidesWith(this.lvlSprites[yIndex][xIndex]));
 
+    }
+
+    // method to locate the door sprite in the level data. It updates the doorIndexY and doorIndexX
+    private void locateDoor() {
+        for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
+            for (int j = 0; j < Level.LEVEL_WIDTH; j++) {
+                if (this.lvlSprites[i][j] instanceof DoorSprite) {
+                    this.doorIndexY = i;
+                    this.doorIndexX = j;
+                }
+            }
+        }
+    }
+
+    // method to check if the sprite is colliding with the door. If it is, add the sprite to the player ranking
+    private void checkDoorCollision() {
+        if (this.woodSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains("WoodSprite")) {
+            this.playerRanking.add("WoodSprite");
+        }
+        else if (this.slimeSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains("SlimeSprite")) {
+            this.playerRanking.add("SlimeSprite");
+        }
+        else if (this.candySprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains("CandySprite")) {
+            this.playerRanking.add("CandySprite");
+        }
+        else if (this.iceSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains("IceSprite")) {
+            this.playerRanking.add("IceSprite");
+        }
     }
 }
