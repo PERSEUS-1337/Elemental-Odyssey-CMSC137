@@ -82,13 +82,13 @@ public class Level {
     private Sprite spriteGenerator(int value, int x, int y){
         switch (value) {
             case 1:
-                return new WoodSprite("WoodSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+                return new WoodSprite("WoodSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
             case 2:
-                return new SlimeSprite("SlimeSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+                return new SlimeSprite("SlimeSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
             case 3:
-                return new CandySprite("CandySprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+                return new CandySprite("CandySprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
             case 4:
-                return new IceSprite("IceSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+                return new IceSprite("IceSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
             case 5:
                 return new TerrainSprite("TerrainSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             case 6:

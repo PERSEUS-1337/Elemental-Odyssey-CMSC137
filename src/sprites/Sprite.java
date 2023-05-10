@@ -6,14 +6,17 @@ import javafx.scene.image.Image;
 
 public class Sprite {
 	protected Image img;
-	protected int x, y, dx, dy;
+	protected int x, y;
+	protected double dx, dy;
 	protected boolean visible;
 	protected double width;
 	protected double height;
 
 	public static final int SPRITE_DEFAULT_WIDTH = 32;
+	public static final int SPRITE_DEFAULT_HEIGHT = 32;
 	public static final float SCALE = 1.5f;
 	public static final int SPRITE_WIDTH = (int) (SPRITE_DEFAULT_WIDTH * SCALE);
+	public static final int SPRITE_HEIGHT = (int) (SPRITE_DEFAULT_HEIGHT * SCALE);
 	
 	public Sprite(int xPos, int yPos){
 		this.x = xPos;
@@ -48,8 +51,6 @@ public class Sprite {
 		Rectangle2D rectangle1 = this.getBounds();
 		Rectangle2D rectangle2 = rect2.getBounds();
 
-		// this.y -= rect2.height;
-
 		return rectangle1.intersects(rectangle2);
 	}
 	
@@ -72,6 +73,22 @@ public class Sprite {
     	return this.y;
 	}
 	
+	public int getCenterX(){
+		return this.x + (Sprite.SPRITE_WIDTH / 2);
+	}
+
+	public int getCenterY(){
+		return this.y + (Sprite.SPRITE_HEIGHT / 2);
+	}
+
+	public double getWidth(){
+		return this.width;
+	}
+
+	public double getHeight(){
+		return this.height;
+	}
+
 	public boolean getVisible(){
 		return visible;	
 	}
@@ -100,7 +117,6 @@ public class Sprite {
 	public void setVisible(boolean value){
 		this.visible = value;
 	}
-	
 	
 
 }
