@@ -5,6 +5,7 @@ import sprites.objects.DoorSprite;
 import sprites.players.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import javafx.animation.AnimationTimer;
@@ -28,11 +29,16 @@ public class GameTimer extends AnimationTimer {
     // GameOver-related variables
     private boolean gameOver;
     private ArrayList<String> playerRanking;
+    private HashMap<String,Integer> playerTimeFinished;
     // We need to keep track of the time from the start of the game to the end of the game
     private long startTime;
     private long endTime;
     private int doorIndexX;
     private int doorIndexY;
+    private Boolean isWoodSpriteFinished;
+    private Boolean isSlimeSpriteFinished;
+    private Boolean isCandySpriteFinished;
+    private Boolean isIceSpriteFinished;
 
     public static final int FPS = 60;
 
@@ -51,13 +57,20 @@ public class GameTimer extends AnimationTimer {
         // Initialize GameOver-related variables
         this.gameOver = false;
         this.playerRanking = new ArrayList<String>();
+        this.playerTimeFinished = new HashMap<String,Integer>();
         this.startTime = System.nanoTime();
         this.endTime = 0;
 
-        // Get the index of the door based on the lvldata
+        // Get the index of the door based on the lvldata to get the door sprite
         this.locateDoor();
         System.out.println("Door index: " + this.doorIndexY + ", " + this.doorIndexX);
         this.doorSprite = (DoorSprite) lvlSprites[this.doorIndexY][this.doorIndexX];
+
+        // Initialize the isFinished variables
+        this.isWoodSpriteFinished = false;
+        this.isSlimeSpriteFinished = false;
+        this.isCandySpriteFinished = false;
+        this.isIceSpriteFinished = false;
 
         // Get variable reference to player sprites
         for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
@@ -98,10 +111,19 @@ public class GameTimer extends AnimationTimer {
 
         // Move the sprites
         moveMySprite();
-        this.woodSprite.move();
-        this.slimeSprite.move();
-        this.candySprite.move();
-        this.iceSprite.move();
+        if(!isWoodSpriteFinished) {
+            this.woodSprite.move();
+        }
+        if (!isSlimeSpriteFinished) {
+            this.slimeSprite.move();
+        }
+        if (!isCandySpriteFinished) {
+            this.candySprite.move();
+        }
+        if (!isIceSpriteFinished) {
+            this.iceSprite.move();
+        }
+
 
         /*
          * TO ADD:
@@ -117,7 +139,8 @@ public class GameTimer extends AnimationTimer {
         }
 
         // After the sprites have been rendered, check if the player sprites have reached the end of the level, which is colliding with the Door sprite
-        this.checkDoorCollision();
+        // Also pass the time it took for the player to reach the end of the level
+        this.checkDoorCollision(passedTime);
 
         // Put thread to sleep until next frame
         try {
@@ -216,19 +239,28 @@ public class GameTimer extends AnimationTimer {
         }
     }
 
-    // method to check if the sprite is colliding with the door. If it is, add the sprite to the player ranking
-    private void checkDoorCollision() {
-        if (this.woodSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains("WoodSprite")) {
-            this.playerRanking.add("WoodSprite");
+    // method to check if the sprite is colliding with the door. If it is, add the sprite to the player ranking and update the time for the sprite to finish the level
+    private void checkDoorCollision(int timeFinished) {
+        if (this.woodSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains(WoodSprite.SPRITE_NAME)) {
+            this.playerRanking.add(WoodSprite.SPRITE_NAME);
+            this.playerTimeFinished.put(WoodSprite.SPRITE_NAME, timeFinished);
+            this.isWoodSpriteFinished = true;
         }
-        else if (this.slimeSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains("SlimeSprite")) {
-            this.playerRanking.add("SlimeSprite");
+        else if (this.slimeSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains(SlimeSprite.SPRITE_NAME)) {
+            this.playerRanking.add(SlimeSprite.SPRITE_NAME);
+            this.playerTimeFinished.put(SlimeSprite.SPRITE_NAME, timeFinished);
+            this.isSlimeSpriteFinished = true;
         }
-        else if (this.candySprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains("CandySprite")) {
-            this.playerRanking.add("CandySprite");
+        else if (this.candySprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains(CandySprite.SPRITE_NAME)) {
+            this.playerRanking.add(CandySprite.SPRITE_NAME);
+            this.playerTimeFinished.put(CandySprite.SPRITE_NAME, timeFinished);
+            this.isCandySpriteFinished = true;
         }
-        else if (this.iceSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains("IceSprite")) {
-            this.playerRanking.add("IceSprite");
+        else if (this.iceSprite.collidesWith(this.doorSprite) == true && !this.playerRanking.contains(IceSprite.SPRITE_NAME)) {
+            this.playerRanking.add(IceSprite.SPRITE_NAME);
+            this.playerTimeFinished.put(IceSprite.SPRITE_NAME, timeFinished);
+            this.isIceSpriteFinished = true;
         }
+        System.out.println(this.playerRanking);
     }
 }
