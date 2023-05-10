@@ -82,25 +82,25 @@ public class Level {
     private Sprite spriteGenerator(int value, int x, int y){
         switch (value) {
             case 1:
-                return new WoodSprite("WoodSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
+                return new WoodSprite(WoodSprite.SPRITE_NAME, x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
             case 2:
-                return new SlimeSprite("SlimeSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
+                return new SlimeSprite(SlimeSprite.SPRITE_NAME, x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
             case 3:
-                return new CandySprite("CandySprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
+                return new CandySprite(CandySprite.SPRITE_NAME, x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
             case 4:
-                return new IceSprite("IceSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
+                return new IceSprite(IceSprite.SPRITE_NAME, x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH-1);
             case 5:
-                return new TerrainSprite("TerrainSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+                return new TerrainSprite(TerrainSprite.SPRITE_NAME, x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             case 6:
-                return new CrateSprite("CrateSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+                return new CrateSprite(CrateSprite.SPRITE_NAME, x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             case 7:
-                return new LeverSprite("LeverSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+                return new LeverSprite(LeverSprite.SPRITE_NAME, x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             case 8:
-                return new TerrainSpritePoison("TerrainSpritePoison", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+                return new TerrainSpritePoison(TerrainSpritePoison.SPRITE_NAME, x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             case 9:
-                return new DoorSprite("DoorSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+                return new DoorSprite(DoorSprite.SPRITE_NAME, x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             case 10:
-                return new ButtonSprite("ButtonSprite", x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
+                return new ButtonSprite(ButtonSprite.SPRITE_NAME, x*Sprite.SPRITE_WIDTH, y*Sprite.SPRITE_WIDTH);
             default:
                 return null;
         }
