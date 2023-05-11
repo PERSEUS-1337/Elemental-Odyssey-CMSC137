@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GameOverStage">
    <children>
       <AnchorPane prefHeight="410.0" prefWidth="600.0">
@@ -16,9 +15,9 @@
                   <Image url="@../assets/background/gameOverBackground.png" />
                </image>
             </ImageView>
-            <Button layoutX="547.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+            <Button fx:id="btnClose" layoutX="547.0" layoutY="14.0" mnemonicParsing="false" onAction="#onCloseButtonClicked" style="-fx-background-color: transparent;">
                <graphic>
-                  <ImageView fx:id="btnClose" fitHeight="43.0" fitWidth="23.0" onMouseClicked="#onCloseButtonClicked" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="43.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../assets/buttons/CloseButton.png" />
                      </image>
