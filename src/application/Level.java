@@ -26,6 +26,7 @@ public class Level {
     protected int[][] lvldata;
     protected Scene scene;
 	protected static Stage stage;
+    protected static Stage gameOverStage;
 	protected Group root;
 	protected Canvas canvas;
 	protected GraphicsContext gc;
@@ -162,7 +163,7 @@ public class Level {
                 
                 Scene scene = new Scene(root, GameOverStage.WINDOW_WIDTH, GameOverStage.WINDOW_HEIGHT);
     
-                Stage gameOverStage = new Stage();
+                gameOverStage = new Stage();
                 gameOverStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
                 gameOverStage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
                 gameOverStage.setTitle("Gameover!");
@@ -183,5 +184,8 @@ public class Level {
         }
     });
 }
+    public static void clsoeGameOverStage(){
+        gameOverStage.close();
+    }
 
 }

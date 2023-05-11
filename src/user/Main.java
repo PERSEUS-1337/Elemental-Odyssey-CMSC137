@@ -16,7 +16,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    private static Stage mainStage;
+    public static Stage mainStage;
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -28,13 +28,13 @@ public class Main extends Application {
         
 	}
 
-    public void createMainGUI(Stage stage){
+    public static void createMainGUI(Stage stage){
         // Get the FXML file for the main menu from the 'views' folder
         try {
             // Adding the background to the main menu
             MovingBackground bg = new MovingBackground(MovingBackground.brownColor, MovingBackground.defaultWindowSize);
             // Getting the FXML file for the main menu
-            Parent mainGuiRoot = FXMLLoader.load(getClass().getResource("/views/MainGUI.fxml"));
+            Parent mainGuiRoot = FXMLLoader.load(Main.class.getResource("/views/MainGUI.fxml"));
             // Adding the background and the main menu to the same scene
             Group root = new Group();
             root.getChildren().addAll(bg, mainGuiRoot);
