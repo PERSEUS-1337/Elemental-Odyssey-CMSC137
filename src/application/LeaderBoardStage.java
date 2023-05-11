@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import sprites.players.CandySprite;
 import sprites.players.IceSprite;
 import sprites.players.SlimeSprite;
@@ -53,7 +56,31 @@ public class LeaderBoardStage extends Pane {
         thirdPlaceImage.setX(THIRD_PLACE_X);
         thirdPlaceImage.setY(THIRD_PLACE_Y);
 
-        getChildren().addAll(firstPlaceImage, secondPlaceImage, thirdPlaceImage);
+        // Add the winner time texts using the playerTimeFinished HashMap
+        String firstPlaceTime = String.valueOf(playerTimeFinished.get(firstPlace));
+        String secondPlaceTime = String.valueOf(playerTimeFinished.get(secondPlace));
+        String thirdPlaceTime = String.valueOf(playerTimeFinished.get(thirdPlace));
+
+        // Add the winner time texts
+        Text firstPlaceTimeText = new Text(firstPlaceTime + "s");
+        Text secondPlaceTimeText = new Text(secondPlaceTime + "s");
+        Text thirdPlaceTimeText = new Text(thirdPlaceTime + "s");
+
+        // Set the fonts of the texts to "Press Start 2P" and set the font size to 15
+        Font timeTextFont = Font.font("Press Start 2P", FontWeight.NORMAL, 15);
+        firstPlaceTimeText.setFont(timeTextFont);
+        secondPlaceTimeText.setFont(timeTextFont);
+        thirdPlaceTimeText.setFont(timeTextFont);
+
+        // Set the coordinates of the winner time texts above each winner image
+        firstPlaceTimeText.setX(FIRST_PLACE_X + 10);
+        firstPlaceTimeText.setY(FIRST_PLACE_Y - 20);
+        secondPlaceTimeText.setX(SECOND_PLACE_X + 10);
+        secondPlaceTimeText.setY(SECOND_PLACE_Y - 20);
+        thirdPlaceTimeText.setX(THIRD_PLACE_X + 10);
+        thirdPlaceTimeText.setY(THIRD_PLACE_Y - 20);
+
+        getChildren().addAll(firstPlaceImage, secondPlaceImage, thirdPlaceImage, firstPlaceTimeText, secondPlaceTimeText, thirdPlaceTimeText);
     }
 
     private ImageView generateWinnerImage(String winnerName) {
