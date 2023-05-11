@@ -3,11 +3,9 @@ package application;
 import sprites.*;
 import sprites.objects.DoorSprite;
 import sprites.players.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
-
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -26,7 +24,6 @@ public class GameTimer extends AnimationTimer {
     private ArrayList<KeyCode> pressed;
 
     // GameOver-related variables
-    private boolean gameOver;
     private ArrayList<String> playerRanking;
     private HashMap<String,Integer> playerTimeFinished;
     // We need to keep track of the time from the start of the game to the end of the game
@@ -54,7 +51,6 @@ public class GameTimer extends AnimationTimer {
         this.pressed = new ArrayList<KeyCode>();
 
         // Initialize GameOver-related variables
-        this.gameOver = false;
         this.playerRanking = new ArrayList<String>();
         this.playerTimeFinished = new HashMap<String,Integer>();
         this.startTime = System.nanoTime();
@@ -132,17 +128,24 @@ public class GameTimer extends AnimationTimer {
             }
         }
 
+        // Check if the game is over. If it is over, we update the end time
+        // If the game is over, we display the game over screen
+        if(isGameOver(passedTime)) {
+            this.stop(); // stop the gametimer
+            Level.setGameOver();
+        }
         // After the sprites have been rendered, check if the player sprites have reached the end of the level, which is colliding with the Door sprite
         // Also pass the time it took for the player to reach the end of the level
         this.checkDoorCollision(passedTime);
 
-        // Check if the game is over. If it is over, we update the end time
-        System.out.println(this.isGameOver(passedTime));
+        
 
         // Put thread to sleep until next frame
         try {
             Thread.sleep((1000 / GameTimer.FPS) - ((System.nanoTime() - currentNanoTime) / 1000000));
         } catch (Exception e) {}
+
+        
 
     } // end of handle method
 

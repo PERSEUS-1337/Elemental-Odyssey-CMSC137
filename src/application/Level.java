@@ -1,8 +1,14 @@
 package application;
 
 import java.io.File;
+import java.io.IOException;
 
+import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -11,6 +17,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import sprites.*;
 import sprites.objects.*;
 import sprites.players.*;
@@ -135,5 +142,46 @@ public class Level {
     public static void changeMusicVolume(double volume) {
         mediaPlayer.setVolume(volume);
     }
+
+    public static void setGameOver(){
+    PauseTransition transition = new PauseTransition(Duration.seconds(1));
+    transition.play();
+
+    transition.setOnFinished(new EventHandler<ActionEvent>() {
+
+        public void handle(ActionEvent arg0) {
+            // Must show the gameOver screen
+            try {
+                
+                MovingBackground bg = new MovingBackground(MovingBackground.yellowColor, MovingBackground.defaultWindowSize);
+                // Getting the FXML file for the about ui
+                Parent gameOverRoot = FXMLLoader.load(getClass().getResource("/views/GameOverStage.fxml"));
+                // Adding the background and the about ui to the same scene
+                Group root = new Group();
+                root.getChildren().addAll(bg, gameOverRoot);
+                
+                Scene scene = new Scene(root, GameOverStage.WINDOW_WIDTH, GameOverStage.WINDOW_HEIGHT);
+    
+                Stage gameOverStage = new Stage();
+                gameOverStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
+                gameOverStage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
+                gameOverStage.setTitle("About Us");
+                gameOverStage.setScene(scene);
+
+                // Close the music
+                mediaPlayer.stop();
+
+                // Close the current level stage
+                Level.getStage().close();
+
+                gameOverStage.show();
+    
+                
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    });
+}
 
 }
