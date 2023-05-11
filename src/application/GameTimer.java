@@ -28,7 +28,6 @@ public class GameTimer extends AnimationTimer {
     private HashMap<String,Integer> playerTimeFinished;
     // We need to keep track of the time from the start of the game to the end of the game
     private long startTime;
-    private long endTime;
     private int doorIndexX;
     private int doorIndexY;
     private Boolean isWoodSpriteFinished;
@@ -54,7 +53,6 @@ public class GameTimer extends AnimationTimer {
         this.playerRanking = new ArrayList<String>();
         this.playerTimeFinished = new HashMap<String,Integer>();
         this.startTime = System.nanoTime();
-        this.endTime = 0;
 
         // Get the index of the door based on the lvldata to get the door sprite
         this.locateDoor();
@@ -211,7 +209,7 @@ public class GameTimer extends AnimationTimer {
    	}
 
     // method to print out the details of the sprite
-    private void printSpriteDetails() {
+    // private void printSpriteDetails() {
         // System.out.println("=============== SPRITE DETAILS ==============");
         // int xCoord = this.woodSprite.getCenterX();
         // int yCoord = this.woodSprite.getCenterY();
@@ -225,7 +223,7 @@ public class GameTimer extends AnimationTimer {
         // System.out.println("Sprite Collides with:" + this.lvlSprites[yIndex][xIndex]);
         // System.out.println("Collission? " + this.woodSprite.collidesWith(this.lvlSprites[yIndex][xIndex]));
 
-    }
+    // }
 
     // method to locate the door sprite in the level data. It updates the doorIndexY and doorIndexX
     private void locateDoor() {
@@ -287,7 +285,6 @@ public class GameTimer extends AnimationTimer {
 
     // method to check if the game is over, which means all the players have finished the level
     private boolean isGameOver(int timeFinished) {
-        this.endTime = timeFinished;
         return this.isWoodSpriteFinished && this.isSlimeSpriteFinished && this.isCandySpriteFinished && this.isIceSpriteFinished;
     }
 }
