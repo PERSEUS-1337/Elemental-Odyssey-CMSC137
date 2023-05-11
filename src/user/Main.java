@@ -3,6 +3,8 @@
 // influenced by Fireboy and Watergirl.
 
 package user;
+import chat.Client;
+import chat.Server;
 
 import java.io.IOException;
 
@@ -31,12 +33,25 @@ public class Main extends Application {
             Group root = new Group();
             root.getChildren().addAll(bg, mainGuiRoot);
             
+            // Instantiate the in-game chat client
+            Server server = new Server(5000);
+            Client chatClient = new Client();
+
             Scene scene = new Scene(root, MainGUIController.WINDOW_WIDTH, MainGUIController.WINDOW_HEIGHT);
+            new Thread(() -> {
+                server.startServer();
+            }).start();
+            // Start the chat client
+            new Thread(() -> {
+                chatClient.initialize();
+            }).start();
+            // Add the chat layout to the main game scene
+            // root.getChildren().add(chatClient.getLayout());
 
             mainStage.setResizable(false); // Disables the ability to resize the window
             mainStage.setTitle(MainGUIController.GAME_NAME);
             mainStage.setScene(scene);
-            mainStage.show();
+            mainStage.show();            
         } catch (IOException e) {
             e.printStackTrace();
         }
