@@ -56,7 +56,7 @@ public class LeaderBoardStage extends Pane {
         getChildren().addAll(firstPlaceImage, secondPlaceImage, thirdPlaceImage);
     }
 
-    ImageView generateWinnerImage(String winnerName) {
+    private ImageView generateWinnerImage(String winnerName) {
         ImageView winnerImage = new ImageView();
         switch(winnerName) {
             case WoodSprite.SPRITE_NAME:

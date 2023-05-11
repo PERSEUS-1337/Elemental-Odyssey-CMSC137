@@ -179,6 +179,13 @@ public class Level {
                 Level.getStage().close();
 
                 gameOverStage.show();
+
+                // Play the background music
+                try {
+                GameOverStage.playBackgroundMusic(GameOverStage.GAME_OVER_MUSIC, SettingsStage.masterVolume);
+                } catch (Exception e) {
+                System.out.println("Error playing music: " + e.getMessage());
+                }
     
                 
             } catch (IOException e) {
