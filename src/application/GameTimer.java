@@ -132,7 +132,7 @@ public class GameTimer extends AnimationTimer {
         // If the game is over, we display the game over screen
         if(isGameOver(passedTime)) {
             this.stop(); // stop the gametimer
-            Level.setGameOver();
+            Level.setGameOver(this.playerRanking, this.playerTimeFinished);
         }
         // After the sprites have been rendered, check if the player sprites have reached the end of the level, which is colliding with the Door sprite
         // Also pass the time it took for the player to reach the end of the level

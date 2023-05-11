@@ -2,6 +2,8 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -144,7 +146,7 @@ public class Level {
         mediaPlayer.setVolume(volume);
     }
 
-    public static void setGameOver(){
+    public static void setGameOver(ArrayList<String> rankings, HashMap<String, Integer> timeFinished){
     PauseTransition transition = new PauseTransition(Duration.seconds(1));
     transition.play();
 
@@ -153,13 +155,14 @@ public class Level {
         public void handle(ActionEvent arg0) {
             // Must show the gameOver screen
             try {
+                LeaderBoardStage leaderBoard = new LeaderBoardStage(rankings, timeFinished);
                 
                 MovingBackground bg = new MovingBackground(MovingBackground.yellowColor, MovingBackground.defaultWindowSize);
                 // Getting the FXML file for the about ui
                 Parent gameOverRoot = FXMLLoader.load(getClass().getResource("/views/GameOverStage.fxml"));
                 // Adding the background and the about ui to the same scene
                 Group root = new Group();
-                root.getChildren().addAll(bg, gameOverRoot);
+                root.getChildren().addAll(bg, gameOverRoot, leaderBoard);
                 
                 Scene scene = new Scene(root, GameOverStage.WINDOW_WIDTH, GameOverStage.WINDOW_HEIGHT);
     
