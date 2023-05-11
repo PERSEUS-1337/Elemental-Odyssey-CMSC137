@@ -165,7 +165,7 @@ public class Level {
                 Stage gameOverStage = new Stage();
                 gameOverStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
                 gameOverStage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
-                gameOverStage.setTitle("About Us");
+                gameOverStage.setTitle("Gameover!");
                 gameOverStage.setScene(scene);
 
                 // Close the music
