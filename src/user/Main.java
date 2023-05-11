@@ -16,11 +16,19 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+    private static Stage mainStage;
 	public static void main(String[] args) {
 		launch(args);
 	}
 
-	public void start(Stage mainStage){
+	public void start(Stage stage){
+        mainStage = stage;
+        // Call the createMainGUI method to create the main GUI
+        createMainGUI(mainStage);
+        
+	}
+
+    public void createMainGUI(Stage stage){
         // Get the FXML file for the main menu from the 'views' folder
         try {
             // Adding the background to the main menu
@@ -33,21 +41,24 @@ public class Main extends Application {
             
             Scene scene = new Scene(root, MainGUIController.WINDOW_WIDTH, MainGUIController.WINDOW_HEIGHT);
 
-            mainStage.setResizable(false); // Disables the ability to resize the window
-            mainStage.setTitle(MainGUIController.GAME_NAME);
-            mainStage.setScene(scene);
-            mainStage.show();
+            stage.setResizable(false); // Disables the ability to resize the window
+            stage.setTitle(MainGUIController.GAME_NAME);
+            stage.setScene(scene);
+            stage.show();
 
             // Play the background music
-           try {
+            try {
             MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC, MainGUIController.DEFAULT_MASTER_VOLUME);
-           } catch (Exception e) {
+            } catch (Exception e) {
             System.out.println("Error playing music: " + e.getMessage());
-           }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-	}
+    }
+
+    public static void closeMainGUI(){
+        mainStage.close();
+    }
 
 }

@@ -15,6 +15,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import user.Main;
 
 public class MainGUIController {
 
@@ -89,6 +90,9 @@ public class MainGUIController {
 
         // Stop the background music if tutorial level window is open
         MainGUIController.stopBackgroundMusic();
+
+        // Close the Main Menu
+        Main.closeMainGUI();
     }
 
     @FXML
