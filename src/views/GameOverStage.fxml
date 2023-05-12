@@ -10,7 +10,7 @@
    <children>
       <AnchorPane prefHeight="410.0" prefWidth="600.0">
          <children>
-            <ImageView fitHeight="401.0" fitWidth="624.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="401.0" fitWidth="624.0" layoutX="-1.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/background/gameOverBackground.png" />
                </image>

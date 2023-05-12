@@ -5,7 +5,6 @@ import java.util.HashMap;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import sprites.players.CandySprite;
 import sprites.players.IceSprite;
@@ -23,11 +22,11 @@ public class LeaderBoardStage extends Pane {
     
     // Coordinates of the rankings
     public static final int FIRST_PLACE_X = 275;
-    public static final int FIRST_PLACE_Y = 111;
+    public static final int FIRST_PLACE_Y = 124;
     public static final int SECOND_PLACE_X = 212;
-    public static final int SECOND_PLACE_Y = 246;
+    public static final int SECOND_PLACE_Y = 260;
     public static final int THIRD_PLACE_X = 341;
-    public static final int THIRD_PLACE_Y = 257;
+    public static final int THIRD_PLACE_Y = 271;
 
     // Constructor
     public LeaderBoardStage(ArrayList<String> rankings, HashMap<String,Integer> timeFinished) {
@@ -66,19 +65,19 @@ public class LeaderBoardStage extends Pane {
         Text secondPlaceTimeText = new Text(secondPlaceTime + "s");
         Text thirdPlaceTimeText = new Text(thirdPlaceTime + "s");
 
-        // Set the fonts of the texts to "Press Start 2P" and set the font size to 15
-        Font timeTextFont = Font.font("Press Start 2P", FontWeight.NORMAL, 15);
+        // Set the fonts of the texts to "Press Start 2P" using the Font file in the assets/fonts folder
+        Font timeTextFont = Font.loadFont(getClass().getResourceAsStream("/assets/fonts/PressStart2P-Regular.ttf"), 15);
         firstPlaceTimeText.setFont(timeTextFont);
         secondPlaceTimeText.setFont(timeTextFont);
         thirdPlaceTimeText.setFont(timeTextFont);
 
         // Set the coordinates of the winner time texts above each winner image
         firstPlaceTimeText.setX(FIRST_PLACE_X + 10);
-        firstPlaceTimeText.setY(FIRST_PLACE_Y - 20);
+        firstPlaceTimeText.setY(FIRST_PLACE_Y - 12);
         secondPlaceTimeText.setX(SECOND_PLACE_X + 10);
-        secondPlaceTimeText.setY(SECOND_PLACE_Y - 20);
+        secondPlaceTimeText.setY(SECOND_PLACE_Y - 12);
         thirdPlaceTimeText.setX(THIRD_PLACE_X + 10);
-        thirdPlaceTimeText.setY(THIRD_PLACE_Y - 20);
+        thirdPlaceTimeText.setY(THIRD_PLACE_Y - 12);
 
         getChildren().addAll(firstPlaceImage, secondPlaceImage, thirdPlaceImage, firstPlaceTimeText, secondPlaceTimeText, thirdPlaceTimeText);
     }
