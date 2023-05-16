@@ -24,6 +24,11 @@ public class GameModeController {
 
         // Close the Game Mode Menu
         MainGUIController.closeGameModeMenu();
+
+        // If the chat gui has been closed, close its socket
+        chatGUI.getStage().setOnCloseRequest(e -> {
+            chatGUI.closeSocket();
+        });
     }
 
     @FXML
@@ -34,9 +39,13 @@ public class GameModeController {
         ChatGUI chatGUI = new ChatGUI(ChatGUI.SERVER, "Player One");
         chatGUI.setStage(new Stage());
 
-
         // Close the Game Mode Menu
         MainGUIController.closeGameModeMenu();
+
+        // If the chat gui has been closed, close its socket
+        chatGUI.getStage().setOnCloseRequest(e -> {
+            chatGUI.closeSocket();
+        });
     }
 
 }

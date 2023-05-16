@@ -12,7 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
+import javafx.stage.Window;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,6 +48,15 @@ public class ChatGUI {
         } else if(chatType.equals(CLIENT)){
             clientListen();
         }
+    }
+
+    // Method for getting the stage
+    public Stage getStage() {
+        Window window = msgArea.getScene().getWindow();
+        if (window instanceof Stage) {
+            return (Stage) window;
+        }
+        return null;
     }
 
     // Method for the client to listen to the server
@@ -148,6 +157,15 @@ public class ChatGUI {
     // Method to append a message to the message area
     private void appendMessage(String message) {
         msgArea.appendText(message + "\n");
+    }
+
+    // Method to close the socket
+    void closeSocket() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     void setStage(Stage primaryStage) {
