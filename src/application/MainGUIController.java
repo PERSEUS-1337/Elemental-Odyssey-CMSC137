@@ -127,7 +127,7 @@ public class MainGUIController {
             Stage gameModeStage = new Stage();
             gameModeStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
             gameModeStage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
-            gameModeStage.setTitle("Select Game Mode");
+            gameModeStage.setTitle("Let's Play a Game!");
             gameModeStage.setScene(scene);
             gameModeStage.show();
 

@@ -13,9 +13,9 @@
    <children>
       <AnchorPane prefHeight="244.0" prefWidth="538.0">
          <children>
-            <ImageView fitHeight="263.0" fitWidth="522.0" layoutX="8.0" layoutY="-27.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="185.0" fitWidth="285.0" layoutX="131.0" layoutY="-9.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../assets/texts/selectGameModeText.png" />
+                  <Image url="@../assets/texts/playText.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="50.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
@@ -60,12 +60,12 @@
             </ImageView>
             <ToolBar layoutX="107.0" layoutY="131.0" prefHeight="74.0" prefWidth="324.0">
               <items>
-                <Button fx:id="btnSinglePlayer" mnemonicParsing="false" onAction="#onSinglePlayerButtonClicked" text="Singleplayer">
+                <Button fx:id="btnCreate" mnemonicParsing="false" onAction="#onCreateGameButtonClicked" text="Create Game">
                      <font>
                         <Font name="Goudy Old Style" size="25.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnMultiPlayer" mnemonicParsing="false" onAction="#onMultiPlayerButtonClicked" text="Multiplayer">
+                  <Button fx:id="btnJoin" mnemonicParsing="false" onAction="#onJoinGameButtonClicked" text="Join Game">
                      <font>
                         <Font name="Goudy Old Style" size="25.0" />
                      </font>

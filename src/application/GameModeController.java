@@ -15,13 +15,13 @@ public class GameModeController {
     private Button btnSinglePlayer;
 
     @FXML
-    void onMultiPlayerButtonClicked(ActionEvent event) {
-        System.out.println("Multi Player Button Clicked");
+    void onJoinGameButtonClicked(ActionEvent event) {
+        System.out.println("Join Game Button Clicked");
     }
 
     @FXML
-    void onSinglePlayerButtonClicked(ActionEvent event) {
-        System.out.println("Single Player Button Clicked");
+    void onCreateGameButtonClicked(ActionEvent event) {
+        System.out.println("Create Game Button Clicked");
     }
 
 }
