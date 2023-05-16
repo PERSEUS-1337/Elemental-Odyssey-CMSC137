@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import user.Main;
 
 public class MainGUIController {
+    private static Stage gameModeStage;
 
     public static final String GAME_NAME = "Elemental Odyssey: Beyond the Horizon";
     // Get the mainThemeMusic.wav file, get its targetPath, and filename
@@ -124,7 +125,7 @@ public class MainGUIController {
             
             Scene scene = new Scene(root, GameModeController.WINDOW_WIDTH, GameModeController.WINDOW_HEIGHT);
 
-            Stage gameModeStage = new Stage();
+            gameModeStage = new Stage();
             gameModeStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
             gameModeStage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
             gameModeStage.setTitle("Let's Play a Game!");
@@ -234,6 +235,10 @@ public class MainGUIController {
 
     public static void changeMusicVolume(double volume) {
         mediaPlayer.setVolume(volume);
+    }
+
+    public static void closeGameModeMenu() {
+        gameModeStage.close();
     }
 
 }
