@@ -35,6 +35,7 @@ public class ChatGUI {
     private String serverIP;
     private Integer serverPort;
     private Integer numClients;
+    private Integer numConnectedClients;
     private Set<OutputStreamWriter> connectedClients = new HashSet<>();
 
 
@@ -43,16 +44,9 @@ public class ChatGUI {
     public static final String CLIENT = "client";
     
 
-    public ChatGUI (String chatType, Integer numConnectedClients){
-
-        if(numConnectedClients == 1){
-            this.chatterName = "Player Two";
-        }else if(numConnectedClients == 2){
-            this.chatterName = "Player Three";
-        }
-        else if(numConnectedClients == 3){
-            this.chatterName = "Player Four";
-        }
+    public ChatGUI (String chatType){
+        this.numConnectedClients = 0;
+        this.chatterName = "Player " + (numConnectedClients + 1);
         this.numClients = 3;
         this.serverIP = "localhost";
         this.serverPort = 5000;
@@ -73,6 +67,12 @@ public class ChatGUI {
         }
         return null;
     }
+
+    private String generateChatterName() {
+        return "Player " + numConnectedClients;
+    }
+    
+ 
 
     private void broadcastMessage(String message, OutputStreamWriter sender) {
         for (OutputStreamWriter writer : connectedClients) {
@@ -140,11 +140,13 @@ public class ChatGUI {
             while (true) {
                 Socket clientSocket = server.accept();
                 System.out.println("Client connected using port " + clientSocket.getPort());
+                numConnectedClients++;
+                chatterName = generateChatterName();
+                System.out.println("New chatter name is: " + chatterName);
                 counterIndex++;
                 OutputStreamWriter writer = new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8);
                 connectedClients.add(writer);
                 
-    
                 Thread receivingThread = new Thread(() -> {
                     try {
                         BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8));
@@ -171,12 +173,13 @@ public class ChatGUI {
         } catch (IOException e) {
             e.printStackTrace();
             try {
-                socket.close();
+                server.close();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
     }
+    
     
 
     // Method to send a message to the server
