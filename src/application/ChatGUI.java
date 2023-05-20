@@ -303,6 +303,7 @@ public class ChatGUI {
         msgArea.setLayoutY(14.0);
         msgArea.setPrefHeight(397.0);
         msgArea.setPrefWidth(290.0);
+        msgArea.setFont(new Font("Bookman Old Style", 12.0));
 
         msgInput = new TextField();
         msgInput.setLayoutX(18.0);
