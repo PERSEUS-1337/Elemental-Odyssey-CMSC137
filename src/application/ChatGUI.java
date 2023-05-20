@@ -35,18 +35,17 @@ public class ChatGUI {
     private Socket socket;
     private ServerSocket server;
     private OutputStreamWriter writer;
-    private Integer serverPort;
     private String serverIP;
     private List<Socket> clientSockets = new ArrayList<>();
     private List<OutputStreamWriter> clientWriters = new ArrayList<>();
 
     private String chatName;
+    private static Integer serverPort = 5000;
     public static final String SERVER = "Server";
     public static final String CLIENT = "Client";
 
     public ChatGUI(String chatType, String chatName, String ipAddress) {
         this.serverIP = ipAddress;
-        this.serverPort = 5000;
         this.chatName = chatName;
 
         if (chatType.equals(SERVER)) {
@@ -55,7 +54,7 @@ public class ChatGUI {
             clientListen();
             // Set-up the GUI
             this.setStage(new Stage());
-        } else if (chatType.equals(CLIENT) && isServerRunning()) {
+        } else if (chatType.equals(CLIENT) && isServerRunning(this.serverIP)) {
             clientListen();
             // Set-up the GUI
             this.setStage(new Stage());
@@ -68,8 +67,8 @@ public class ChatGUI {
         try {
             InetAddress address = InetAddress.getByName(this.serverIP);
             this.server = new ServerSocket();
-            this.server.bind(new InetSocketAddress(address, this.serverPort));
-            System.out.println("Server instantiated at port " + this.serverPort);
+            this.server.bind(new InetSocketAddress(address, serverPort));
+            System.out.println("Server instantiated at port " + serverPort);
             System.out.println("Waiting for client(s) to connect...");
 
             while (true) {
@@ -130,11 +129,11 @@ public class ChatGUI {
     }
 
     // method to check if the server socket address is already running
-    boolean isServerRunning() {
+    static boolean isServerRunning(String ipAddress) {
         try {
-            InetAddress address = InetAddress.getByName(this.serverIP);
+            InetAddress address = InetAddress.getByName(ipAddress);
             ServerSocket server = new ServerSocket();
-            server.bind(new InetSocketAddress(address, this.serverPort));
+            server.bind(new InetSocketAddress(address, serverPort));
             server.close();
             return false;
         } catch (IOException e) {
