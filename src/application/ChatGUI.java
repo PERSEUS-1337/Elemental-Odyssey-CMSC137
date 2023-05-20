@@ -41,11 +41,11 @@ public class ChatGUI {
     private List<OutputStreamWriter> clientWriters = new ArrayList<>();
 
     private String chatName;
-    public static final String SERVER = "server";
-    public static final String CLIENT = "client";
+    public static final String SERVER = "Server";
+    public static final String CLIENT = "Client";
 
-    public ChatGUI(String chatType, String chatName) {
-        this.serverIP = "127.0.0.4";
+    public ChatGUI(String chatType, String chatName, String ipAddress) {
+        this.serverIP = ipAddress;
         this.serverPort = 5000;
         this.chatName = chatName;
 
