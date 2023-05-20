@@ -12,92 +12,129 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatGUI {
+    // GUI Variables for Chat App
+    private Stage stage;
     private TextArea msgArea;
     private TextField msgInput;
     private Button msgSend;
+
+    // Socket Programming Variables for Chat
     private Socket socket;
     private ServerSocket server;
     private OutputStreamWriter writer;
-    private String chatterName;
-    private String serverIP;
     private Integer serverPort;
-    private Integer numClients;
-    private Integer numConnectedClients;
-    private Set<OutputStreamWriter> connectedClients = new HashSet<>();
+    private String serverIP;
+    private List<Socket> clientSockets = new ArrayList<>();
+    private List<OutputStreamWriter> clientWriters = new ArrayList<>();
 
-
-
+    private String chatName;
     public static final String SERVER = "server";
     public static final String CLIENT = "client";
-    
 
-    public ChatGUI (String chatType){
-        this.numConnectedClients = 0;
-        this.chatterName = "Player " + (numConnectedClients + 1);
-        this.numClients = 3;
-        this.serverIP = "localhost";
+    public ChatGUI(String chatType, String chatName) {
+        this.serverIP = "127.0.0.4";
         this.serverPort = 5000;
-        
+        this.chatName = chatName;
 
-        if(chatType.equals(SERVER)){
-            serverListen();
-        } else if(chatType.equals(CLIENT)){
+        if (chatType.equals(SERVER)) {
+            Thread serverThread = new Thread(this::startServer);
+            serverThread.start();
+            clientListen();
+        } else if (chatType.equals(CLIENT)) {
             clientListen();
         }
     }
 
-    // Method for getting the stage
-    public Stage getStage() {
-        Window window = msgArea.getScene().getWindow();
-        if (window instanceof Stage) {
-            return (Stage) window;
+
+    // method for starting the server. It processes the client sockets and the client writers in separate threads, so that the server can handle multiple clients
+    private void startServer() {
+        try {
+            InetAddress address = InetAddress.getByName(this.serverIP);
+            this.server = new ServerSocket();
+            this.server.bind(new InetSocketAddress(address, this.serverPort));
+            System.out.println("Server instantiated at port " + this.serverPort);
+            System.out.println("Waiting for client(s) to connect...");
+
+            while (true) {
+                Socket clientSocket = server.accept();
+                System.out.println("Client connected");
+
+                clientSockets.add(clientSocket);
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8));
+                OutputStreamWriter clientWriter = new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8);
+
+                // Add the client writer to the list
+                clientWriters.add(clientWriter);
+
+                // Thread for processing the client sockets' messages
+                Thread receivingThread = new Thread(() -> {
+                    try {
+                        while (true) {
+                            String message = reader.readLine();
+                            if (message == null) {
+                                break;
+                            }
+                            // Forward the message to all connected clients
+                            sendMessageToAllClients(message, clientWriter);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        // Remove the client writer from the list when the client disconnects
+                        clientWriters.remove(clientWriter);
+                        try {
+                            clientSocket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                receivingThread.start();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return null;
     }
 
-    private String generateChatterName() {
-        return "Player " + numConnectedClients;
-    }
-    
- 
-
-    private void broadcastMessage(String message, OutputStreamWriter sender) {
-        for (OutputStreamWriter writer : connectedClients) {
-            if (writer != sender) {
+    // method for sending message to all clients except the sender
+    private void sendMessageToAllClients(String message, OutputStreamWriter senderWriter) {
+        for (OutputStreamWriter clientWriter : clientWriters) {
+            if (clientWriter != senderWriter) {
                 try {
-                    writer.write(message + "\n");
-                    writer.flush();
+                    clientWriter.write(message + "\n");
+                    clientWriter.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
     }
-    
-    
 
-    // Method for the client to listen to the server
+    // method for listening to the server
     private void clientListen() {
         try {
             socket = new Socket(this.serverIP, serverPort);
             System.out.println("Connected to server at port " + serverPort);
-    
+
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             writer = new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8);
-    
+
+            // Thread for receiving messages from the server
             Thread receivingThread = new Thread(() -> {
                 try {
                     while (true) {
@@ -105,111 +142,68 @@ public class ChatGUI {
                         if (message == null) {
                             break;
                         }
-                        System.out.println("Received message: " + message);
                         appendMessage(message);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    try {
-                        socket.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
                 }
             });
             receivingThread.start();
         } catch (IOException e) {
             e.printStackTrace();
-            try {
-                socket.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
         }
     }
-    
 
-    // Method for the server to listen to the client
-    private void serverListen() {
-        try {
-            this.server = new ServerSocket(this.serverPort);
-            System.out.println("Server instantiated at port " + this.serverPort);
-            System.out.println("Waiting for client(s) to connect...");
-            int counterIndex = 0;
-    
-            while (true) {
-                Socket clientSocket = server.accept();
-                System.out.println("Client connected using port " + clientSocket.getPort());
-                numConnectedClients++;
-                chatterName = generateChatterName();
-                System.out.println("New chatter name is: " + chatterName);
-                counterIndex++;
-                OutputStreamWriter writer = new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8);
-                connectedClients.add(writer);
-                
-                Thread receivingThread = new Thread(() -> {
-                    try {
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8));
-                        while (true) {
-                            String message = reader.readLine();
-                            if (message == null) {
-                                break;
-                            }
-                            System.out.println("Received message: " + message);
-                            broadcastMessage(message, writer);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        try {
-                            clientSocket.close();
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                });
-                
-                receivingThread.start();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            try {
-                server.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-    
-    
-
-    // Method to send a message to the server
+    // method for sending message to the server
     private void sendMessage(String message) {
         try {
-            writer.write(this.chatterName + ": " + message + "\n");
+            writer.write(this.chatName + ": " + message + "\n");
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // Method to append a message to the message area
+    // method for appending message to the message area
     private void appendMessage(String message) {
         msgArea.appendText(message + "\n");
     }
 
-    // Method to close the socket
+    // method for closing the client sockets
+    private void closeClientSockets() {
+        for (Socket clientSocket : clientSockets) {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // method to get the stage
+    Stage getStage() {
+        return this.stage;
+    }
+
+    // method to close the socket
     void closeSocket() {
         try {
-            socket.close();
+            if (socket != null) {
+                socket.close();
+            }
+            closeClientSockets();
+            if (server != null) {
+                server.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    
-
+    // method to set the Chat GUI stage components
     void setStage(Stage primaryStage) {
-        primaryStage.setTitle("Game Chat");
+        this.stage = primaryStage;
+        primaryStage.setTitle("Chat App");
 
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
@@ -218,10 +212,10 @@ public class ChatGUI {
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.setPrefSize(328.0, 530.0);
 
-        ImageView chatAppBackground = new ImageView(new Image(getClass().getResourceAsStream("../assets/background/chatBackground.png")));
-        chatAppBackground.setFitHeight(530.0);
-        chatAppBackground.setFitWidth(328.0);
-        chatAppBackground.setPickOnBounds(true);
+        ImageView background = new ImageView(new Image(getClass().getResourceAsStream("../assets/background/chatBackground.png")));
+        background.setFitHeight(530.0);
+        background.setFitWidth(328.0);
+        background.setPickOnBounds(true);
 
         ImageView lowerLeftCorner = new ImageView(new Image(getClass().getResourceAsStream("../assets/blocks/lowerLeftCorner_Gold.png")));
         lowerLeftCorner.setFitHeight(23.0);
@@ -280,19 +274,19 @@ public class ChatGUI {
         bottomBorder.setLayoutY(524.0);
         bottomBorder.setPickOnBounds(true);
         bottomBorder.setPreserveRatio(true);
-    
+
         Pane pane = new Pane();
         pane.setLayoutX(1.0);
         pane.setLayoutY(22.0);
         pane.setPrefHeight(481.0);
         pane.setPrefWidth(322.0);
-    
+
         msgArea = new TextArea();
         msgArea.setLayoutX(18.0);
         msgArea.setLayoutY(14.0);
         msgArea.setPrefHeight(397.0);
         msgArea.setPrefWidth(290.0);
-    
+
         msgInput = new TextField();
         msgInput.setLayoutX(18.0);
         msgInput.setLayoutY(435.0);
@@ -300,7 +294,7 @@ public class ChatGUI {
         msgInput.setPrefWidth(226.0);
         msgInput.setPromptText("Enter message...");
         msgInput.setFont(new Font("Bookman Old Style", 12.0));
-    
+
         msgSend = new Button("Send");
         msgSend.setLayoutX(262.0);
         msgSend.setLayoutY(435.0);
@@ -314,14 +308,14 @@ public class ChatGUI {
                 msgInput.clear();
             }
         });
-    
+
         pane.getChildren().addAll(msgArea, msgInput, msgSend);
-        anchorPane.getChildren().addAll(chatAppBackground, lowerLeftCorner, upperRightCorner, upperLeftCorner, lowerRightCorner,
+        anchorPane.getChildren().addAll(background, lowerLeftCorner, upperRightCorner, upperLeftCorner, lowerRightCorner,
                 leftBorder, rightBorder, topBorder, bottomBorder, pane);
         root.getChildren().add(anchorPane);
-    
+
         Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        this.stage.setScene(scene);
+        this.stage.show();
     }
-}    
+}

@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 public class GameModeController {
     public static final Integer WINDOW_WIDTH = 538;
     public static final Integer WINDOW_HEIGHT = 235;
-    // private Integer numConnectedClients = 1;
 
 
     @FXML
@@ -17,20 +16,11 @@ public class GameModeController {
     @FXML
     private Button btnSinglePlayer;
 
-    // private String generateChatterName() {
-    //     String chatterName = "Player " + (numConnectedClients + 1);
-    //     numConnectedClients++;
-    //     return chatterName;
-    // }
-    
-
     @FXML
     void onJoinGameButtonClicked(ActionEvent event) {
         // So the chat server will be created first
         System.out.println("Join Game Button Clicked");
-        // String chatterName = generateChatterName();
-        ChatGUI chatGUI = new ChatGUI(ChatGUI.CLIENT);
-        // numConnectedClients++;
+        ChatGUI chatGUI = new ChatGUI(ChatGUI.CLIENT, "Client");
         chatGUI.setStage(new Stage());
 
         // Close the Game Mode Menu
@@ -45,9 +35,7 @@ public class GameModeController {
     @FXML
     void onCreateGameButtonClicked(ActionEvent event) {
         System.out.println("Create Game Button Clicked");
-        // String chatterName = generateChatterName();
-        ChatGUI chatGUI = new ChatGUI(ChatGUI.SERVER);
-        // numConnectedClients++;
+        ChatGUI chatGUI = new ChatGUI(ChatGUI.SERVER, "Server");
 
         // The chat server will be created first
         chatGUI.setStage(new Stage());
