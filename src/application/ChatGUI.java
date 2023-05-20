@@ -53,8 +53,12 @@ public class ChatGUI {
             Thread serverThread = new Thread(this::startServer);
             serverThread.start();
             clientListen();
-        } else if (chatType.equals(CLIENT)) {
+            // Set-up the GUI
+            this.setStage(new Stage());
+        } else if (chatType.equals(CLIENT) && isServerRunning()) {
             clientListen();
+            // Set-up the GUI
+            this.setStage(new Stage());
         }
     }
 
@@ -122,6 +126,19 @@ public class ChatGUI {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    // method to check if the server socket address is already running
+    boolean isServerRunning() {
+        try {
+            InetAddress address = InetAddress.getByName(this.serverIP);
+            ServerSocket server = new ServerSocket();
+            server.bind(new InetSocketAddress(address, this.serverPort));
+            server.close();
+            return false;
+        } catch (IOException e) {
+            return true;
         }
     }
 
