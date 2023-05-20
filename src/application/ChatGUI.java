@@ -217,7 +217,7 @@ public class ChatGUI {
     }
 
     // method to set the Chat GUI stage components
-    void setStage(Stage primaryStage) {
+    private void setStage(Stage primaryStage) {
         this.stage = primaryStage;
         primaryStage.setTitle("User: " + this.chatName);
 

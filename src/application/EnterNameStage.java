@@ -37,18 +37,20 @@ public class EnterNameStage {
 
         nameOfUser = txtName.getText();
 
-        ChatGUI chatGUI = new ChatGUI(chatType, nameOfUser, ipAddress);
+        // ChatGUI chatGUI = new ChatGUI(chatType, nameOfUser, ipAddress);
+        PickSpriteStage pickSpriteStage = new PickSpriteStage(nameOfUser, ipAddress, chatType);
+        pickSpriteStage.setStage(new Stage());
 
         // Close the Enter Name Stage
         this.closeEnterAddressStage();
 
-        // Close the Game Mode Menu
-        MainGUIController.closeGameModeMenu();
+        // // Close the Game Mode Menu
+        // MainGUIController.closeGameModeMenu();
 
-        // If the chat gui has been closed, close its socket
-        chatGUI.getStage().setOnCloseRequest(e -> {
-            chatGUI.closeSocket();
-        });
+        // // If the chat gui has been closed, close its socket
+        // chatGUI.getStage().setOnCloseRequest(e -> {
+        //     chatGUI.closeSocket();
+        // });
     }
 
      // method to set the stage
