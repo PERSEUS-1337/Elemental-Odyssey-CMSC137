@@ -333,6 +333,7 @@ public class ChatGUI {
 
         Scene scene = new Scene(root);
         this.stage.setScene(scene);
+        this.stage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
         this.stage.show();
     }
 }
