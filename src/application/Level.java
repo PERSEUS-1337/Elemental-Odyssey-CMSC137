@@ -45,7 +45,8 @@ public class Level {
     private static MediaPlayer mediaPlayer;
 
     // Constructor
-	public Level() {
+	public Level(Boolean isMultiplayer) {
+        System.out.println("isMultiplayer: " + isMultiplayer);
 		this.root = new Group();
 		this.scene = new Scene(root, Level.WINDOW_WIDTH,Level.WINDOW_HEIGHT,Color.WHITE);
 		this.canvas = new Canvas(Level.WINDOW_WIDTH,Level.WINDOW_HEIGHT);

@@ -4,7 +4,7 @@ public class TutorialLevel extends Level {
 	public static final Integer tutorialWindowSize = 1500;
     
 	public static int[][] LVL0DATA = {
-        {0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		{0,0,0,1,0,2,0,3,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -21,8 +21,8 @@ public class TutorialLevel extends Level {
 		{5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,8,8,5,5,5,5,5,5,0,0},
     };
 
-    public TutorialLevel () {
-		super();
+    public TutorialLevel (Boolean isMultiplayer) {
+		super(isMultiplayer);
 
 		this.lvldata = TutorialLevel.LVL0DATA;
 	}

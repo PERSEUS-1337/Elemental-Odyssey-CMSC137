@@ -71,7 +71,7 @@ public class MainGUIController {
     void onInstructionsButtonClicked(ActionEvent event) {
         System.out.println("Instructions Button Clicked");
 
-        TutorialLevel tutorialLevel = new TutorialLevel();
+        TutorialLevel tutorialLevel = new TutorialLevel(false);
         tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
 
          // Play the background music for tutorial
