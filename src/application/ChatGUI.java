@@ -233,63 +233,21 @@ public class ChatGUI {
         background.setFitWidth(328.0);
         background.setPickOnBounds(true);
 
-        ImageView lowerLeftCorner = new ImageView(new Image(getClass().getResourceAsStream("../assets/blocks/lowerLeftCorner_Gold.png")));
-        lowerLeftCorner.setFitHeight(23.0);
-        lowerLeftCorner.setFitWidth(34.0);
-        lowerLeftCorner.setLayoutY(504.0);
-        lowerLeftCorner.setPickOnBounds(true);
-        lowerLeftCorner.setPreserveRatio(true);
+        ImageView lowerLeftCorner = createImageView("../assets/blocks/lowerLeftCorner_Gold.png", 34.0, 23.0, 0.0, 504.0);
 
-        ImageView upperRightCorner = new ImageView(new Image(getClass().getResourceAsStream("../assets/blocks/upperRightCorner_Gold.png")));
-        upperRightCorner.setFitHeight(23.0);
-        upperRightCorner.setFitWidth(31.0);
-        upperRightCorner.setLayoutX(297.0);
-        upperRightCorner.setPickOnBounds(true);
-        upperRightCorner.setPreserveRatio(true);
+        ImageView upperRightCorner = createImageView("../assets/blocks/upperRightCorner_Gold.png", 31.0, 23.0, 297.0, -1.0);
 
-        ImageView upperLeftCorner = new ImageView(new Image(getClass().getResourceAsStream("../assets/blocks/upperLeftCorner_Gold.png")));
-        upperLeftCorner.setFitHeight(35.0);
-        upperLeftCorner.setFitWidth(31.0);
-        upperLeftCorner.setPickOnBounds(true);
-        upperLeftCorner.setPreserveRatio(true);
+        ImageView upperLeftCorner = createImageView("../assets/blocks/upperLeftCorner_Gold.png", 31.0, 35.0, 0.0, 0.0);
 
-        ImageView lowerRightCorner = new ImageView(new Image(getClass().getResourceAsStream("../assets/blocks/lowerRightCorner_Gold.png")));
-        lowerRightCorner.setFitHeight(23.0);
-        lowerRightCorner.setFitWidth(31.0);
-        lowerRightCorner.setLayoutX(297.0);
-        lowerRightCorner.setLayoutY(504.0);
-        lowerRightCorner.setPickOnBounds(true);
-        lowerRightCorner.setPreserveRatio(true);
+        ImageView lowerRightCorner = createImageView("../assets/blocks/lowerRightCorner_Gold.png", 31.0, 23.0, 297.0, 504.0);
 
-        ImageView leftBorder = new ImageView(new Image(getClass().getResourceAsStream("../assets/blocks/longVerticalGoldBorder.png")));
-        leftBorder.setFitHeight(481.0);
-        leftBorder.setFitWidth(51.0);
-        leftBorder.setLayoutY(23.0);
-        leftBorder.setPickOnBounds(true);
-        leftBorder.setPreserveRatio(true);
+        ImageView leftBorder = createImageView("../assets/blocks/longVerticalGoldBorder.png", 51.0, 481.0, 0.0, 23.0);
 
-        ImageView rightBorder = new ImageView(new Image(getClass().getResourceAsStream("../assets/blocks/longVerticalGoldBorder.png")));
-        rightBorder.setFitHeight(481.0);
-        rightBorder.setFitWidth(51.0);
-        rightBorder.setLayoutX(323.0);
-        rightBorder.setLayoutY(23.0);
-        rightBorder.setPickOnBounds(true);
-        rightBorder.setPreserveRatio(true);
+        ImageView rightBorder = createImageView("../assets/blocks/longVerticalGoldBorder.png", 51.0, 481.0, 323.0, 23.0);
 
-        ImageView topBorder = new ImageView(new Image(getClass().getResourceAsStream("../assets/blocks/longHorizontalGoldBorder.png")));
-        topBorder.setFitHeight(7.0);
-        topBorder.setFitWidth(269.0);
-        topBorder.setLayoutX(30.0);
-        topBorder.setPickOnBounds(true);
-        topBorder.setPreserveRatio(true);
+        ImageView topBorder = createImageView("../assets/blocks/longHorizontalGoldBorder.png", 269.0, 7.0, 30.0, 0.0);
 
-        ImageView bottomBorder = new ImageView(new Image(getClass().getResourceAsStream("../assets/blocks/longHorizontalGoldBorder.png")));
-        bottomBorder.setFitHeight(7.0);
-        bottomBorder.setFitWidth(269.0);
-        bottomBorder.setLayoutX(30.0);
-        bottomBorder.setLayoutY(524.0);
-        bottomBorder.setPickOnBounds(true);
-        bottomBorder.setPreserveRatio(true);
+        ImageView bottomBorder = createImageView("../assets/blocks/longHorizontalGoldBorder.png", 269.0, 7.0, 30.0, 524.0);
 
         Pane pane = new Pane();
         pane.setLayoutX(1.0);
@@ -335,5 +293,18 @@ public class ChatGUI {
         this.stage.setScene(scene);
         this.stage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
         this.stage.show();
+    }
+
+    // method to set an ImageView component
+    private ImageView createImageView(String imageUrl, double fitWidth, double fitHeight, double layoutX, double layoutY) {
+        Image image = new Image(getClass().getResourceAsStream(imageUrl));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(fitWidth);
+        imageView.setFitHeight(fitHeight);
+        imageView.setLayoutX(layoutX);
+        imageView.setLayoutY(layoutY);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        return imageView;
     }
 }
