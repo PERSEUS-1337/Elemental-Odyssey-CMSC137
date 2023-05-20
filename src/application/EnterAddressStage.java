@@ -44,6 +44,17 @@ public class EnterAddressStage {
             System.out.println("Address Set");
             System.out.println("Address: " + ipAddress);
 
+            // if the chatType is SERVER, then check if the ipAddress is already in use
+            if (chatType.equals(ChatGUI.SERVER)) {
+                // if the ipAddress is already in use, then display an error message
+                if (ChatGUI.isServerRunning(ipAddress)) {
+                    System.out.println("Server is already running");
+                    // Close the Enter Name Stage if ip address is already in use
+                    this.closeEnterAddressStage();
+                    return;
+                }
+            }
+
             EnterNameStage enterNameStage = new EnterNameStage(ipAddress, chatType);
             enterNameStage.setStage(new Stage());
 
