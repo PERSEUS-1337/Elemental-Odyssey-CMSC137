@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import user.Main;
 
 public class PickSpriteStage extends VBox {
     private Button btnPickCandy;
@@ -158,8 +159,13 @@ public class PickSpriteStage extends VBox {
     // method to create an Instance of the Chat GUI
     private void createChatGUI() {
         ChatGUI chatGUI = new ChatGUI(chatType, nameOfUser, ipAddress);
+
+        // Stop the music from MainGUIController
+        MainGUIController.stopBackgroundMusic();
         //  Close the Game Mode Menu
         MainGUIController.closeGameModeMenu();
+        // Close the Main Menu
+        Main.closeMainGUI();
         // Close the Pick Sprite Stage
         this.closePickSpriteStage();
 
