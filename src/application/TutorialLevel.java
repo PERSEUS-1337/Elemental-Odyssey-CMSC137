@@ -21,8 +21,8 @@ public class TutorialLevel extends Level {
 		{5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,8,8,5,5,5,5,5,5,0,0},
     };
 
-    public TutorialLevel (Boolean isMultiplayer) {
-		super(isMultiplayer);
+    public TutorialLevel (Boolean isMultiplayer, String chatType, String nameOfUser, String ipAddress, String spriteType) {
+		super(isMultiplayer, chatType, nameOfUser, ipAddress, spriteType);
 
 		this.lvldata = TutorialLevel.LVL0DATA;
 	}

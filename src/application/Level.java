@@ -33,6 +33,11 @@ public class Level {
 	protected Canvas canvas;
 	protected GraphicsContext gc;
 	protected GameTimer gametimer;
+    protected Boolean isMultiplayer;
+    protected String chatType;
+    protected String nameOfUser;
+    protected String ipAddress;
+    protected String spriteType;
 
     public static final int LEVEL_WIDTH = 26;
     public static final int LEVEL_HEIGHT = 15;
@@ -45,7 +50,13 @@ public class Level {
     private static MediaPlayer mediaPlayer;
 
     // Constructor
-	public Level(Boolean isMultiplayer) {
+	public Level(Boolean isMultiplayer, String chatType, String nameOfUser, String ipAddress, String spriteType) {
+        this.chatType = chatType;
+        this.nameOfUser = nameOfUser;
+        this.ipAddress = ipAddress;
+        this.isMultiplayer = isMultiplayer;
+        this.spriteType = spriteType;
+        
         System.out.println("isMultiplayer: " + isMultiplayer);
 		this.root = new Group();
 		this.scene = new Scene(root, Level.WINDOW_WIDTH,Level.WINDOW_HEIGHT,Color.WHITE);
@@ -55,39 +66,75 @@ public class Level {
 
     // Method to add the stage elements
 	public void setStage(Stage stage, String backgroundColor, Integer windowSize) {
-		Level.stage = stage;
+        if(!this.isMultiplayer){
+            Level.stage = stage;
 
-        // Setup the moving background image
-        MovingBackground movingBackground = new MovingBackground(backgroundColor, windowSize);
-
-		//set stage elements here
-		this.root.getChildren().addAll(movingBackground,canvas);
-
-		Level.stage.setTitle("Instructions - Tutorial Level");
-        Level.stage.setResizable(false);
-        Level.stage.initModality(Modality.APPLICATION_MODAL);
-		Level.stage.setScene(this.scene);
-
-        // Build level based on lvldata
-        Sprite[][] lvlSprites = new Sprite[LEVEL_HEIGHT][LEVEL_WIDTH];
-        for (int i=0; i<Level.LEVEL_HEIGHT; i++){
-            for (int j=0; j<Level.LEVEL_WIDTH; j++){
-                lvlSprites[i][j] = this.spriteGenerator(lvldata[i][j], j, i);
+            // Setup the moving background image
+            MovingBackground movingBackground = new MovingBackground(backgroundColor, windowSize);
+    
+            //set stage elements here
+            this.root.getChildren().addAll(movingBackground,canvas);
+    
+            Level.stage.setTitle("Instructions - Tutorial Level");
+            Level.stage.setResizable(false);
+            Level.stage.initModality(Modality.APPLICATION_MODAL);
+            Level.stage.setScene(this.scene);
+    
+            // Build level based on lvldata
+            Sprite[][] lvlSprites = new Sprite[LEVEL_HEIGHT][LEVEL_WIDTH];
+            for (int i=0; i<Level.LEVEL_HEIGHT; i++){
+                for (int j=0; j<Level.LEVEL_WIDTH; j++){
+                    lvlSprites[i][j] = this.spriteGenerator(lvldata[i][j], j, i);
+                }
             }
+    
+            //instantiate an animation timer
+            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, null, null, null, null, null);
+    
+            //invoke the start method of the animation timer
+            this.gametimer.start();
+            // After invoking the start method, we need to check if the user exits the window
+            // If the user exits the window, we need to stop the timer
+            Level.stage.setOnCloseRequest(e -> {
+                this.gametimer.stop();
+            });
+    
+            Level.stage.show();
+        } else {
+            Level.stage = stage;
+
+            // Setup the moving background image
+            MovingBackground movingBackground = new MovingBackground(backgroundColor, windowSize);
+    
+            //set stage elements here
+            this.root.getChildren().addAll(movingBackground,canvas);
+    
+            Level.stage.setTitle("Instructions - Tutorial Level");
+            Level.stage.setResizable(false);
+            Level.stage.initModality(Modality.APPLICATION_MODAL);
+            Level.stage.setScene(this.scene);
+    
+            // Build level based on lvldata
+            Sprite[][] lvlSprites = new Sprite[LEVEL_HEIGHT][LEVEL_WIDTH];
+            for (int i=0; i<Level.LEVEL_HEIGHT; i++){
+                for (int j=0; j<Level.LEVEL_WIDTH; j++){
+                    lvlSprites[i][j] = this.spriteGenerator(lvldata[i][j], j, i);
+                }
+            }
+    
+            //instantiate an animation timer
+            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, this.isMultiplayer, this.chatType, this.nameOfUser, this.ipAddress, this.spriteType);
+    
+            //invoke the start method of the animation timer
+            this.gametimer.start();
+            // After invoking the start method, we need to check if the user exits the window
+            // If the user exits the window, we need to stop the timer
+            Level.stage.setOnCloseRequest(e -> {
+                this.gametimer.stop();
+            });
+    
+            Level.stage.show();
         }
-
-		//instantiate an animation timer
-		this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites);
-
-		//invoke the start method of the animation timer
-		this.gametimer.start();
-        // After invoking the start method, we need to check if the user exits the window
-        // If the user exits the window, we need to stop the timer
-        Level.stage.setOnCloseRequest(e -> {
-            this.gametimer.stop();
-        });
-
-		Level.stage.show();
 	}
 
     private Sprite spriteGenerator(int value, int x, int y){

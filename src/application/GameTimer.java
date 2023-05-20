@@ -3,8 +3,18 @@ package application;
 import sprites.*;
 import sprites.objects.DoorSprite;
 import sprites.players.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -21,7 +31,7 @@ public class GameTimer extends AnimationTimer {
     private CandySprite candySprite;
     private IceSprite iceSprite;
     private Sprite[][] lvlSprites;
-    private ArrayList<KeyCode> pressed;
+    private ArrayList<String> pressed;
 
     // GameOver-related variables
     private ArrayList<String> playerRanking;
@@ -35,6 +45,16 @@ public class GameTimer extends AnimationTimer {
     private Boolean isCandySpriteFinished;
     private Boolean isIceSpriteFinished;
 
+    // Multiplayer-related variables
+    private ServerSocket serverSocket;
+    private Boolean isMultiplayer;
+    private String chatType;
+    private String nameOfUser;
+    private String ipAddress;
+    private Integer serverPort = 5002;
+    private static String spriteType;
+    private static List<PrintWriter> clientWriters = new ArrayList<>();
+
     public static final int FPS = 60;
 
     /*
@@ -43,11 +63,18 @@ public class GameTimer extends AnimationTimer {
      * Background image for game stage and sprites
      */
 
-    GameTimer(GraphicsContext gc, Scene theScene, Sprite[][] lvlSprites) {
+    GameTimer(GraphicsContext gc, Scene theScene, Sprite[][] lvlSprites, Boolean isMultiplayer, String chatType, String nameOfUser, String ipAddress, String type) {
         this.gc = gc;
         this.theScene = theScene;
         this.lvlSprites = lvlSprites;
-        this.pressed = new ArrayList<KeyCode>();
+        this.pressed = new ArrayList<String>();
+
+        // Multiplayer-related variables
+        this.isMultiplayer = isMultiplayer;
+        this.chatType = chatType;
+        this.nameOfUser = nameOfUser;
+        this.ipAddress = ipAddress;
+        spriteType = type;
 
         // Initialize GameOver-related variables
         this.playerRanking = new ArrayList<String>();
@@ -82,11 +109,159 @@ public class GameTimer extends AnimationTimer {
         this.slimeSprite.setLevelData(lvlSprites);
         this.candySprite.setLevelData(lvlSprites);
         this.iceSprite.setLevelData(lvlSprites);
+        
 
-        // call method to handle mouse click event
-        this.handleKeyPressEvent();
+        // If the game is multiplayer, we need to create a new thread for the server
+        if (this.isMultiplayer && this.chatType.equals(ChatGUI.SERVER)) {
+            // Create a new thread for the server
+            Thread serverThread = new Thread(this::startServer);
+            serverThread.start();
+            Thread clientThread = new Thread(this::startClient);
+            clientThread.start();
+            
+        } if (this.isMultiplayer && this.chatType.equals(ChatGUI.CLIENT)) {
+            // Create a new thread for the client
+            Thread clientThread = new Thread(this::startClient);
+            clientThread.start();
+        } else { // if the game is singleplayer, we need to handle the key press events
+            this.handleKeyPressEvent();
+        }
 
     } // end of constructor
+
+
+    // method to start the server for multiplayer
+    private void startServer() {
+        try {
+            InetAddress address = InetAddress.getByName(this.ipAddress);
+            this.serverSocket = new ServerSocket();
+            this.serverSocket.bind(new InetSocketAddress(address, serverPort));
+            System.out.println("Game server started. Waiting for players...");
+
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Player connected.");
+
+                PrintWriter clientWriter = new PrintWriter(clientSocket.getOutputStream(), true);
+                clientWriters.add(clientWriter);
+
+                Thread clientThread = new Thread(() -> handleClient(clientSocket));
+                clientThread.start();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(0);
+        } finally { // close the server socket
+            try {
+                System.out.println("Closing server socket...");
+                serverSocket.close();
+            } catch (Exception e) {
+                System.out.println("Unable to close server socket: " + e.getMessage());
+            }
+        }
+    }
+
+    // method to handle the client for multiplayer
+    private static void handleClient(Socket clientSocket) {
+        try {
+            BufferedReader inputReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+            while (true) {
+                String message = inputReader.readLine();
+                if (message == null) {
+                    // Client disconnected
+                    break;
+                }
+
+                // Broadcast the key press to all connected clients
+                broadcast(message);
+            }
+
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+    }
+
+    // method to broadcast the message to all connected clients (the key pressed by the player)
+    private static void broadcast(String message) {
+        for (PrintWriter writer : clientWriters) {
+            writer.println(message);
+        }
+    }
+
+    // method to start the client for multiplayer. It will handle the key press events for the player and send the key pressed as well to the server
+    private void startClient() {
+        try {
+            InetAddress address = InetAddress.getByName(this.ipAddress);
+            Socket socket = new Socket();
+            socket.connect(new InetSocketAddress(address, serverPort));
+            System.out.println(this.nameOfUser + " connected to server.");
+
+            BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter outputWriter = new PrintWriter(socket.getOutputStream(), true);
+
+            Thread receiveThread = new Thread(() -> {
+                try {
+                    while (true) {
+                        // keep removing all elements inside the pressed list that contains the word "released"
+                        // this is to prevent the key from being pressed multiple times
+                        pressed.removeIf(s -> s.contains("released"));
+
+
+                        String message = inputReader.readLine();
+                        // the message will be either from the current player or from the other players
+                        // if the message is from the current player, we do not add it to the pressed list
+                        
+                        // we also need to remove from the pressed list if the key has been released
+                        // a key release has the format of "spriteType: keyName released"
+                        // we need to remove the "released" part of the message
+                        if(message.contains("released")){
+                            String[] messageSplit = message.split(" ");
+                            String keyName = messageSplit[1];
+                            String spriteType = messageSplit[0];
+                            String keyReleased = spriteType + " " + keyName;
+                            pressed.removeIf(s -> s.contains(keyReleased));
+                        }
+
+
+                        if(!message.contains(spriteType) && !pressed.contains("released")){
+                            pressed.add(message);
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            receiveThread.start();
+
+            // this is to handle the key press events for the player. We need to send the key pressed to the server
+            this.theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                public void handle(KeyEvent e) {
+                    KeyCode code = e.getCode();
+                    if (!pressed.contains(spriteType  + ": " + code)){
+                        pressed.add(spriteType  + ": " + code);
+                        outputWriter.println(spriteType  + ": " + code.getName());
+                        
+                    }
+                }
+            });
+    
+            // this is to handle the key release events for the player. We need to send the key released to the server
+            this.theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                public void handle(KeyEvent e) {
+                    KeyCode code = e.getCode();
+                    pressed.remove(spriteType  + ": " + code);
+                    // we need to let the server know that the key has been released
+                    outputWriter.println(spriteType  + ": " + code.getName() + " released");
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+    }
 
      @Override
      public void handle(long currentNanoTime) {
@@ -97,16 +272,17 @@ public class GameTimer extends AnimationTimer {
 		long gameStartSec = TimeUnit.NANOSECONDS.toSeconds(this.startTime);
 		int passedTime = (int) (currentSec - gameStartSec);
 
-        System.out.println("Passed Time: " + passedTime + " seconds");
+        // System.out.println("Passed Time: " + passedTime + " seconds");
         
 
         // Move the sprites
-        moveMySprite();
+        moveMySprite(this.isMultiplayer, spriteType);
         this.woodSprite.move();
         this.slimeSprite.move();
         this.candySprite.move();
         this.iceSprite.move();
 
+        System.out.println(pressed);
         /*
          * TO ADD:
          * Moving other sprites
@@ -152,60 +328,99 @@ public class GameTimer extends AnimationTimer {
         this.theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             public void handle(KeyEvent e) {
                 KeyCode code = e.getCode();
-            	if (!pressed.contains(code))
-            		pressed.add(code);
+            	if (!pressed.contains(spriteType  + ": " + code))
+            		pressed.add(spriteType  + ": " + code);
             }
         });
 
         this.theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             public void handle(KeyEvent e) {
             	KeyCode code = e.getCode();
-            	pressed.remove(code);
+            	pressed.remove(spriteType  + ": " + code);
             }
         });
     }
 
     //method that will move the sprite depending on the key pressed
-	private void moveMySprite() {
-		// Wood Sprite movement
-        if (pressed.contains(KeyCode.W)) this.woodSprite.jump();
-		if (pressed.contains(KeyCode.A) && pressed.contains(KeyCode.D)) this.woodSprite.setDX(0);
-		else if (pressed.contains(KeyCode.A)) this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.D)) this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
-		else this.woodSprite.setDX(0);
+	private void moveMySprite(Boolean isMultiplayer, String spriteType) {
+        if(!isMultiplayer){ 
+        // Singleplayer mode
 
-		// Slime Sprite movement
-        if (pressed.contains(KeyCode.T)) this.slimeSprite.jump();
-		if (pressed.contains(KeyCode.F) && pressed.contains(KeyCode.H)) this.slimeSprite.setDX(0);
-		else if (pressed.contains(KeyCode.F)) this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.H)) this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE);
-		else this.slimeSprite.setDX(0);
+        switch (spriteType) {
+            case WoodSprite.SPRITE_NAME:
+                // Wood Sprite movement
+                if (pressed.contains(spriteType  + ": " + KeyCode.W)) this.woodSprite.jump();
+                if (pressed.contains(spriteType  + ": " + KeyCode.A) && pressed.contains(spriteType  + ": " + KeyCode.D)) this.woodSprite.setDX(0);
+                else if (pressed.contains(spriteType  + ": " + KeyCode.A)) this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(spriteType  + ": " + KeyCode.D)) this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else this.woodSprite.setDX(0);
+                break;
+            case SlimeSprite.SPRITE_NAME:
+                // Slime Sprite movement
+                if (pressed.contains(spriteType  + ": " + KeyCode.T)) this.slimeSprite.jump();
+                if (pressed.contains(spriteType  + ": " + KeyCode.F) && pressed.contains(spriteType  + ": " + KeyCode.H)) this.slimeSprite.setDX(0);
+                else if (pressed.contains(spriteType  + ": " + KeyCode.F)) this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(spriteType  + ": " + KeyCode.H)) this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else this.slimeSprite.setDX(0);
+                    
+                break;
+            case CandySprite.SPRITE_NAME:
+                // Candy Sprite movement
+                if (pressed.contains(spriteType  + ": " + KeyCode.I)) this.candySprite.jump();
+                if (pressed.contains(spriteType  + ": " + KeyCode.J) && pressed.contains(spriteType  + ": " + KeyCode.L)) this.candySprite.setDX(0);
+                else if (pressed.contains(spriteType  + ": " + KeyCode.J)) this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(spriteType  + ": " + KeyCode.L)) this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else this.candySprite.setDX(0);
+                        
+                break;
+            case IceSprite.SPRITE_NAME:
+                // Ice Sprite movement
+                if (pressed.contains(spriteType  + ": " + KeyCode.UP)) this.iceSprite.jump();
+                if (pressed.contains(spriteType  + ": " + KeyCode.LEFT) && pressed.contains(spriteType  + ": " + KeyCode.RIGHT)) this.iceSprite.setDX(0);
+                else if (pressed.contains(spriteType  + ": " + KeyCode.LEFT)) this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(spriteType  + ": " + KeyCode.RIGHT)) this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else this.iceSprite.setDX(0);
+                            
+                break;
 
-        // Candy Sprite movement
-		if (pressed.contains(KeyCode.I)) this.candySprite.jump();
-		if (pressed.contains(KeyCode.J) && pressed.contains(KeyCode.L)) this.candySprite.setDX(0);
-		else if (pressed.contains(KeyCode.J)) this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.L)) this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE);
-		else this.candySprite.setDX(0);
+            default:
+                break;
+        }
 
-        // Ice Sprite movement
-        if (pressed.contains(KeyCode.UP)) this.iceSprite.jump();
-		if (pressed.contains(KeyCode.LEFT) && pressed.contains(KeyCode.RIGHT)) this.iceSprite.setDX(0);
-		else if (pressed.contains(KeyCode.LEFT)) this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-		else if (pressed.contains(KeyCode.RIGHT)) this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE);
-		else this.iceSprite.setDX(0);
+        } else {
+            // For multiplayer, there's only one set of player sprite movement control keys
+            // Get the sprite type of the player
 
-        // // Current Player (Multiplayer)
-        // // Vertical movement
-		// if (pressed.contains(KeyCode.UP) && pressed.contains(KeyCode.DOWN)) this.mySprite.setDY(0);
-		// else if (pressed.contains(KeyCode.UP)) this.mySprite.setDY(-PlayerSprite.MOVE_DISTANCE);
-		// else if (pressed.contains(KeyCode.DOWN)) this.mySprite.setDY(PlayerSprite.MOVE_DISTANCE);
-		// else this.mySprite.setDY(0);
-		// // Horizontal movement
-		// if (pressed.contains(KeyCode.LEFT) && pressed.contains(KeyCode.RIGHT)) this.mySprite.setDX(0);
-		// else if (pressed.contains(KeyCode.LEFT)) this.mySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-		// else if (pressed.contains(KeyCode.RIGHT)) this.mySprite.setDX(PlayerSprite.MOVE_DISTANCE);
-		// else this.mySprite.setDX(0);
+                // Wood Sprite movement
+                if (pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.W)) this.woodSprite.jump();
+                if (pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.A) && pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.woodSprite.setDX(0);
+                else if (pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.A)) this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else this.woodSprite.setDX(0);
+
+                // Slime Sprite movement
+                if (pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.W)) this.slimeSprite.jump();
+                if (pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.A) && pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.slimeSprite.setDX(0);
+                else if (pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.A)) this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else this.slimeSprite.setDX(0);
+
+                // Candy Sprite movement
+                if (pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.W)) this.candySprite.jump();
+                if (pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.A) && pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.D)) this.candySprite.setDX(0);
+                else if (pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.A)) this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.D)) this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else this.candySprite.setDX(0);
+
+                // Ice Sprite movement
+                if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.W)) this.iceSprite.jump();
+                if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.A) && pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.iceSprite.setDX(0);
+                else if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.A)) this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else this.iceSprite.setDX(0);
+        
+
+        }
    	}
 
     // method to print out the details of the sprite

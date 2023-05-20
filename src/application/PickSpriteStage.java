@@ -11,6 +11,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sprites.players.CandySprite;
+import sprites.players.IceSprite;
+import sprites.players.SlimeSprite;
+import sprites.players.WoodSprite;
 import user.Main;
 
 public class PickSpriteStage extends VBox {
@@ -129,14 +133,14 @@ public class PickSpriteStage extends VBox {
     void onClickedSpriteCandy(ActionEvent event) {
         System.out.println("Candy Sprite Clicked");
         // Create the Chat GUI
-        this.createChatGUI();
+        this.createChatGUIandLevel(CandySprite.SPRITE_NAME);
     }
 
     // method to handle the event when the Ice Sprite button is clicked
     void onClickedSpriteIce(ActionEvent event) {
         System.out.println("Ice Sprite Clicked");
         // Create the Chat GUI
-        this.createChatGUI();
+        this.createChatGUIandLevel(IceSprite.SPRITE_NAME);
 
     }
 
@@ -144,7 +148,7 @@ public class PickSpriteStage extends VBox {
     void onClickedSpriteSlime(ActionEvent event) {
         System.out.println("Slime Sprite Clicked");
         // Create the Chat GUI
-        this.createChatGUI();
+        this.createChatGUIandLevel(SlimeSprite.SPRITE_NAME);
 
     }
 
@@ -152,13 +156,17 @@ public class PickSpriteStage extends VBox {
     void onClickedSpriteWood(ActionEvent event) {
         System.out.println("Wood Sprite Clicked");
         // Create the Chat GUI
-        this.createChatGUI();
+        this.createChatGUIandLevel(WoodSprite.SPRITE_NAME);
 
     }
 
-    // method to create an Instance of the Chat GUI
-    private void createChatGUI() {
+    // method to create an Instance of the Chat GUI and the Level
+    private void createChatGUIandLevel(String spriteType) {
         ChatGUI chatGUI = new ChatGUI(chatType, nameOfUser, ipAddress);
+
+        // Create the basic level (Tutorial Level for now)
+        TutorialLevel tutorialLevel = new TutorialLevel(true, chatType, nameOfUser, ipAddress, spriteType);
+        tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
 
         // Stop the music from MainGUIController
         MainGUIController.stopBackgroundMusic();
