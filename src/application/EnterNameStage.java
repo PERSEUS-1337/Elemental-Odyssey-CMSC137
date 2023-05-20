@@ -12,60 +12,47 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class EnterAddressStage {
-    private TextField txtAddress;
-    private Button btnEnterAddress;
+public class EnterNameStage {
+    private TextField txtName;
+    private Button btnEnterName;
     private String chatType;
+    private String nameOfUser;
     static String ipAddress;
     public static final Integer WINDOW_WIDTH = 582;
     public static final Integer WINDOW_HEIGHT = 129;
-
+    
     // Constructor
-    public EnterAddressStage(String chatType) {
+    public EnterNameStage(String ipAddress, String chatType) {
         this.chatType = chatType;
-    }
-
-    void onButtonClickedSetAddress() {
-        System.out.println("Set Address Button Clicked");
-
-        // Get the address from the text field
-        String address = txtAddress.getText();
-
-        // The address should not be empty and should resemble an ip address. If it does not, then it is not a valid address
-        if (address.isEmpty() || !address.matches("\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}")) {
-            System.out.println("Invalid Address");
-            
-            // If the address is invalid, then clear the text field
-            txtAddress.clear();
-            return;
-        } else {
-            // If the address is valid, then set the ip address
-            ipAddress = address;
-            System.out.println("Address Set");
-            System.out.println("Address: " + ipAddress);
-
-            EnterNameStage enterNameStage = new EnterNameStage(ipAddress, chatType);
-            enterNameStage.setStage(new Stage());
-
-            // Close the Enter Address Stage
-            this.closeEnterAddressStage();
-
-        }
-    }
-
-    // method to get the ip address
-    static String getIpAddress() {
-        return ipAddress;
     }
 
     // method to close the Enter Address Stage
     private void closeEnterAddressStage() {
-        Stage stage = (Stage) btnEnterAddress.getScene().getWindow();
+        Stage stage = (Stage) btnEnterName.getScene().getWindow();
         stage.close();
     }
 
-    // method to set the stage
-    void setStage(Stage primaryStage) {
+    void onButtonClickedSetName() {
+        System.out.println("Set Name Button Clicked");
+
+        nameOfUser = txtName.getText();
+
+            ChatGUI chatGUI = new ChatGUI(chatType, nameOfUser, ipAddress);
+
+            // Close the Enter Name Stage
+            this.closeEnterAddressStage();
+
+            // Close the Game Mode Menu
+            MainGUIController.closeGameModeMenu();
+
+            // If the chat gui has been closed, close its socket
+            chatGUI.getStage().setOnCloseRequest(e -> {
+                chatGUI.closeSocket();
+            });
+    }
+
+     // method to set the stage
+     void setStage(Stage primaryStage) {
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
         root.setPrefSize(582, 129);
@@ -73,18 +60,18 @@ public class EnterAddressStage {
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.setPrefSize(582, 137);
 
-        txtAddress = new TextField();
-        txtAddress.setLayoutX(37);
-        txtAddress.setLayoutY(41);
-        txtAddress.setPrefSize(310, 45);
-        txtAddress.setPromptText("Please enter the chat room IP address");
-        txtAddress.setFont(new Font("Bookman Old Style", 15));
+        txtName = new TextField();
+        txtName.setLayoutX(37);
+        txtName.setLayoutY(41);
+        txtName.setPrefSize(310, 45);
+        txtName.setPromptText("Please enter the chat room IP address");
+        txtName.setFont(new Font("Bookman Old Style", 15));
 
-        btnEnterAddress = new Button("Enter");
-        btnEnterAddress.setLayoutX(371);
-        btnEnterAddress.setLayoutY(41);
-        btnEnterAddress.setPrefSize(167, 46);
-        btnEnterAddress.setFont(new Font("Bookman Old Style", 16));
+        btnEnterName = new Button("Enter");
+        btnEnterName.setLayoutX(371);
+        btnEnterName.setLayoutY(41);
+        btnEnterName.setPrefSize(167, 46);
+        btnEnterName.setFont(new Font("Bookman Old Style", 16));
 
         ImageView lowerLeftCorner = createImageView("../assets/blocks/lowerLeftCorner_Iron.png", 39, 67, 0, 100);
         ImageView lowerRightCorner = createImageView("../assets/blocks/lowerRightCorner_Iron.png", 39, 67, 543, 100);
@@ -96,13 +83,13 @@ public class EnterAddressStage {
         ImageView longVerticalBorder2 = createImageView("../assets/blocks/longVerticalIronBorder.png", 13, 75, 581, 25);
 
 
-        btnEnterAddress.setOnAction(e -> {
-            onButtonClickedSetAddress();
+        btnEnterName.setOnAction(e -> {
+            onButtonClickedSetName();
         });
 
         MovingBackground bg = new MovingBackground(MovingBackground.blueColor, MovingBackground.defaultWindowSize);
         anchorPane.getChildren().addAll(
-                txtAddress, btnEnterAddress, lowerLeftCorner, lowerRightCorner, upperRightCorner, upperLeftCorner,
+                txtName, btnEnterName, lowerLeftCorner, lowerRightCorner, upperRightCorner, upperLeftCorner,
                 longHorizontalBorder1, longHorizontalBorder2, longVerticalBorder1, longVerticalBorder2
         );
 
@@ -112,7 +99,7 @@ public class EnterAddressStage {
         primaryStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
         primaryStage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Enter the IP Address");
+        primaryStage.setTitle("Enter Your Name");
         primaryStage.show();
     }
 
@@ -128,5 +115,4 @@ public class EnterAddressStage {
         imageView.setPreserveRatio(true);
         return imageView;
     }
-
 }
