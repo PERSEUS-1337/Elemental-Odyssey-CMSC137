@@ -54,6 +54,8 @@ public class GameTimer extends AnimationTimer {
     private Integer serverPort = 5002;
     private static String spriteType;
     private static List<PrintWriter> clientWriters = new ArrayList<>();
+    private BufferedReader inputReader;
+    private PrintWriter outputWriter;
 
     public static final int FPS = 60;
 
@@ -199,18 +201,20 @@ public class GameTimer extends AnimationTimer {
             socket.connect(new InetSocketAddress(address, serverPort));
             System.out.println(this.nameOfUser + " connected to server.");
 
-            BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter outputWriter = new PrintWriter(socket.getOutputStream(), true);
+            inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            outputWriter = new PrintWriter(socket.getOutputStream(), true);
 
             Thread receiveThread = new Thread(() -> {
                 try {
                     while (true) {
                         // keep removing all elements inside the pressed list that contains the word "released"
                         // this is to prevent the key from being pressed multiple times
-                        pressed.removeIf(s -> s.contains("released"));
 
 
                         String message = inputReader.readLine();
+                        if(!message.contains(spriteType) && !pressed.contains(message) && !message.contains("released")){
+                            pressed.add(message);
+                        }
                         // the message will be either from the current player or from the other players
                         // if the message is from the current player, we do not add it to the pressed list
                         
@@ -223,12 +227,10 @@ public class GameTimer extends AnimationTimer {
                             String spriteType = messageSplit[0];
                             String keyReleased = spriteType + " " + keyName;
                             pressed.removeIf(s -> s.contains(keyReleased));
-                        }
+                        } pressed.removeIf(s -> s.contains("released"));
 
 
-                        if(!message.contains(spriteType) && !pressed.contains("released")){
-                            pressed.add(message);
-                        }
+                        
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -240,10 +242,12 @@ public class GameTimer extends AnimationTimer {
             this.theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 public void handle(KeyEvent e) {
                     KeyCode code = e.getCode();
+                    outputWriter.println(spriteType  + ": " + code.getName());
+                    outputWriter.println(spriteType  + ": " + code.getName());
+                    outputWriter.println(spriteType  + ": " + code.getName());
+                    outputWriter.println(spriteType  + ": " + code.getName());
                     if (!pressed.contains(spriteType  + ": " + code)){
                         pressed.add(spriteType  + ": " + code);
-                        outputWriter.println(spriteType  + ": " + code.getName());
-                        
                     }
                 }
             });
@@ -313,11 +317,10 @@ public class GameTimer extends AnimationTimer {
         this.checkDoorCollision(passedTime);
 
         
-
-        // Put thread to sleep until next frame
-        try {
-            Thread.sleep((1000 / GameTimer.FPS) - ((System.nanoTime() - currentNanoTime) / 1000000));
-        } catch (Exception e) {}
+        // // Put thread to sleep until next frame
+        // try {
+        //     Thread.sleep((1000 / GameTimer.FPS) - ((System.nanoTime() - currentNanoTime) / 1000000));
+        // } catch (Exception e) {}
 
         
 
