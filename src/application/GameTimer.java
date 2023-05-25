@@ -126,7 +126,7 @@ public class GameTimer extends AnimationTimer {
             Thread clientThread = new Thread(this::startClient);
             clientThread.start();
         } else { // if the game is singleplayer, we need to handle the key press events
-            this.handleKeyPressEvent();
+            // this.handleKeyPressEvent();
         }
 
     } // end of constructor
@@ -207,28 +207,20 @@ public class GameTimer extends AnimationTimer {
             Thread receiveThread = new Thread(() -> {
                 try {
                     while (true) {
-                        // keep removing all elements inside the pressed list that contains the word "released"
-                        // this is to prevent the key from being pressed multiple times
-
 
                         String message = inputReader.readLine();
-                        if(!message.contains(spriteType) && !pressed.contains(message) && !message.contains("released")){
+                        System.out.println("Message received: " + message);
+                        if (!pressed.contains(spriteType) && !pressed.contains(message) && !pressed.contains("released")){ // if the key pressed is not from our own sprite type, then we can add it to the pressed list
                             pressed.add(message);
                         }
-                        // the message will be either from the current player or from the other players
-                        // if the message is from the current player, we do not add it to the pressed list
-                        
-                        // we also need to remove from the pressed list if the key has been released
-                        // a key release has the format of "spriteType: keyName released"
-                        // we need to remove the "released" part of the message
-                        if(message.contains("released")){
+                        if (message.contains("released")) {
+                            // if the key pressed is released, then we need to remove it from the pressed list
+                            // the key pressed is in the format of "spriteType: keyName released"
                             String[] messageSplit = message.split(" ");
                             String keyName = messageSplit[1];
                             String spriteType = messageSplit[0];
-                            String keyReleased = spriteType + " " + keyName;
-                            pressed.removeIf(s -> s.contains(keyReleased));
-                        } pressed.removeIf(s -> s.contains("released"));
-
+                            pressed.removeIf(key -> key.contains(keyName) && key.contains(spriteType));
+                        }
 
                         
                     }
@@ -243,9 +235,7 @@ public class GameTimer extends AnimationTimer {
                 public void handle(KeyEvent e) {
                     KeyCode code = e.getCode();
                     outputWriter.println(spriteType  + ": " + code.getName());
-                    outputWriter.println(spriteType  + ": " + code.getName());
-                    outputWriter.println(spriteType  + ": " + code.getName());
-                    outputWriter.println(spriteType  + ": " + code.getName());
+                    System.out.println("Sent: "+ spriteType  + ": " + code.getName());
                     if (!pressed.contains(spriteType  + ": " + code)){
                         pressed.add(spriteType  + ": " + code);
                     }
@@ -257,7 +247,7 @@ public class GameTimer extends AnimationTimer {
                 public void handle(KeyEvent e) {
                     KeyCode code = e.getCode();
                     pressed.remove(spriteType  + ": " + code);
-                    // we need to let the server know that the key has been released
+                    // // we need to let the server know that the key has been released
                     outputWriter.println(spriteType  + ": " + code.getName() + " released");
                 }
             });
