@@ -164,7 +164,7 @@ public class GameTimer extends AnimationTimer {
     }
 
     // method to handle the client for multiplayer
-    private static void handleClient(Socket clientSocket) {
+    private void handleClient(Socket clientSocket) {
         try {
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
@@ -212,6 +212,7 @@ public class GameTimer extends AnimationTimer {
                         System.out.println("Message received: " + message);
                         if (!pressed.contains(spriteType) && !pressed.contains(message) && !pressed.contains("released")){ // if the key pressed is not from our own sprite type, then we can add it to the pressed list
                             pressed.add(message);
+                            // this.woodSprite.setX(doorIndexX);
                         }
                         if (message.contains("released")) {
                             // if the key pressed is released, then we need to remove it from the pressed list
@@ -221,8 +222,6 @@ public class GameTimer extends AnimationTimer {
                             String spriteType = messageSplit[0];
                             pressed.removeIf(key -> key.contains(keyName) && key.contains(spriteType));
                         }
-
-                        
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -234,8 +233,8 @@ public class GameTimer extends AnimationTimer {
             this.theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 public void handle(KeyEvent e) {
                     KeyCode code = e.getCode();
-                    outputWriter.println(spriteType  + ": " + code.getName());
-                    System.out.println("Sent: "+ spriteType  + ": " + code.getName());
+                    // outputWriter.println(spriteType  + ": " + code.getName());
+                    // System.out.println("Sent: "+ spriteType  + ": " + code.getName());
                     if (!pressed.contains(spriteType  + ": " + code)){
                         pressed.add(spriteType  + ": " + code);
                     }
@@ -248,7 +247,7 @@ public class GameTimer extends AnimationTimer {
                     KeyCode code = e.getCode();
                     pressed.remove(spriteType  + ": " + code);
                     // // we need to let the server know that the key has been released
-                    outputWriter.println(spriteType  + ": " + code.getName() + " released");
+                    // outputWriter.println(spriteType  + ": " + code.getName() + " released");
                 }
             });
         } catch (IOException e) {
@@ -276,7 +275,17 @@ public class GameTimer extends AnimationTimer {
         this.candySprite.move();
         this.iceSprite.move();
 
-        System.out.println(pressed);
+        outputWriter.println("woodSprite Coord = x: " + this.woodSprite.getX() + " y: " + this.woodSprite.getY());
+        outputWriter.println("slimeSprite Coord = x: " + this.slimeSprite.getX() + " y: " + this.slimeSprite.getY());
+        outputWriter.println("candySprite Coord = x: " + this.candySprite.getX() + " y: " + this.candySprite.getY());
+        outputWriter.println("iceSprite Coord = x: " + this.iceSprite.getX() + " y: " + this.iceSprite.getY());
+
+        // System.out.println("woodSprite Coord = x:" + this.woodSprite.getX() + " y:" + this.woodSprite.getY());
+        // System.out.println("slimeSprite Coord = x:" + this.slimeSprite.getX() + " y:" + this.slimeSprite.getY());
+        // System.out.println("candySprite Coord = x:" + this.candySprite.getX() + " y:" + this.candySprite.getY());
+        // System.out.println("iceSprite Coord = x:" + this.iceSprite.getX() + " y:" + this.iceSprite.getY());
+
+        // System.out.println(pressed);
         /*
          * TO ADD:
          * Moving other sprites
@@ -338,7 +347,7 @@ public class GameTimer extends AnimationTimer {
 	private void moveMySprite(Boolean isMultiplayer, String spriteType) {
         if(!isMultiplayer){ 
         // Singleplayer mode
-
+        
         switch (spriteType) {
             case WoodSprite.SPRITE_NAME:
                 // Wood Sprite movement
