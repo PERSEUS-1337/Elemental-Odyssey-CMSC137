@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -200,16 +203,17 @@ public class GameTimer extends AnimationTimer {
             Socket socket = new Socket();
             socket.connect(new InetSocketAddress(address, serverPort));
             System.out.println(this.nameOfUser + " connected to server.");
-
+            
             inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             outputWriter = new PrintWriter(socket.getOutputStream(), true);
 
             Thread receiveThread = new Thread(() -> {
                 try {
                     while (true) {
-
+                        
                         String message = inputReader.readLine();
                         System.out.println("Message received: " + message);
+
                         if (!pressed.contains(spriteType) && !pressed.contains(message) && !pressed.contains("released")){ // if the key pressed is not from our own sprite type, then we can add it to the pressed list
                             pressed.add(message);
                             // this.woodSprite.setX(doorIndexX);
@@ -221,6 +225,44 @@ public class GameTimer extends AnimationTimer {
                             String keyName = messageSplit[1];
                             String spriteType = messageSplit[0];
                             pressed.removeIf(key -> key.contains(keyName) && key.contains(spriteType));
+                        }
+
+                        // String message = "Message received: candySprite Coord = x: 316 y: 239";
+
+                        // Extract x coordinate
+                        String xCoordinate = "";
+                        Pattern xPattern = Pattern.compile("x: (\\d+)");
+                        Matcher xMatcher = xPattern.matcher(message);
+                        if (xMatcher.find()) {
+                            xCoordinate = xMatcher.group(1);
+                        }
+
+                        // Extract y coordinate
+                        String yCoordinate = "";
+                        Pattern yPattern = Pattern.compile("y: (\\d+)");
+                        Matcher yMatcher = yPattern.matcher(message);
+                        if (yMatcher.find()) {
+                            yCoordinate = yMatcher.group(1);
+                        }
+
+                        // System.out.println("X coordinate: " + xCoordinate + "Y coordinate: " + yCoordinate);
+                        // System.out.println("Y coordinate: " + yCoordinate);
+
+                        // this.iceSprite.setX(Integer.parseInt(xCoordinate));
+                        // this.iceSprite.setY(Integer.parseInt(yCoordinate));
+
+                        if (message.contains("candySprite") && spriteType != "CandySprite") {
+                            this.candySprite.setX(Integer.parseInt(xCoordinate));
+                            this.candySprite.setY(Integer.parseInt(yCoordinate));
+                        } else if (message.contains("iceSprite") && spriteType != "IceSprite") {
+                            this.iceSprite.setX(Integer.parseInt(xCoordinate));
+                            this.iceSprite.setY(Integer.parseInt(yCoordinate));
+                        } else if (message.contains("slimeSprite") && spriteType != "SlimeSprite"){
+                            this.slimeSprite.setX(Integer.parseInt(xCoordinate));
+                            this.slimeSprite.setY(Integer.parseInt(yCoordinate));
+                        } else if (message.contains("woodSprite") && spriteType != "WoodSprite") {
+                            this.woodSprite.setX(Integer.parseInt(xCoordinate));
+                            this.woodSprite.setY(Integer.parseInt(yCoordinate));
                         }
                     }
                 } catch (IOException e) {
@@ -275,10 +317,17 @@ public class GameTimer extends AnimationTimer {
         this.candySprite.move();
         this.iceSprite.move();
 
-        outputWriter.println("woodSprite Coord = x: " + this.woodSprite.getX() + " y: " + this.woodSprite.getY());
-        outputWriter.println("slimeSprite Coord = x: " + this.slimeSprite.getX() + " y: " + this.slimeSprite.getY());
-        outputWriter.println("candySprite Coord = x: " + this.candySprite.getX() + " y: " + this.candySprite.getY());
-        outputWriter.println("iceSprite Coord = x: " + this.iceSprite.getX() + " y: " + this.iceSprite.getY());
+        // System.out.println("Type: " + spriteType);
+        
+        if (spriteType == "WoodSprite") {
+            outputWriter.println("woodSprite Coord = x: " + this.woodSprite.getX() + " y: " + this.woodSprite.getY());
+        } else if (spriteType == "SlimeSprite") {
+            outputWriter.println("slimeSprite Coord = x: " + this.slimeSprite.getX() + " y: " + this.slimeSprite.getY());
+        } else if (spriteType == "CandySprite") {
+            outputWriter.println("candySprite Coord = x: " + this.candySprite.getX() + " y: " + this.candySprite.getY());
+        } else {
+            outputWriter.println("iceSprite Coord = x: " + this.iceSprite.getX() + " y: " + this.iceSprite.getY());
+        }
 
         // System.out.println("woodSprite Coord = x:" + this.woodSprite.getX() + " y:" + this.woodSprite.getY());
         // System.out.println("slimeSprite Coord = x:" + this.slimeSprite.getX() + " y:" + this.slimeSprite.getY());
