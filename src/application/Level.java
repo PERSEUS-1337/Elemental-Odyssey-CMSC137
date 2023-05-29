@@ -34,8 +34,8 @@ public class Level {
 	protected GraphicsContext gc;
 	protected GameTimer gametimer;
 
-    public static final int LEVEL_WIDTH = 26;
-    public static final int LEVEL_HEIGHT = 15;
+    public static final int LEVEL_WIDTH = 40;
+    public static final int LEVEL_HEIGHT = 23;
     public static final int WINDOW_WIDTH = Sprite.SPRITE_WIDTH * LEVEL_WIDTH;
     public static final int WINDOW_HEIGHT = Sprite.SPRITE_WIDTH * LEVEL_HEIGHT;
 

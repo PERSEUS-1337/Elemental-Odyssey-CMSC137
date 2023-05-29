@@ -71,26 +71,33 @@ public class MainGUIController {
     void onInstructionsButtonClicked(ActionEvent event) {
         System.out.println("Instructions Button Clicked");
 
-        TutorialLevel tutorialLevel = new TutorialLevel();
-        tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
+        Level level = new LevelOne();
+        level.setStage(new Stage(), MovingBackground.blueColor, Level.WINDOW_WIDTH);
 
-         // Play the background music for tutorial
-         try {
-            TutorialLevel.playBackgroundMusic(TutorialLevel.TRACK_01, SettingsStage.musicVolume);
-           } catch (Exception e) {
-            System.out.println("Error playing music: " + e.getMessage());
-           }
-
-        // if the tutorial level window is closed, play the background music for the menu and stop its music
         Level.getStage().setOnCloseRequest(e -> {
-            TutorialLevel.stopBackgroundMusic();
-            MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC, SettingsStage.musicVolume);
-            // also stop the game timer
-            tutorialLevel.stopTimer();
+            level.stopTimer();
         });
 
-        // Stop the background music if tutorial level window is open
-        MainGUIController.stopBackgroundMusic();
+        // TutorialLevel tutorialLevel = new TutorialLevel();
+        // tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
+
+        //  // Play the background music for tutorial
+        //  try {
+        //     TutorialLevel.playBackgroundMusic(TutorialLevel.TRACK_01, SettingsStage.musicVolume);
+        //    } catch (Exception e) {
+        //     System.out.println("Error playing music: " + e.getMessage());
+        //    }
+
+        // // if the tutorial level window is closed, play the background music for the menu and stop its music
+        // Level.getStage().setOnCloseRequest(e -> {
+        //     TutorialLevel.stopBackgroundMusic();
+        //     MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC, SettingsStage.musicVolume);
+        //     // also stop the game timer
+        //     tutorialLevel.stopTimer();
+        // });
+
+        // // Stop the background music if tutorial level window is open
+        // MainGUIController.stopBackgroundMusic();
 
         // Close the Main Menu
         Main.closeMainGUI();
