@@ -1,21 +1,19 @@
 package sprites.players;
-import java.util.Timer;
-import java.util.TimerTask;
-
 
 public class FreezePowerUp implements PowerUp {
-    private Timer timer;
 
     @Override
     public void activate(PlayerSprite player) {
-        System.out.println("Frozon!");
+        System.out.println("Frozone!");
         player.setSpeed(4);
     }
     
     @Override
     public void deactivate(PlayerSprite player) {
-        System.out.println("Stop!");
+        System.out.println("Move!");
         player.setSpeed(0);
+        System.out.println(player.getSpeed());
+        System.out.println(player.name);
     }
     
 }

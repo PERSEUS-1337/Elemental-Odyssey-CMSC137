@@ -28,6 +28,9 @@ import javafx.scene.input.KeyEvent;
 import sprites.players.PlayerSprite;
 import sprites.players.PowerUp;
 import sprites.players.FreezePowerUp;
+import sprites.players.BarrierPowerUp;
+import sprites.players.StickyPowerUp;
+import sprites.players.SpeedPowerUp;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 
@@ -158,7 +161,8 @@ public class GameTimer extends AnimationTimer {
         }
         activePowerUp = powerUp;
         powerUp.activate(player);
-        int powerUpDuration = 5000; // Duration in milliseconds (e.g., 5 seconds)
+        int powerUpDuration = 3000; // Duration in milliseconds (e.g., 5 seconds)
+        // duration as an argument if you want it to have different durations per powerup
     
         if (powerupTimer != null) {
             powerupTimer.stop();
@@ -465,11 +469,11 @@ public class GameTimer extends AnimationTimer {
                 break;
             case IceSprite.SPRITE_NAME:
                 // Ice Sprite movement
-                if (pressed.contains(spriteType + ": " + KeyCode.B)) {
-                    // System.out.println("freeze!");
-                    PowerUp freezePowerUp = new FreezePowerUp();
-                    applyPowerUp(freezePowerUp, this.iceSprite);
-                }
+                // if (pressed.contains(spriteType + ": " + KeyCode.B)) {
+                //     // System.out.println("freeze!");
+                //     PowerUp freezePowerUp = new FreezePowerUp();
+                //     applyPowerUp(freezePowerUp, this.iceSprite);
+                // }
                 if (pressed.contains(spriteType  + ": " + KeyCode.UP)) this.iceSprite.jump();
                 if (pressed.contains(spriteType  + ": " + KeyCode.LEFT) && pressed.contains(spriteType  + ": " + KeyCode.RIGHT)) this.iceSprite.setDX(0);
                 else if (pressed.contains(spriteType  + ": " + KeyCode.LEFT)) this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
@@ -487,31 +491,66 @@ public class GameTimer extends AnimationTimer {
             // Get the sprite type of the player
 
                 // Wood Sprite movement
+                if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.Z)) {
+                    System.out.println("freeze!");
+                    PowerUp freezePowerUp = new FreezePowerUp();
+                    applyPowerUp(freezePowerUp, this.woodSprite);
+                }
+                if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.X)) {
+                    System.out.println("slow");
+                    PowerUp stickyPowerUp = new StickyPowerUp();
+                    applyPowerUp(stickyPowerUp, this.woodSprite);
+                }
+                if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.C)) {
+                    System.out.println("protec");
+                    PowerUp barrierPowerUp = new BarrierPowerUp();
+                    applyPowerUp(barrierPowerUp, this.woodSprite);
+                }
                 if (pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.W)) this.woodSprite.jump();
                 if (pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.A) && pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.woodSprite.setDX(0);
-                else if (pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.A)) this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-                else if (pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.A)) this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.slimeSprite.getSpeed());
+                else if (pressed.contains(WoodSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.slimeSprite.getSpeed());
                 else this.woodSprite.setDX(0);
 
                 // Slime Sprite movement
+                if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.Z)) {
+                    System.out.println("freeze!");
+                    PowerUp freezePowerUp = new FreezePowerUp();
+                    applyPowerUp(freezePowerUp, this.slimeSprite);
+                }
+                if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.X)) {
+                    System.out.println("slow");
+                    PowerUp stickyPowerUp = new StickyPowerUp();
+                    applyPowerUp(stickyPowerUp, this.slimeSprite);
+                }
+                if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.V)) {
+                    System.out.println("speed");
+                    PowerUp speedPowerUp = new SpeedPowerUp();
+                    applyPowerUp(speedPowerUp, this.slimeSprite);
+                }
                 if (pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.W)) this.slimeSprite.jump();
                 if (pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.A) && pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.slimeSprite.setDX(0);
-                else if (pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.A)) this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-                else if (pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.A)) {this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.slimeSprite.getSpeed());System.out.println(this.slimeSprite.getSpeed());}
+                else if (pressed.contains(SlimeSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.slimeSprite.getSpeed());
                 else this.slimeSprite.setDX(0);
 
                 // Candy Sprite movement
+                if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.Z)) {
+                    System.out.println("freeze!");
+                    PowerUp freezePowerUp = new FreezePowerUp();
+                    applyPowerUp(freezePowerUp, this.candySprite);
+                }
                 if (pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.W)) this.candySprite.jump();
                 if (pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.A) && pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.D)) this.candySprite.setDX(0);
-                else if (pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.A)) this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-                else if (pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.D)) this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.A)) this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.candySprite.getSpeed());
+                else if (pressed.contains(CandySprite.SPRITE_NAME  + ": " + KeyCode.D)) this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE-this.candySprite.getSpeed());
                 else this.candySprite.setDX(0);
 
                 // Ice Sprite movement
-                if (pressed.contains(spriteType + ": " + KeyCode.B)) {
-                    System.out.println("freeze!");
-                    PowerUp freezePowerUp = new FreezePowerUp();
-                    applyPowerUp(freezePowerUp, this.iceSprite);
+                if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.X)) {
+                    System.out.println("slow");
+                    PowerUp stickyPowerUp = new StickyPowerUp();
+                    applyPowerUp(stickyPowerUp, this.iceSprite);
                 }
                 if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.W)) this.iceSprite.jump();
                 if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.A) && pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.iceSprite.setDX(0);
