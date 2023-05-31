@@ -221,7 +221,7 @@ public class Level {
                 gameOverStage.setScene(scene);
 
                 // Close the music
-                mediaPlayer.stop();
+                // mediaPlayer.stop();
 
                 // Close the current level stage
                 Level.getStage().close();
