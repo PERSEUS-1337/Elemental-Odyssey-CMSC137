@@ -65,9 +65,9 @@ public class ChatGUI {
     // method for starting the server. It processes the client sockets and the client writers in separate threads, so that the server can handle multiple clients
     private void startServer() {
         try {
-            InetAddress address = InetAddress.getByName(this.serverIP);
-            this.server = new ServerSocket();
-            this.server.bind(new InetSocketAddress(address, serverPort));
+            // InetAddress address = InetAddress.getByName(this.serverIP);
+            this.server = new ServerSocket(serverPort);
+            // this.server.bind(new InetSocketAddress(address, serverPort));
             System.out.println("Server instantiated at port " + serverPort);
             System.out.println("Waiting for client(s) to connect...");
 
@@ -144,7 +144,7 @@ public class ChatGUI {
     // method for listening to the server
     private void clientListen() {
         try {
-            socket = new Socket(this.serverIP, serverPort);
+            socket = new Socket("10.0.4.149", serverPort);
             System.out.println("Connected to server at port " + serverPort);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
