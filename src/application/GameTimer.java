@@ -268,6 +268,12 @@ public class GameTimer extends AnimationTimer {
 
         // System.out.println("Passed Time: " + passedTime + " seconds");
         
+        System.out.println("Is game over? " + isGameOver(passedTime));
+        // print to see if all sprites can move
+        System.out.println("Wood Sprite can move? " + this.isWoodSpriteFinished);
+        System.out.println("Slime Sprite can move? " + this.isSlimeSpriteFinished);
+        System.out.println("Candy Sprite can move? " + this.isCandySpriteFinished);
+        System.out.println("Ice Sprite can move? " + this.isIceSpriteFinished);
 
         // Move the sprites
         moveMySprite(this.isMultiplayer, spriteType);
