@@ -40,7 +40,7 @@ public class ChatGUI {
     private List<OutputStreamWriter> clientWriters = new ArrayList<>();
 
     private String chatName;
-    private static Integer serverPort = 5000;
+    private static Integer serverPort = 54321;
     public static final String SERVER = "Server";
     public static final String CLIENT = "Client";
 
