@@ -19,6 +19,16 @@ public class PlayerSprite extends Sprite {
     public final static int MAX_SPRITE_STRENGTH = 150;
 	public final static int MIN_SPRITE_STRENGTH = 100;
 
+	private int speed;
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
 	public PlayerSprite(String name, int x, int y){
 		super(x,y);
 		this.name = name;

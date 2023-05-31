@@ -25,6 +25,13 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import sprites.players.PlayerSprite;
+import sprites.players.PowerUp;
+import sprites.players.FreezePowerUp;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+
+import javafx.util.Duration;
 
 public class GameTimer extends AnimationTimer {
     private GraphicsContext gc;
@@ -59,6 +66,10 @@ public class GameTimer extends AnimationTimer {
     private static List<PrintWriter> clientWriters = new ArrayList<>();
     private BufferedReader inputReader;
     private PrintWriter outputWriter;
+    private Timeline powerupTimer;
+    private PowerUp activePowerUp;
+
+
 
     public static final int FPS = 60;
 
@@ -95,6 +106,7 @@ public class GameTimer extends AnimationTimer {
         this.isCandySpriteFinished = false;
         this.isIceSpriteFinished = false;
 
+
         // Get variable reference to player sprites
         for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
             for (int j = 0; j < Level.LEVEL_WIDTH; j++) {
@@ -110,6 +122,8 @@ public class GameTimer extends AnimationTimer {
         }
 
         // give reference of lvlSprites to players to interact with surroundings
+     
+
         this.woodSprite.setLevelData(lvlSprites);
         this.slimeSprite.setLevelData(lvlSprites);
         this.candySprite.setLevelData(lvlSprites);
@@ -134,7 +148,32 @@ public class GameTimer extends AnimationTimer {
 
     } // end of constructor
 
+    // private void activatePowerUp(PowerUp powerup, PlayerSprite player) {
+    //     powerup.activate(player);
+    // }
 
+    public void applyPowerUp(PowerUp powerUp, PlayerSprite player) {
+        if (activePowerUp != null) {
+            activePowerUp.deactivate(player);
+        }
+        activePowerUp = powerUp;
+        powerUp.activate(player);
+        int powerUpDuration = 5000; // Duration in milliseconds (e.g., 5 seconds)
+    
+        if (powerupTimer != null) {
+            powerupTimer.stop();
+        }
+    
+        powerupTimer = new Timeline(new KeyFrame(Duration.millis(powerUpDuration), e -> {
+            powerUp.deactivate(player);
+            activePowerUp = null;
+        }));
+        powerupTimer.setCycleCount(1);
+        powerupTimer.play();
+    }
+    
+    
+    
     // method to start the server for multiplayer
     private void startServer() {
         try {
@@ -212,7 +251,7 @@ public class GameTimer extends AnimationTimer {
                     while (true) {
                         
                         String message = inputReader.readLine();
-                        System.out.println("Message received: " + message);
+                        // System.out.println("Message received: " + message);
 
                         if (!pressed.contains(spriteType) && !pressed.contains(message) && !pressed.contains("released")){ // if the key pressed is not from our own sprite type, then we can add it to the pressed list
                             pressed.add(message);
@@ -426,6 +465,11 @@ public class GameTimer extends AnimationTimer {
                 break;
             case IceSprite.SPRITE_NAME:
                 // Ice Sprite movement
+                if (pressed.contains(spriteType + ": " + KeyCode.B)) {
+                    // System.out.println("freeze!");
+                    PowerUp freezePowerUp = new FreezePowerUp();
+                    applyPowerUp(freezePowerUp, this.iceSprite);
+                }
                 if (pressed.contains(spriteType  + ": " + KeyCode.UP)) this.iceSprite.jump();
                 if (pressed.contains(spriteType  + ": " + KeyCode.LEFT) && pressed.contains(spriteType  + ": " + KeyCode.RIGHT)) this.iceSprite.setDX(0);
                 else if (pressed.contains(spriteType  + ": " + KeyCode.LEFT)) this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
@@ -464,10 +508,15 @@ public class GameTimer extends AnimationTimer {
                 else this.candySprite.setDX(0);
 
                 // Ice Sprite movement
+                if (pressed.contains(spriteType + ": " + KeyCode.B)) {
+                    System.out.println("freeze!");
+                    PowerUp freezePowerUp = new FreezePowerUp();
+                    applyPowerUp(freezePowerUp, this.iceSprite);
+                }
                 if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.W)) this.iceSprite.jump();
                 if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.A) && pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.iceSprite.setDX(0);
-                else if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.A)) this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
-                else if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                else if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.A)) this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.iceSprite.getSpeed());
+                else if (pressed.contains(IceSprite.SPRITE_NAME  + ": " + KeyCode.D)) this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.iceSprite.getSpeed());
                 else this.iceSprite.setDX(0);
         
 
