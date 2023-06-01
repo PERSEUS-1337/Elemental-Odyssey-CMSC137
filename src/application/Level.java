@@ -137,6 +137,7 @@ public class Level {
         }
 	}
 
+    // Method to generate the sprites
     private Sprite spriteGenerator(int value, int x, int y){
         switch (value) {
             case 1:
@@ -164,11 +165,12 @@ public class Level {
         }
     }
 
+    // Method to get the stage
 	static Stage getStage(){
 		return(Level.stage);
 	}
 
-    
+    // Method to stop the timer    
 	public void stopTimer(){
 		this.gametimer.stop();
 	}
@@ -190,11 +192,13 @@ public class Level {
         mediaPlayer.stop();
     }
 
+    // Method to change the volume of the music
     public static void changeMusicVolume(double volume) {
         mediaPlayer.setVolume(volume);
     }
 
-    public static void setGameOver(ArrayList<String> rankings, HashMap<String, Integer> timeFinished){
+    // Method to set the game over stage
+    public static void setGameOver(ArrayList<String> rankings, HashMap<String, String> rankingArray){
     PauseTransition transition = new PauseTransition(Duration.seconds(1));
     transition.play();
 
@@ -203,7 +207,7 @@ public class Level {
         public void handle(ActionEvent arg0) {
             // Must show the gameOver screen
             try {
-                LeaderBoardStage leaderBoard = new LeaderBoardStage(rankings, timeFinished);
+                LeaderBoardStage leaderBoard = new LeaderBoardStage(rankings, rankingArray);
                 
                 MovingBackground bg = new MovingBackground(MovingBackground.yellowColor, MovingBackground.defaultWindowSize);
                 // Getting the FXML file for the about ui
@@ -242,6 +246,8 @@ public class Level {
         }
     });
 }
+
+    // Method to close the game over stage
     public static void clsoeGameOverStage(){
         gameOverStage.close();
     }

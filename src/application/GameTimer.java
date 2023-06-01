@@ -36,9 +36,8 @@ public class GameTimer extends AnimationTimer {
 
     // GameOver-related variables
     private ArrayList<String> playerRanking;
-    private HashMap<String, Integer> playerTimeFinished;
-    // We need to keep track of the time from the start of the game to the end of
-    // the game
+    private HashMap<String, String> playerTimeFinished; // We need to keep track of the ranking of player sprites
+    private Integer rankCounter;
     private long startTime;
     private int doorIndexX;
     private int doorIndexY;
@@ -78,7 +77,8 @@ public class GameTimer extends AnimationTimer {
 
         // Initialize GameOver-related variables
         this.playerRanking = new ArrayList<String>();
-        this.playerTimeFinished = new HashMap<String, Integer>();
+        this.playerTimeFinished = new HashMap<String, String>();
+        this.rankCounter = 0;
         this.startTime = System.nanoTime();
 
         // Get the index of the door based on the lvldata to get the door sprite
@@ -451,25 +451,25 @@ public class GameTimer extends AnimationTimer {
         if (woodSpriteYIndex == this.doorIndexY && woodSpriteXIndex == this.doorIndexX
                 && !this.playerRanking.contains(WoodSprite.SPRITE_NAME)) {
             this.playerRanking.add(WoodSprite.SPRITE_NAME);
-            this.playerTimeFinished.put(WoodSprite.SPRITE_NAME, timeFinished);
+            this.playerTimeFinished.put(WoodSprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
             this.isWoodSpriteFinished = true;
         }
         if (slimeSpriteYIndex == this.doorIndexY && slimeSpriteXIndex == this.doorIndexX
                 && !this.playerRanking.contains(SlimeSprite.SPRITE_NAME)) {
             this.playerRanking.add(SlimeSprite.SPRITE_NAME);
-            this.playerTimeFinished.put(SlimeSprite.SPRITE_NAME, timeFinished);
+            this.playerTimeFinished.put(SlimeSprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
             this.isSlimeSpriteFinished = true;
         }
         if (candySpriteYIndex == this.doorIndexY && candySpriteXIndex == this.doorIndexX
                 && !this.playerRanking.contains(CandySprite.SPRITE_NAME)) {
             this.playerRanking.add(CandySprite.SPRITE_NAME);
-            this.playerTimeFinished.put(CandySprite.SPRITE_NAME, timeFinished);
+            this.playerTimeFinished.put(CandySprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
             this.isCandySpriteFinished = true;
         }
         if (iceSpriteYIndex == this.doorIndexY && iceSpriteXIndex == this.doorIndexX
                 && !this.playerRanking.contains(IceSprite.SPRITE_NAME)) {
             this.playerRanking.add(IceSprite.SPRITE_NAME);
-            this.playerTimeFinished.put(IceSprite.SPRITE_NAME, timeFinished);
+            this.playerTimeFinished.put(IceSprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
             this.isIceSpriteFinished = true;
         }
 
