@@ -91,7 +91,7 @@ public class Level {
             }
     
             //instantiate an animation timer
-            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, !isMultiplayer, null, null, null, null, null);
+            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, isMultiplayer, null, null, null, null, null);
     
             //invoke the start method of the animation timer
             this.gametimer.start();
