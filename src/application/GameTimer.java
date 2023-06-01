@@ -193,9 +193,7 @@ public class GameTimer extends AnimationTimer {
     // events for the player and send the key pressed as well to the server
     private void startClient() {
         try {
-            // InetAddress address = InetAddress.getByName(this.ipAddress);
             socket = new Socket(ipAddress, this.serverPort);
-            // socket.connect(new InetSocketAddress(address, serverPort));
             System.out.println("Game Server: " + this.nameOfUser + " connected to server.");
 
             inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -329,9 +327,9 @@ public class GameTimer extends AnimationTimer {
             }
         }
 
-        // Check if the game is over. If it is over, we update the end time
+        // Check if the game is over (must get the first tree sprites). If it is over, we update the end time
         // If the game is over, we display the game over screen
-        if (isGameOver(passedTime)) {
+        if (this.rankCounter == 3) {
             this.stop(); // stop the gametimer
             Level.setGameOver(this.playerRanking, this.playerTimeFinished);
         }
@@ -473,11 +471,5 @@ public class GameTimer extends AnimationTimer {
             this.isIceSpriteFinished = true;
         }
 
-    }
-
-    // method to check if the game is over, which means all the players have finished the level
-    private boolean isGameOver(int timeFinished) {
-        return this.isWoodSpriteFinished && this.isSlimeSpriteFinished && this.isCandySpriteFinished
-                && this.isIceSpriteFinished;
     }
 }
