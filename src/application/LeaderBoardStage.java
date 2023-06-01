@@ -72,11 +72,11 @@ public class LeaderBoardStage extends Pane {
         thirdPlaceTimeText.setFont(timeTextFont);
 
         // Set the coordinates of the winner time texts above each winner image
-        firstPlaceTimeText.setX(FIRST_PLACE_X + 10);
+        firstPlaceTimeText.setX(FIRST_PLACE_X + 9);
         firstPlaceTimeText.setY(FIRST_PLACE_Y - 12);
-        secondPlaceTimeText.setX(SECOND_PLACE_X + 10);
+        secondPlaceTimeText.setX(SECOND_PLACE_X + 9);
         secondPlaceTimeText.setY(SECOND_PLACE_Y - 12);
-        thirdPlaceTimeText.setX(THIRD_PLACE_X + 10);
+        thirdPlaceTimeText.setX(THIRD_PLACE_X + 9);
         thirdPlaceTimeText.setY(THIRD_PLACE_Y - 12);
 
         getChildren().addAll(firstPlaceImage, secondPlaceImage, thirdPlaceImage, firstPlaceTimeText, secondPlaceTimeText, thirdPlaceTimeText);
