@@ -132,14 +132,12 @@ public class GameTimer extends AnimationTimer {
     // method to start the server for multiplayer
     private void startServer() {
         try {
-            // InetAddress address = InetAddress.getByName(this.ipAddress);
             this.serverSocket = new ServerSocket(this.serverPort);
-            // this.serverSocket.bind(new InetSocketAddress(address, serverPort));
             System.out.println("Game server started. Waiting for players...");
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("Player connected.");
+                System.out.println("Game Server: Player connected.");
 
                 PrintWriter clientWriter = new PrintWriter(clientSocket.getOutputStream(), true);
                 clientWriters.add(clientWriter);
@@ -152,10 +150,10 @@ public class GameTimer extends AnimationTimer {
             System.exit(0);
         } finally { // close the server socket
             try {
-                System.out.println("Closing server socket...");
+                System.out.println("Game Server: Closing server socket...");
                 serverSocket.close();
             } catch (Exception e) {
-                System.out.println("Unable to close server socket: " + e.getMessage());
+                System.out.println("Game Server: Unable to close server socket - " + e.getMessage());
             }
         }
     }
@@ -198,7 +196,7 @@ public class GameTimer extends AnimationTimer {
             // InetAddress address = InetAddress.getByName(this.ipAddress);
             socket = new Socket(ipAddress, this.serverPort);
             // socket.connect(new InetSocketAddress(address, serverPort));
-            System.out.println(this.nameOfUser + " connected to server.");
+            System.out.println("Game Server: " + this.nameOfUser + " connected to server.");
 
             inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             outputWriter = new PrintWriter(socket.getOutputStream(), true);
