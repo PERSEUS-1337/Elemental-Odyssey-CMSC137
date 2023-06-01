@@ -33,7 +33,7 @@ public class EnterAddressStage {
 
         // The address should not be empty and should resemble an ip address. If it does not, then it is not a valid address
         if (address.isEmpty() || !address.matches("\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}")) {
-            System.out.println("Invalid Address");
+            System.out.println("Enter Address Stage: Invalid Address");
             
             // If the address is invalid, then clear the text field
             txtAddress.clear();
@@ -41,14 +41,14 @@ public class EnterAddressStage {
         } else {
             // If the address is valid, then set the ip address
             ipAddress = address;
-            System.out.println("Address Set");
-            System.out.println("Address: " + ipAddress);
+            System.out.println("Enter Address Stage: Address Set");
+            System.out.println("Enter Address Stage: Address: " + ipAddress);
 
             // if the chatType is SERVER, then check if the ipAddress is already in use
             if (chatType.equals(ChatGUI.SERVER)) {
                 // if the ipAddress is already in use, then display an error message
                 if (ChatGUI.isServerRunning(ipAddress)) {
-                    System.out.println("Server is already running");
+                    System.out.println("Enter Address Stage: Server is already running");
                     // Close the Enter Name Stage if ip address is already in use
                     this.closeEnterAddressStage();
                     return;
