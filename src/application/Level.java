@@ -23,6 +23,7 @@ import javafx.util.Duration;
 import sprites.*;
 import sprites.objects.*;
 import sprites.players.*;
+import user.Main;
 
 public class Level {
     protected int[][] lvldata;
@@ -91,7 +92,7 @@ public class Level {
             }
     
             //instantiate an animation timer
-            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, isMultiplayer, null, null, null, null, null);
+            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, isMultiplayer, null, null, null, this.spriteType, null);
     
             //invoke the start method of the animation timer
             this.gametimer.start();
@@ -203,50 +204,63 @@ public class Level {
     }
 
     // Method to set the game over stage
-    public static void setGameOver(ArrayList<String> rankings, HashMap<String, String> rankingArray){
+    public static void setGameOver(ArrayList<String> rankings, HashMap<String, String> rankingArray, Boolean isMultiplayer){
     PauseTransition transition = new PauseTransition(Duration.seconds(1));
     transition.play();
 
     transition.setOnFinished(new EventHandler<ActionEvent>() {
 
         public void handle(ActionEvent arg0) {
-            // Must show the gameOver screen
-            try {
-                LeaderBoardStage leaderBoard = new LeaderBoardStage(rankings, rankingArray);
-                
-                MovingBackground bg = new MovingBackground(MovingBackground.yellowColor, MovingBackground.defaultWindowSize);
-                // Getting the FXML file for the about ui
-                Parent gameOverRoot = FXMLLoader.load(getClass().getResource("/views/GameOverStage.fxml"));
-                // Adding the background and the about ui to the same scene
-                Group root = new Group();
-                root.getChildren().addAll(bg, gameOverRoot, leaderBoard);
-                
-                Scene scene = new Scene(root, GameOverStage.WINDOW_WIDTH, GameOverStage.WINDOW_HEIGHT);
-    
-                gameOverStage = new Stage();
-                gameOverStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
-                gameOverStage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
-                gameOverStage.setTitle("Gameover!");
-                gameOverStage.setScene(scene);
+            if(isMultiplayer){
+                // Must show the gameOver screen
+                try {
+                    LeaderBoardStage leaderBoard = new LeaderBoardStage(rankings, rankingArray);
+                    
+                    MovingBackground bg = new MovingBackground(MovingBackground.yellowColor, MovingBackground.defaultWindowSize);
+                    // Getting the FXML file for the about ui
+                    Parent gameOverRoot = FXMLLoader.load(getClass().getResource("/views/GameOverStage.fxml"));
+                    // Adding the background and the about ui to the same scene
+                    Group root = new Group();
+                    root.getChildren().addAll(bg, gameOverRoot, leaderBoard);
+                    
+                    Scene scene = new Scene(root, GameOverStage.WINDOW_WIDTH, GameOverStage.WINDOW_HEIGHT);
+        
+                    gameOverStage = new Stage();
+                    gameOverStage.initModality(Modality.APPLICATION_MODAL); // Prevents user from interacting with other windows
+                    gameOverStage.resizableProperty().setValue(Boolean.FALSE); // Disables the ability to resize the window
+                    gameOverStage.setTitle("Gameover!");
+                    gameOverStage.setScene(scene);
 
+                    // Close the music
+                    mediaPlayer.stop();
+
+                    // Close the current level stage
+                    Level.getStage().close();
+
+                    gameOverStage.show();
+
+                    // Play the background music
+                    try {
+                    GameOverStage.playBackgroundMusic(GameOverStage.GAME_OVER_MUSIC, SettingsStage.masterVolume);
+                    } catch (Exception e) {
+                    System.out.println("Error playing music: " + e.getMessage());
+                    }
+        
+                    
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
                 // Close the music
                 mediaPlayer.stop();
-
+                
                 // Close the current level stage
                 Level.getStage().close();
 
-                gameOverStage.show();
-
-                // Play the background music
-                try {
-                GameOverStage.playBackgroundMusic(GameOverStage.GAME_OVER_MUSIC, SettingsStage.masterVolume);
-                } catch (Exception e) {
-                System.out.println("Error playing music: " + e.getMessage());
-                }
-    
-                
-            } catch (IOException e) {
-                e.printStackTrace();
+                // When the close button is clicked, the createMainGUI method will be called
+                Main.createMainGUI(Main.mainStage);
+                // Play the Main Menu music as well
+                MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC, SettingsStage.musicVolume);
             }
         }
     });

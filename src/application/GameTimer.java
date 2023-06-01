@@ -92,25 +92,42 @@ public class GameTimer extends AnimationTimer {
         this.isCandySpriteFinished = false;
         this.isIceSpriteFinished = false;
 
-        // Get variable reference to player sprites
-        for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
-            for (int j = 0; j < Level.LEVEL_WIDTH; j++) {
-                if (lvlSprites[i][j] instanceof WoodSprite)
-                    this.woodSprite = (WoodSprite) lvlSprites[i][j];
-                else if (lvlSprites[i][j] instanceof SlimeSprite)
-                    this.slimeSprite = (SlimeSprite) lvlSprites[i][j];
-                else if (lvlSprites[i][j] instanceof CandySprite)
-                    this.candySprite = (CandySprite) lvlSprites[i][j];
-                else if (lvlSprites[i][j] instanceof IceSprite)
-                    this.iceSprite = (IceSprite) lvlSprites[i][j];
-            }
-        }
+        
 
-        // give reference of lvlSprites to players to interact with surroundings
-        this.woodSprite.setLevelData(lvlSprites);
-        this.slimeSprite.setLevelData(lvlSprites);
-        this.candySprite.setLevelData(lvlSprites);
-        this.iceSprite.setLevelData(lvlSprites);
+        if(this.isMultiplayer){
+
+                // Get variable reference to player sprites
+            for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
+                for (int j = 0; j < Level.LEVEL_WIDTH; j++) {
+                    if (lvlSprites[i][j] instanceof WoodSprite)
+                        this.woodSprite = (WoodSprite) lvlSprites[i][j];
+                    else if (lvlSprites[i][j] instanceof SlimeSprite)
+                        this.slimeSprite = (SlimeSprite) lvlSprites[i][j];
+                    else if (lvlSprites[i][j] instanceof CandySprite)
+                        this.candySprite = (CandySprite) lvlSprites[i][j];
+                    else if (lvlSprites[i][j] instanceof IceSprite)
+                        this.iceSprite = (IceSprite) lvlSprites[i][j];
+                }
+            }
+
+            // give reference of lvlSprites to players to interact with surroundings
+            this.woodSprite.setLevelData(lvlSprites);
+            this.slimeSprite.setLevelData(lvlSprites);
+            this.candySprite.setLevelData(lvlSprites);
+            this.iceSprite.setLevelData(lvlSprites);
+        } else{
+
+                // Get variable reference to player sprites
+                for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
+                    for (int j = 0; j < Level.LEVEL_WIDTH; j++) {
+                        if (lvlSprites[i][j] instanceof WoodSprite)
+                            this.woodSprite = (WoodSprite) lvlSprites[i][j];
+                    }
+                }
+
+            // give reference of lvlSprites to the single player [WOOD SPRITE ONLY]
+            this.woodSprite.setLevelData(lvlSprites);
+        }
 
         // If the game is multiplayer, we need to create a new thread for the server
         if (this.isMultiplayer && this.chatType.equals(ChatGUI.SERVER)) {
@@ -126,10 +143,29 @@ public class GameTimer extends AnimationTimer {
             Thread clientThread = new Thread(this::startClient);
             clientThread.start();
         } else { // if the game is singleplayer, we need to handle the key press events
-            // this.handleKeyPressEvent();
+            this.handleKeyPressEvent();
         }
 
     } // end of constructor
+
+    // method to handle the key press events for the player
+    private void handleKeyPressEvent() {
+        this.theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent e) {
+                KeyCode code = e.getCode();
+                if (!pressed.contains(spriteType + ": " + code)) {
+                    pressed.add(spriteType + ": " + code);
+                }
+            }
+        });
+
+        this.theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent e) {
+                KeyCode code = e.getCode();
+                pressed.remove(spriteType + ": " + code);
+            }
+        });
+    }
 
     // method to start the server for multiplayer
     private void startServer() {
@@ -298,22 +334,36 @@ public class GameTimer extends AnimationTimer {
         // Move the sprites
         moveMySprite(this.isMultiplayer, spriteType);
 
-        // Move only the sprite of the current player based on the updated coordinates
-        if (spriteType == "WoodSprite") {
-            this.woodSprite.move();
-            outputWriter.println("woodSprite Coord = x: " + this.woodSprite.getX() + " y: " + this.woodSprite.getY());
-        } else if (spriteType == "SlimeSprite") {
-            this.slimeSprite.move();
-            outputWriter
-                    .println("slimeSprite Coord = x: " + this.slimeSprite.getX() + " y: " + this.slimeSprite.getY());
-        } else if (spriteType == "CandySprite") {
-            this.candySprite.move();
-            outputWriter
-                    .println("candySprite Coord = x: " + this.candySprite.getX() + " y: " + this.candySprite.getY());
-        } else {
-            this.iceSprite.move();
-            outputWriter.println("iceSprite Coord = x: " + this.iceSprite.getX() + " y: " + this.iceSprite.getY());
+        if(this.isMultiplayer){
+            // Move only the sprite of the current player based on the updated coordinates
+            if (spriteType == "WoodSprite") {
+                this.woodSprite.move();
+                outputWriter.println("woodSprite Coord = x: " + this.woodSprite.getX() + " y: " + this.woodSprite.getY());
+            } else if (spriteType == "SlimeSprite") {
+                this.slimeSprite.move();
+                outputWriter
+                        .println("slimeSprite Coord = x: " + this.slimeSprite.getX() + " y: " + this.slimeSprite.getY());
+            } else if (spriteType == "CandySprite") {
+                this.candySprite.move();
+                outputWriter
+                        .println("candySprite Coord = x: " + this.candySprite.getX() + " y: " + this.candySprite.getY());
+            } else {
+                this.iceSprite.move();
+                outputWriter.println("iceSprite Coord = x: " + this.iceSprite.getX() + " y: " + this.iceSprite.getY());
         }
+        } else {
+            // Move the sprite of the current player
+            if (spriteType == "WoodSprite") {
+                this.woodSprite.move();
+            } else if (spriteType == "SlimeSprite") {
+                this.slimeSprite.move();
+            } else if (spriteType == "CandySprite") {
+                this.candySprite.move();
+            } else {
+                this.iceSprite.move();
+            }
+        }
+
 
         // render the sprites
         for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
@@ -331,15 +381,20 @@ public class GameTimer extends AnimationTimer {
 
         // Check if the game is over (must get the first tree sprites). If it is over, we update the end time
         // If the game is over, we display the game over screen
-        if (this.rankCounter == 3) {
+        if (this.rankCounter == 3 && this.isMultiplayer) {
             this.stop(); // stop the gametimer
-            Level.setGameOver(this.playerRanking, this.playerTimeFinished);
+            Level.setGameOver(this.playerRanking, this.playerTimeFinished, this.isMultiplayer);
 
             // Must close the chat gui and the sockets
-            if (this.isMultiplayer) {
-                PickSpriteStage.closeChatGUIStage();
-                this.chat.closeSocket();
-            }
+            PickSpriteStage.closeChatGUIStage();
+            this.chat.closeSocket();
+        } 
+        
+        // Check if the game is over (must get the singleplayer sprite). If it is over, we update the end time
+        // If the game is over, we display the game over screen
+        else if (this.rankCounter == 1 && !this.isMultiplayer) {
+                this.stop(); // stop the gametimer
+                Level.setGameOver(this.playerRanking, this.playerTimeFinished, this.isMultiplayer);
         }
         // After the sprites have been rendered, check if the player sprites have
         // reached the end of the level, which is colliding with the Door sprite
@@ -433,7 +488,8 @@ public class GameTimer extends AnimationTimer {
     // sprite to the player ranking and update the time for the sprite to finish the
     // level
     private void checkDoorCollision(int timeFinished) {
-        // Calculate first the yIndex and xIndex of each player sprite
+        if(this.isMultiplayer){
+            // Calculate first the yIndex and xIndex of each player sprite
         int woodSpriteXCoord = this.woodSprite.getCenterX();
         int woodSpriteYCoord = this.woodSprite.getCenterY();
         int woodSpriteXIndex = woodSpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
@@ -477,6 +533,20 @@ public class GameTimer extends AnimationTimer {
             this.playerRanking.add(IceSprite.SPRITE_NAME);
             this.playerTimeFinished.put(IceSprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
             this.isIceSpriteFinished = true;
+        }
+        } else {
+            // Calculate first the yIndex and xIndex of the single player sprite
+            int woodSpriteXCoord = this.woodSprite.getCenterX();
+            int woodSpriteYCoord = this.woodSprite.getCenterY();
+            int woodSpriteXIndex = woodSpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+            int woodSpriteYIndex = woodSpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
+
+            if (woodSpriteYIndex == this.doorIndexY && woodSpriteXIndex == this.doorIndexX
+                    && !this.playerRanking.contains(WoodSprite.SPRITE_NAME)) {
+                this.playerRanking.add(WoodSprite.SPRITE_NAME);
+                this.playerTimeFinished.put(WoodSprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
+                this.isWoodSpriteFinished = true;
+            }
         }
 
     }

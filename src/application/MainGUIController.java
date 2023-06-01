@@ -15,6 +15,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sprites.players.WoodSprite;
 import user.Main;
 
 public class MainGUIController {
@@ -72,7 +73,7 @@ public class MainGUIController {
         System.out.println("Instructions Button Clicked");
 
         // Most of the parameters are null because the tutorial level is not multiplayer
-        TutorialLevel tutorialLevel = new TutorialLevel(false, null, null, null, null, null);
+        TutorialLevel tutorialLevel = new TutorialLevel(false, null, null, null, WoodSprite.SPRITE_NAME, null);
         tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
 
          // Play the background music for tutorial
