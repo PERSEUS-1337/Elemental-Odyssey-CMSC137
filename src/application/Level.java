@@ -46,7 +46,7 @@ public class Level {
     public static final int WINDOW_HEIGHT = Sprite.SPRITE_WIDTH * LEVEL_HEIGHT;
 
     // Music and sounds stuff
-    public static final String TRACK_01 = setGameOverMusicPath();
+    public static final String TRACK_01 = setGameMusicPath();
     // media player for the background music
     private static MediaPlayer mediaPlayer;
 
@@ -127,6 +127,9 @@ public class Level {
             //instantiate an animation timer
             this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, this.isMultiplayer, this.chatType, this.nameOfUser, this.ipAddress, this.spriteType, this.chat);
     
+            // play the background music
+            playBackgroundMusic(TRACK_01, SettingsStage.masterVolume);
+
             //invoke the start method of the animation timer
             this.gametimer.start();
             // After invoking the start method, we need to check if the user exits the window
@@ -227,7 +230,7 @@ public class Level {
                 gameOverStage.setScene(scene);
 
                 // Close the music
-                // mediaPlayer.stop();
+                mediaPlayer.stop();
 
                 // Close the current level stage
                 Level.getStage().close();
@@ -255,13 +258,13 @@ public class Level {
     }
     
     // Method to set the music path
-    private static String setGameOverMusicPath(){
+    private static String setGameMusicPath(){
         String musicPath = "";
         try {
-            musicPath = "src/sounds/gameOverThemeMusic.wav";
+            musicPath = "src/sounds/musicTrack01.wav";
         } catch (Exception e) {
         } finally {
-            musicPath = "src\\sounds\\gameOverThemeMusic.wav";
+            musicPath = "src\\sounds\\musicTrack01.wav";
         }
         return musicPath;
     }
