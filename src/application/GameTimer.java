@@ -53,6 +53,7 @@ public class GameTimer extends AnimationTimer {
     private String chatType;
     private String nameOfUser;
     private String ipAddress;
+    private ChatGUI chat;
     private Integer serverPort = 53412;     // Port number for the game server 
     private static String spriteType;
     private static List<PrintWriter> clientWriters = new ArrayList<>();
@@ -62,7 +63,7 @@ public class GameTimer extends AnimationTimer {
     public static final int FPS = 60;
 
     GameTimer(GraphicsContext gc, Scene theScene, Sprite[][] lvlSprites, Boolean isMultiplayer, String chatType,
-            String nameOfUser, String ipAddress, String type) {
+            String nameOfUser, String ipAddress, String type, ChatGUI chat) {
         this.gc = gc;
         this.theScene = theScene;
         this.lvlSprites = lvlSprites;
@@ -74,6 +75,7 @@ public class GameTimer extends AnimationTimer {
         this.nameOfUser = nameOfUser;
         this.ipAddress = ipAddress;
         spriteType = type;
+        this.chat = chat;
 
         // Initialize GameOver-related variables
         this.playerRanking = new ArrayList<String>();
@@ -332,6 +334,12 @@ public class GameTimer extends AnimationTimer {
         if (this.rankCounter == 3) {
             this.stop(); // stop the gametimer
             Level.setGameOver(this.playerRanking, this.playerTimeFinished);
+
+            // Must close the chat gui and the sockets
+            if (this.isMultiplayer) {
+                PickSpriteStage.closeChatGUIStage();
+                this.chat.closeSocket();
+            }
         }
         // After the sprites have been rendered, check if the player sprites have
         // reached the end of the level, which is colliding with the Door sprite

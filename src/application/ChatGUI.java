@@ -45,7 +45,7 @@ public class ChatGUI {
     public static final String CLIENT = "Client";
     public static final String DEFAULT_SERVER = "Connect to Me";
 
-    public ChatGUI(String chatType, String chatName, String ipAddress) {
+    public ChatGUI(String chatType, String chatName, String ipAddress, Stage stage) {
         
         this.serverIP = ipAddress;
         this.chatName = chatName;
@@ -55,11 +55,11 @@ public class ChatGUI {
             serverThread.start();
             clientListen();
             // Set-up the GUI
-            this.setStage(new Stage());
+            this.setStage(stage);
         } else if (chatType.equals(CLIENT) && isServerRunning(this.serverIP)) {
             clientListen();
             // Set-up the GUI
-            this.setStage(new Stage());
+            this.setStage(stage);
         } else {
             System.out.println("Chat: Server is already running!");
             return;

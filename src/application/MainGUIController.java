@@ -72,7 +72,7 @@ public class MainGUIController {
         System.out.println("Instructions Button Clicked");
 
         // Most of the parameters are null because the tutorial level is not multiplayer
-        TutorialLevel tutorialLevel = new TutorialLevel(false, null, null, null, null);
+        TutorialLevel tutorialLevel = new TutorialLevel(false, null, null, null, null, null);
         tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
 
          // Play the background music for tutorial

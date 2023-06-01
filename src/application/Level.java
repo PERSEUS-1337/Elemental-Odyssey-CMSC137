@@ -38,6 +38,7 @@ public class Level {
     protected String nameOfUser;
     protected String ipAddress;
     protected String spriteType;
+    protected ChatGUI chat;
 
     public static final int LEVEL_WIDTH = 26;
     public static final int LEVEL_HEIGHT = 15;
@@ -50,12 +51,13 @@ public class Level {
     private static MediaPlayer mediaPlayer;
 
     // Constructor
-	public Level(Boolean isMultiplayer, String chatType, String nameOfUser, String ipAddress, String spriteType) {
+	public Level(Boolean isMultiplayer, String chatType, String nameOfUser, String ipAddress, String spriteType, ChatGUI chat) {
         this.chatType = chatType;
         this.nameOfUser = nameOfUser;
         this.ipAddress = ipAddress;
         this.isMultiplayer = isMultiplayer;
         this.spriteType = spriteType;
+        this.chat = chat;
         
         System.out.println("isMultiplayer: " + isMultiplayer);
 		this.root = new Group();
@@ -89,7 +91,7 @@ public class Level {
             }
     
             //instantiate an animation timer
-            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, null, null, null, null, null);
+            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, !isMultiplayer, null, null, null, null, null);
     
             //invoke the start method of the animation timer
             this.gametimer.start();
@@ -123,7 +125,7 @@ public class Level {
             }
     
             //instantiate an animation timer
-            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, this.isMultiplayer, this.chatType, this.nameOfUser, this.ipAddress, this.spriteType);
+            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, this.isMultiplayer, this.chatType, this.nameOfUser, this.ipAddress, this.spriteType, this.chat);
     
             //invoke the start method of the animation timer
             this.gametimer.start();

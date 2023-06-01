@@ -28,6 +28,8 @@ public class PickSpriteStage extends VBox {
     private String ipAddress;
     private String chatType;
 
+    private static Stage chatGuiStage;
+
     // Constructor
     public PickSpriteStage(String nameOfUser, String ipAddress, String chatType) {
         this.nameOfUser = nameOfUser;
@@ -160,12 +162,20 @@ public class PickSpriteStage extends VBox {
 
     }
 
+    // method to close the chat gui stage
+    static void closeChatGUIStage() {
+        chatGuiStage.close();
+    }
+
     // method to create an Instance of the Chat GUI and the Level
     private void createChatGUIandLevel(String spriteType) {
-        ChatGUI chatGUI = new ChatGUI(chatType, nameOfUser, ipAddress);
+        // Create the Chat GUI Stage to be able to close it later
+        chatGuiStage = new Stage();
+
+        ChatGUI chatGUI = new ChatGUI(chatType, nameOfUser, ipAddress, chatGuiStage);
 
         // Create the basic level (Tutorial Level for now)
-        TutorialLevel tutorialLevel = new TutorialLevel(true, chatType, nameOfUser, ipAddress, spriteType);
+        TutorialLevel tutorialLevel = new TutorialLevel(true, chatType, nameOfUser, ipAddress, spriteType, chatGUI);
         tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
 
         // Stop the music from MainGUIController
