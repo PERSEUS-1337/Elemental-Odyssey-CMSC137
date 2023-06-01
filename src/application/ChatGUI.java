@@ -43,8 +43,10 @@ public class ChatGUI {
     private static Integer serverPort = 54321;      // Port number for the chat server
     public static final String SERVER = "Server";
     public static final String CLIENT = "Client";
+    public static final String DEFAULT_SERVER = "Connect to Me";
 
     public ChatGUI(String chatType, String chatName, String ipAddress) {
+        
         this.serverIP = ipAddress;
         this.chatName = chatName;
 

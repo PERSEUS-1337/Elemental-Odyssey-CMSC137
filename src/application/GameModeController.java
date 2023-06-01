@@ -28,8 +28,9 @@ public class GameModeController {
         System.out.println("Create Game Button Clicked");
 
         // Create the Enter Address Stage
-        EnterAddressStage enterAddressStage = new EnterAddressStage(ChatGUI.SERVER);
-        enterAddressStage.setStage(new Stage());
+        EnterNameStage enterNameStage = new EnterNameStage(ChatGUI.DEFAULT_SERVER, ChatGUI.SERVER);
+            enterNameStage.setStage(new Stage());
+
         
     }
 
