@@ -15,7 +15,7 @@ public class GameOverStage {
 
     // Music and sounds stuff
     private static MediaPlayer mediaPlayer;
-    public static final String GAME_OVER_MUSIC = "src\\sounds\\gameOverThemeMusic.wav";
+    public static String GAME_OVER_MUSIC = setGameOverMusicPath();
 
     @FXML
     private Button btnClose;
@@ -55,8 +55,22 @@ public class GameOverStage {
         mediaPlayer.stop();
     }
 
+    // Method to change the volume of the music
     public static void changeMusicVolume(double volume) {
         mediaPlayer.setVolume(volume);
+    }
+
+    // Method to set the game over music path
+    private static String setGameOverMusicPath(){
+        String path = "";
+
+        try {
+            path = "src/sounds/gameOverThemeMusic.wav";
+        } catch (Exception e) {
+        } finally {
+            path = "src\\sounds\\gameOverThemeMusic.wav";
+        }
+        return path;
     }
 
 }

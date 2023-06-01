@@ -22,7 +22,7 @@ public class MainGUIController {
 
     public static final String GAME_NAME = "Elemental Odyssey: Beyond the Horizon";
     // Get the mainThemeMusic.wav file, get its targetPath, and filename
-    public static final String MENU_MUSIC = "src\\sounds\\mainThemeMusic.wav";
+    public static final String MENU_MUSIC = setMenuMusicPath();
     public static final Double DEFAULT_MASTER_VOLUME = 0.5;
     public static final Integer WINDOW_WIDTH = 800;
     public static final Integer WINDOW_HEIGHT = 600;
@@ -234,12 +234,26 @@ public class MainGUIController {
         mediaPlayer.stop();
     }
 
+    // Method to change the volume of the music
     public static void changeMusicVolume(double volume) {
         mediaPlayer.setVolume(volume);
     }
 
+    // Method to get the path of the main menu music
     public static void closeGameModeMenu() {
         gameModeStage.close();
+    }
+
+    // Method to get the path of the main menu music
+    private static String setMenuMusicPath(){
+        String musicPath = "";
+        try {
+            musicPath = "src/sounds/mainThemeMusic.wav";
+        } catch (Exception e) {
+        } finally{
+            musicPath = "src\\sounds\\mainThemeMusic.wav";
+        }
+        return musicPath;
     }
 
 }

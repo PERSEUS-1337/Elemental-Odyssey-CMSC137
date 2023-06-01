@@ -46,7 +46,7 @@ public class Level {
     public static final int WINDOW_HEIGHT = Sprite.SPRITE_WIDTH * LEVEL_HEIGHT;
 
     // Music and sounds stuff
-    public static final String TRACK_01 = "src\\sounds\\musicTrack01.wav";
+    public static final String TRACK_01 = setGameOverMusicPath();
     // media player for the background music
     private static MediaPlayer mediaPlayer;
 
@@ -250,8 +250,19 @@ public class Level {
 }
 
     // Method to close the game over stage
-    public static void clsoeGameOverStage(){
+    public static void closeGameOverStage(){
         gameOverStage.close();
     }
-
+    
+    // Method to set the music path
+    private static String setGameOverMusicPath(){
+        String musicPath = "";
+        try {
+            musicPath = "src/sounds/gameOverThemeMusic.wav";
+        } catch (Exception e) {
+        } finally {
+            musicPath = "src\\sounds\\gameOverThemeMusic.wav";
+        }
+        return musicPath;
+    }
 }
