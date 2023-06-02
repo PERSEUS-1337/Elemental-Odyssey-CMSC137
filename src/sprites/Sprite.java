@@ -22,7 +22,7 @@ public class Sprite {
 
 	public static final int SPRITE_DEFAULT_WIDTH = 32;
 	public static final int SPRITE_DEFAULT_HEIGHT = 32;
-	public static final float SCALE = 1.5f;
+	public static final float SCALE = 1.0f;
 	public static final int SPRITE_WIDTH = (int) (SPRITE_DEFAULT_WIDTH * SCALE);
 	public static final int SPRITE_HEIGHT = (int) (SPRITE_DEFAULT_HEIGHT * SCALE);
 	
@@ -82,11 +82,11 @@ public class Sprite {
 	}
 	
 	public int getCenterX(){
-		return this.x + (Sprite.SPRITE_WIDTH / 2);
+		return this.x + ((int) this.width / 2);
 	}
 
 	public int getCenterY(){
-		return this.y + (Sprite.SPRITE_HEIGHT / 2);
+		return this.y + ((int) this.height / 2);
 	}
 
 	public double getWidth(){

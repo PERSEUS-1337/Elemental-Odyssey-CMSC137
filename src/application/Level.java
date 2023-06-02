@@ -41,8 +41,8 @@ public class Level {
     protected String spriteType;
     protected ChatGUI chat;
 
-    public static final int LEVEL_WIDTH = 26;
-    public static final int LEVEL_HEIGHT = 15;
+    public static final int LEVEL_WIDTH = 40;
+    public static final int LEVEL_HEIGHT = 23;
     public static final int WINDOW_WIDTH = Sprite.SPRITE_WIDTH * LEVEL_WIDTH;
     public static final int WINDOW_HEIGHT = Sprite.SPRITE_WIDTH * LEVEL_HEIGHT;
 
@@ -94,6 +94,9 @@ public class Level {
             //instantiate an animation timer
             this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, isMultiplayer, null, null, null, this.spriteType, null);
     
+            // play the background music
+            playBackgroundMusic(TRACK_01, SettingsStage.masterVolume);
+
             //invoke the start method of the animation timer
             this.gametimer.start();
             // After invoking the start method, we need to check if the user exits the window

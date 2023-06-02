@@ -174,9 +174,9 @@ public class PickSpriteStage extends VBox {
 
         ChatGUI chatGUI = new ChatGUI(chatType, nameOfUser, ipAddress, chatGuiStage);
 
-        // Create the basic level (Tutorial Level for now)
-        TutorialLevel tutorialLevel = new TutorialLevel(true, chatType, nameOfUser, ipAddress, spriteType, chatGUI);
-        tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
+        // Create the basic level
+        Level levelOne = new LevelOne(true, chatType, nameOfUser, ipAddress, spriteType, chatGUI);
+        levelOne.setStage(new Stage(), MovingBackground.purpleColor, TutorialLevel.tutorialWindowSize);
 
         // Stop the music from MainGUIController
         MainGUIController.stopBackgroundMusic();

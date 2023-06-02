@@ -73,23 +73,8 @@ public class MainGUIController {
         System.out.println("Instructions Button Clicked");
 
         // Most of the parameters are null because the tutorial level is not multiplayer
-        TutorialLevel tutorialLevel = new TutorialLevel(false, null, null, null, WoodSprite.SPRITE_NAME, null);
-        tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
-
-         // Play the background music for tutorial
-         try {
-            TutorialLevel.playBackgroundMusic(TutorialLevel.TRACK_01, SettingsStage.musicVolume);
-           } catch (Exception e) {
-            System.out.println("Error playing music: " + e.getMessage());
-           }
-
-        // if the tutorial level window is closed, play the background music for the menu and stop its music
-        Level.getStage().setOnCloseRequest(e -> {
-            TutorialLevel.stopBackgroundMusic();
-            MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC, SettingsStage.musicVolume);
-            // also stop the game timer
-            tutorialLevel.stopTimer();
-        });
+        Level tutorialLevel = new TutorialLevel(false, null, null, null, WoodSprite.SPRITE_NAME, null);
+        tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, Level.WINDOW_WIDTH);
 
         // Stop the background music if tutorial level window is open
         MainGUIController.stopBackgroundMusic();

@@ -12,10 +12,10 @@ public class PlayerSprite extends Sprite {
 	protected boolean inAir = false;
 
 	public final static float GRAVITY = 0.4f * Sprite.SCALE;
-	public final static float JUMPSPEED = -10f * Sprite.SCALE;
+	public final static float JUMPSPEED = -7.5f * Sprite.SCALE;
 	public final static float FALLSPEEDAFTERCOLLISION = 0.5f * Sprite.SCALE;
 
-    public final static int MOVE_DISTANCE = 4;
+    public final static int MOVE_DISTANCE = 3;
     public final static int MAX_SPRITE_STRENGTH = 150;
 	public final static int MIN_SPRITE_STRENGTH = 100;
 
