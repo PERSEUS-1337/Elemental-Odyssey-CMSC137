@@ -78,7 +78,7 @@ public class Level {
             //set stage elements here
             this.root.getChildren().addAll(movingBackground,canvas);
     
-            Level.stage.setTitle("Instructions - Tutorial Level");
+            Level.stage.setTitle(MainGUIController.GAME_NAME);
             Level.stage.setResizable(false);
             Level.stage.initModality(Modality.APPLICATION_MODAL);
             Level.stage.setScene(this.scene);
@@ -115,7 +115,7 @@ public class Level {
             //set stage elements here
             this.root.getChildren().addAll(movingBackground,canvas);
     
-            Level.stage.setTitle("Instructions - Tutorial Level");
+            Level.stage.setTitle(MainGUIController.GAME_NAME);
             Level.stage.setResizable(false);
             Level.stage.initModality(Modality.APPLICATION_MODAL);
             Level.stage.setScene(this.scene);
