@@ -40,6 +40,7 @@ public class ChatGUI {
     private List<OutputStreamWriter> clientWriters = new ArrayList<>();
 
     private String chatName;
+    private String chatType;
     private static Integer serverPort = 54321;      // Port number for the chat server
     public static final String SERVER = "Server";
     public static final String CLIENT = "Client";
@@ -49,6 +50,7 @@ public class ChatGUI {
         
         this.serverIP = ipAddress;
         this.chatName = chatName;
+        this.chatType = chatType;
 
         if (chatType.equals(SERVER)) {
             Thread serverThread = new Thread(this::startServer);
@@ -187,17 +189,6 @@ public class ChatGUI {
         msgArea.appendText(message + "\n");
     }
 
-    // method for closing the client sockets
-    private void closeClientSockets() {
-        for (Socket clientSocket : clientSockets) {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     // method to get the stage
     Stage getStage() {
         return this.stage;
@@ -205,16 +196,20 @@ public class ChatGUI {
 
     // method to close the socket
     void closeSocket() {
-        try {
-            if (socket != null) {
-                socket.close();
+        System.out.println("Chat: Closing socket...");
+
+        if (this.chatType.equals(SERVER)) {
+            try {
+                this.server.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            closeClientSockets();
-            if (server != null) {
-                server.close();
+        } else if (this.chatType.equals(CLIENT)) {
+            try {
+                this.socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -45,6 +46,8 @@ public class Level {
     public static final int LEVEL_HEIGHT = 23;
     public static final int WINDOW_WIDTH = Sprite.SPRITE_WIDTH * LEVEL_WIDTH;
     public static final int WINDOW_HEIGHT = Sprite.SPRITE_WIDTH * LEVEL_HEIGHT;
+    public static final int BUTTON_X = WINDOW_WIDTH - 80;
+    public static final int BUTTON_Y = 15;
 
     // Music and sounds stuff
     public static final String TRACK_01 = setGameMusicPath();
@@ -73,9 +76,18 @@ public class Level {
 
             // Setup the moving background image
             MovingBackground movingBackground = new MovingBackground(backgroundColor, windowSize);
+
+            // Add the exit button
+            Button exitButton = new Button();
+            exitButton.setLayoutX(BUTTON_X);
+            exitButton.setLayoutY(BUTTON_Y);
+            exitButton.setPrefSize(25, 20);
+            // Set the image of the exit button
+            exitButton.setStyle("-fx-background-image: url('/assets/buttons/CloseButton.png'); -fx-background-size: 100% 100%;");
+            exitButton.setOnAction(this.goBackToMainMenu());
     
             //set stage elements here
-            this.root.getChildren().addAll(movingBackground,canvas);
+            this.root.getChildren().addAll(movingBackground,canvas, exitButton);
     
             Level.stage.setTitle(MainGUIController.GAME_NAME);
             Level.stage.setResizable(false);
@@ -250,5 +262,31 @@ public class Level {
             musicPath = "src\\sounds\\musicTrack01.wav";
         }
         return musicPath;
+    }
+
+    // Method to go back to the main menu
+    private EventHandler<ActionEvent> goBackToMainMenu(){
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
+            public void handle(ActionEvent e) 
+            { 
+                if(isMultiplayer){
+                    // Must close the chat gui and the sockets
+                    PickSpriteStage.closeChatGUIStage();
+                    chat.closeSocket();
+                }
+
+                // Stop the timer
+                gametimer.stop();
+                // Close the music
+                mediaPlayer.stop();
+                // Close the current level stage
+                Level.getStage().close();
+                // When the close button is clicked, the createMainGUI method will be called
+                Main.createMainGUI(Main.mainStage);
+                // Play the Main Menu music as well
+                MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC, SettingsStage.musicVolume);
+            } 
+        };
+        return event;
     }
 }
