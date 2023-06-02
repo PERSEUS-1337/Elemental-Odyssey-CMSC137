@@ -69,7 +69,6 @@ public class Level {
 
     // Method to add the stage elements
 	public void setStage(Stage stage, String backgroundColor, Integer windowSize) {
-        if(!this.isMultiplayer){
             Level.stage = stage;
 
             // Setup the moving background image
@@ -91,46 +90,13 @@ public class Level {
                 }
             }
     
-            //instantiate an animation timer
-            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, isMultiplayer, null, null, null, this.spriteType, null);
-    
-            // play the background music
-            playBackgroundMusic(TRACK_01, SettingsStage.masterVolume);
-
-            //invoke the start method of the animation timer
-            this.gametimer.start();
-            // After invoking the start method, we need to check if the user exits the window
-            // If the user exits the window, we need to stop the timer
-            Level.stage.setOnCloseRequest(e -> {
-                this.gametimer.stop();
-            });
-    
-            Level.stage.show();
-        } else {
-            Level.stage = stage;
-
-            // Setup the moving background image
-            MovingBackground movingBackground = new MovingBackground(backgroundColor, windowSize);
-    
-            //set stage elements here
-            this.root.getChildren().addAll(movingBackground,canvas);
-    
-            Level.stage.setTitle(MainGUIController.GAME_NAME);
-            Level.stage.setResizable(false);
-            Level.stage.initModality(Modality.APPLICATION_MODAL);
-            Level.stage.setScene(this.scene);
-    
-            // Build level based on lvldata
-            Sprite[][] lvlSprites = new Sprite[LEVEL_HEIGHT][LEVEL_WIDTH];
-            for (int i=0; i<Level.LEVEL_HEIGHT; i++){
-                for (int j=0; j<Level.LEVEL_WIDTH; j++){
-                    lvlSprites[i][j] = this.spriteGenerator(lvldata[i][j], j, i);
-                }
+            if(!isMultiplayer){
+                //instantiate an animation timer for single player
+                this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, isMultiplayer, null, null, null, this.spriteType, null);
+            } else {
+                //instantiate an animation timer for multiplayer
+                this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, this.isMultiplayer, this.chatType, this.nameOfUser, this.ipAddress, this.spriteType, this.chat);
             }
-    
-            //instantiate an animation timer
-            this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, this.isMultiplayer, this.chatType, this.nameOfUser, this.ipAddress, this.spriteType, this.chat);
-    
             // play the background music
             playBackgroundMusic(TRACK_01, SettingsStage.masterVolume);
 
@@ -143,7 +109,7 @@ public class Level {
             });
     
             Level.stage.show();
-        }
+        
 	}
 
     // Method to generate the sprites
