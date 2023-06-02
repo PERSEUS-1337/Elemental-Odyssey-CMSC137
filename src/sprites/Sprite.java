@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 public class Sprite {
 	protected Image img;
 	protected int x, y;
+	protected boolean flipped;
 	public void setY(int y) {
 		this.y = y;
 	}
@@ -30,6 +31,12 @@ public class Sprite {
 		this.x = xPos;
 		this.y = yPos;
 		this.visible = true;
+		this.flipped = false;
+	}
+
+	// method to make the sprite face either left or right
+	public void setFlipped(boolean flipped){
+		this.flipped = flipped;
 	}
 	
 	//method to set the object's image
@@ -42,8 +49,14 @@ public class Sprite {
 	
 	//method to set the image to the image view node
 	public void render(GraphicsContext gc){
-		gc.drawImage(this.img, this.x, this.y);
-        
+        if (flipped) { // flip the image
+            gc.save();
+            gc.scale(-1, 1);
+            gc.drawImage(this.img, -this.x - this.width, this.y);
+            gc.restore();
+        } else { // render normally
+            gc.drawImage(this.img, this.x, this.y);
+        }
     }
 	
 	//method to set the object's width and height properties
