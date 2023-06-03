@@ -21,12 +21,12 @@ public class LeaderBoardStage extends Pane {
     public static final int WINDOW_HEIGHT = 300;
     
     // Coordinates of the rankings
-    public static final int FIRST_PLACE_X = 275;
-    public static final int FIRST_PLACE_Y = 124;
-    public static final int SECOND_PLACE_X = 212;
-    public static final int SECOND_PLACE_Y = 260;
-    public static final int THIRD_PLACE_X = 341;
-    public static final int THIRD_PLACE_Y = 271;
+    public static final int FIRST_PLACE_X = 287;
+    public static final int FIRST_PLACE_Y = 142;
+    public static final int SECOND_PLACE_X = 225;
+    public static final int SECOND_PLACE_Y = 276;
+    public static final int THIRD_PLACE_X = 352;
+    public static final int THIRD_PLACE_Y = 288;
 
     // Constructor
     public LeaderBoardStage(ArrayList<String> rankings, HashMap<String,String> rankingArray) {
@@ -72,11 +72,11 @@ public class LeaderBoardStage extends Pane {
         thirdPlaceTimeText.setFont(timeTextFont);
 
         // Set the coordinates of the winner time texts above each winner image
-        firstPlaceTimeText.setX(FIRST_PLACE_X + 7);
+        firstPlaceTimeText.setX(FIRST_PLACE_X - 5);
         firstPlaceTimeText.setY(FIRST_PLACE_Y - 12);
-        secondPlaceTimeText.setX(SECOND_PLACE_X + 7);
+        secondPlaceTimeText.setX(SECOND_PLACE_X - 5);
         secondPlaceTimeText.setY(SECOND_PLACE_Y - 12);
-        thirdPlaceTimeText.setX(THIRD_PLACE_X + 7);
+        thirdPlaceTimeText.setX(THIRD_PLACE_X - 5);
         thirdPlaceTimeText.setY(THIRD_PLACE_Y - 12);
 
         getChildren().addAll(firstPlaceImage, secondPlaceImage, thirdPlaceImage, firstPlaceTimeText, secondPlaceTimeText, thirdPlaceTimeText);
