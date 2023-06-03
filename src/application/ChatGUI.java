@@ -72,10 +72,12 @@ public class ChatGUI {
     // method for starting the server. It processes the client sockets and the client writers in separate threads, so that the server can handle multiple clients
     private void startServer() {
         try {
-            this.server = new ServerSocket(serverPort);
+            this.server = new ServerSocket();
+            this.server.setReuseAddress(true);
+            this.server.bind(new InetSocketAddress(serverPort));
             System.out.println("Chat: Waiting for client(s) to connect...");
 
-            while (true) {
+            while (!this.server.isClosed()) {
                 Socket clientSocket = server.accept();
                 System.out.println("Chat: Client connected");
 
@@ -90,7 +92,7 @@ public class ChatGUI {
                 // Thread for processing the client sockets' messages
                 Thread receivingThread = new Thread(() -> {
                     try {
-                        while (true) {
+                        while (clientSocket.isConnected()) {
                             String message = reader.readLine();
                             if (message == null) {
                                 break;
@@ -101,13 +103,13 @@ public class ChatGUI {
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {
-                        // Remove the client writer from the list when the client disconnects
-                        clientWriters.remove(clientWriter);
-                        try {
-                            clientSocket.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        // // Remove the client writer from the list when the client disconnects
+                        // clientWriters.remove(clientWriter);
+                        // try {
+                        //     clientSocket.close();
+                        // } catch (IOException e) {
+                        //     e.printStackTrace();
+                        // }
                     }
                 });
                 receivingThread.start();
@@ -157,7 +159,7 @@ public class ChatGUI {
             // Thread for receiving messages from the server
             Thread receivingThread = new Thread(() -> {
                 try {
-                    while (true) {
+                    while (socket.isConnected()) {
                         String message = reader.readLine();
                         if (message == null) {
                             break;
@@ -166,6 +168,12 @@ public class ChatGUI {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             receivingThread.start();
@@ -201,6 +209,7 @@ public class ChatGUI {
         if (this.chatType.equals(SERVER)) {
             try {
                 this.server.close();
+                this.socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

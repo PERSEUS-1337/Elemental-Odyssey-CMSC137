@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -170,10 +171,12 @@ public class GameTimer extends AnimationTimer {
     // method to start the server for multiplayer
     private void startServer() {
         try {
-            this.serverSocket = new ServerSocket(this.serverPort);
+            this.serverSocket = new ServerSocket();
+            this.serverSocket.setReuseAddress(true);
+            this.serverSocket.bind(new InetSocketAddress(this.serverPort));
             System.out.println("Game server started. Waiting for players...");
 
-            while (true) {
+            while (this.rankCounter < 3) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Game Server: Player connected.");
 
@@ -183,17 +186,19 @@ public class GameTimer extends AnimationTimer {
                 Thread clientThread = new Thread(() -> handleClient(clientSocket));
                 clientThread.start();
             }
+            
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit(0);
-        } finally { // close the server socket
-            try {
-                System.out.println("Game Server: Closing server socket...");
-                serverSocket.close();
-            } catch (Exception e) {
-                System.out.println("Game Server: Unable to close server socket - " + e.getMessage());
-            }
-        }
+            // System.exit(0);
+        } 
+        // finally { // close the server socket
+        //     try {
+        //         System.out.println("Game Server: Closing server socket...");
+        //         serverSocket.close();
+        //     } catch (Exception e) {
+        //         System.out.println("Game Server: Unable to close server socket - " + e.getMessage());
+        //     }
+        // }
     }
 
     // method to handle the client for multiplayer
@@ -201,7 +206,7 @@ public class GameTimer extends AnimationTimer {
         try {
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            while (true) {
+            while (this.rankCounter < 3) {
                 String message = inputReader.readLine();
                 if (message == null) {
                     // Client disconnected
@@ -212,10 +217,9 @@ public class GameTimer extends AnimationTimer {
                 broadcast(message);
             }
 
-            clientSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit(0);
+            // System.exit(0);
         }
     }
 
@@ -239,7 +243,7 @@ public class GameTimer extends AnimationTimer {
 
             Thread receiveThread = new Thread(() -> { // This thread is responsible for receiving the sprite movements
                 try {
-                    while (true) {
+                    while (this.rankCounter < 3) {
 
                         String message = inputReader.readLine(); // read the message sent by the server
 
@@ -388,6 +392,16 @@ public class GameTimer extends AnimationTimer {
             // Must close the chat gui and the sockets
             PickSpriteStage.closeChatGUIStage();
             this.chat.closeSocket();
+            try {
+                this.socket.close();
+                System.out.println("Game Client: Closing client socket...");
+                if (this.chatType == ChatGUI.SERVER){
+                    this.serverSocket.close();
+                    System.out.println("Game Server: Closing server socket...");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } 
         
         // Check if the game is over (must get the singleplayer sprite). If it is over, we update the end time
