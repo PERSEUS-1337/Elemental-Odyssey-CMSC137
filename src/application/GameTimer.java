@@ -307,6 +307,8 @@ public class GameTimer extends AnimationTimer {
                             this.woodSprite.setX(Integer.parseInt(xCoordinate));
                             this.woodSprite.setY(Integer.parseInt(yCoordinate));
                         }
+                        // Remove the message from the pressed list after it has been processed
+                        pressed.remove(message);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -442,7 +444,6 @@ public class GameTimer extends AnimationTimer {
         // reached the end of the level, which is colliding with the Door sprite
         // Also pass the time it took for the player to reach the end of the level
         this.checkDoorCollision(passedTime);
-
     } // end of handle method
 
     // method that will move the sprite depending on the key pressed
