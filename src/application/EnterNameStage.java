@@ -17,13 +17,14 @@ public class EnterNameStage {
     private Button btnEnterName;
     private String chatType;
     private String nameOfUser;
-    static String ipAddress;
+    private String ipAddress;
     public static final Integer WINDOW_WIDTH = 582;
     public static final Integer WINDOW_HEIGHT = 129;
     
     // Constructor
     public EnterNameStage(String ipAddress, String chatType) {
         this.chatType = chatType;
+        this.ipAddress = ipAddress;
     }
 
     // method to close the Enter Address Stage

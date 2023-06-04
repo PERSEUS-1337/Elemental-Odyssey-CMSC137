@@ -404,19 +404,22 @@ public class GameTimer extends AnimationTimer {
             this.stop(); // stop the gametimer
 
             // Must close the chat gui and the sockets
-            // PickSpriteStage.closeChatGUIStage();
+            PickSpriteStage.closeChatGUIStage();
             // this.chat.closeSocket();
+
             try {
-                // Join all threads before closing sockets
+                // Join client thread before closing sockets
                 clientThread.join();
 
                 this.socket.close();
                 System.out.println("Game Client: Closing client socket...");
+                this.chat.closeChatClient();
 
                 if (this.chatType == ChatGUI.SERVER){
-                    this.serverSocket.close();
+                    this.serverSocket.close();  // interrupts server thread
                     System.out.println("Game Server: Closing server socket...");
                     serverThread.join();
+                    this.chat.closeChatServer();
                 }
 
                 outputWriter.close();

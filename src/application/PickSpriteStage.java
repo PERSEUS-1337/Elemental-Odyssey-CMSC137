@@ -170,13 +170,13 @@ public class PickSpriteStage extends VBox {
     // method to create an Instance of the Chat GUI and the Level
     private void createChatGUIandLevel(String spriteType) {
         // Create the Chat GUI Stage to be able to close it later
-        // chatGuiStage = new Stage();
+        chatGuiStage = new Stage();
 
-        // ChatGUI chatGUI = new ChatGUI(chatType, nameOfUser, ipAddress, chatGuiStage);
+        ChatGUI chatGUI = new ChatGUI(chatType, nameOfUser, ipAddress, chatGuiStage);
 
         // Create the basic level
-        // Level levelOne = new LevelOne(true, chatType, nameOfUser, ipAddress, spriteType, chatGUI);
-        Level levelOne = new LevelOne(true, chatType, nameOfUser, ipAddress, spriteType, null);
+        Level levelOne = new LevelOne(true, chatType, nameOfUser, ipAddress, spriteType, chatGUI);
+        // Level levelOne = new LevelOne(true, chatType, nameOfUser, ipAddress, spriteType, null);
         levelOne.setStage(new Stage(), MovingBackground.purpleColor, TutorialLevel.tutorialWindowSize);
 
         // Stop the music from MainGUIController
@@ -189,9 +189,10 @@ public class PickSpriteStage extends VBox {
         this.closePickSpriteStage();
 
         // If the chat gui has been closed, close its socket
-        // chatGUI.getStage().setOnCloseRequest(e -> {
-        //     chatGUI.closeSocket();
-        // });
+        chatGUI.getStage().setOnCloseRequest(e -> {
+            chatGUI.closeChatClient();
+            if (chatType == ChatGUI.SERVER) chatGUI.closeChatServer();
+        });
     }
 
 }

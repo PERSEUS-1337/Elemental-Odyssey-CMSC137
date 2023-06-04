@@ -272,7 +272,8 @@ public class Level {
                 if(isMultiplayer){
                     // Must close the chat gui and the sockets
                     PickSpriteStage.closeChatGUIStage();
-                    chat.closeSocket();
+                    chat.closeChatClient();
+                    if (chatType == ChatGUI.SERVER) chat.closeChatServer();
                 }
 
                 // Stop the timer
