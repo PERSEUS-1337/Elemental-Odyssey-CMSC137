@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +61,8 @@ public class GameTimer extends AnimationTimer {
     private static List<PrintWriter> clientWriters = new ArrayList<>();
     private BufferedReader inputReader;
     private PrintWriter outputWriter;
+    private Thread serverThread;
+    private Thread clientThread;
 
     public static final int FPS = 60;
 
@@ -92,8 +95,6 @@ public class GameTimer extends AnimationTimer {
         this.isSlimeSpriteFinished = false;
         this.isCandySpriteFinished = false;
         this.isIceSpriteFinished = false;
-
-        
 
         if(this.isMultiplayer){
 
@@ -133,15 +134,15 @@ public class GameTimer extends AnimationTimer {
         // If the game is multiplayer, we need to create a new thread for the server
         if (this.isMultiplayer && this.chatType.equals(ChatGUI.SERVER)) {
             // Create a new thread for the server
-            Thread serverThread = new Thread(this::startServer);
+            serverThread = new Thread(this::startServer);
             serverThread.start();
-            Thread clientThread = new Thread(this::startClient);
+            clientThread = new Thread(this::startClient);
             clientThread.start();
 
         }
-        if (this.isMultiplayer && this.chatType.equals(ChatGUI.CLIENT)) {
+        else if (this.isMultiplayer && this.chatType.equals(ChatGUI.CLIENT)) {
             // Create a new thread for the client
-            Thread clientThread = new Thread(this::startClient);
+            clientThread = new Thread(this::startClient);
             clientThread.start();
         } else { // if the game is singleplayer, we need to handle the key press events
             this.handleKeyPressEvent();
@@ -176,6 +177,8 @@ public class GameTimer extends AnimationTimer {
             this.serverSocket.bind(new InetSocketAddress(this.serverPort));
             System.out.println("Game server started. Waiting for players...");
 
+            ArrayList<Thread> handleClientThreads = new ArrayList<Thread>();
+
             while (this.rankCounter < 3) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Game Server: Player connected.");
@@ -183,12 +186,22 @@ public class GameTimer extends AnimationTimer {
                 PrintWriter clientWriter = new PrintWriter(clientSocket.getOutputStream(), true);
                 clientWriters.add(clientWriter);
 
-                Thread clientThread = new Thread(() -> handleClient(clientSocket));
-                clientThread.start();
+                Thread handleClientThread = new Thread(() -> handleClient(clientSocket));
+                handleClientThreads.add(handleClientThread);
+                handleClientThread.start();
             }
+
+            // for (Thread t : handleClientThreads){
+            //     try {
+            //         t.join();
+            //     } catch (InterruptedException e) {
+            //         e.printStackTrace();
+            //     }
+            // }
             
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            if (!(e instanceof SocketException))
+                e.printStackTrace();
             // System.exit(0);
         } 
         // finally { // close the server socket
@@ -320,9 +333,11 @@ public class GameTimer extends AnimationTimer {
                     pressed.remove(spriteType + ": " + code);
                 }
             });
-        } catch (IOException e) {
+
+            receiveThread.join();
+        } catch (Exception e) {
             e.printStackTrace();
-            System.exit(0);
+            // System.exit(0);
         }
     }
 
@@ -338,7 +353,7 @@ public class GameTimer extends AnimationTimer {
         // Move the sprites
         moveMySprite(this.isMultiplayer, spriteType);
 
-        if(this.isMultiplayer){
+        if(this.isMultiplayer && this.outputWriter != null){
             // Move only the sprite of the current player based on the updated coordinates
             if (spriteType == "WoodSprite") {
                 this.woodSprite.move();
@@ -355,7 +370,7 @@ public class GameTimer extends AnimationTimer {
                 this.iceSprite.move();
                 outputWriter.println("iceSprite Coord = x: " + this.iceSprite.getX() + " y: " + this.iceSprite.getY());
         }
-        } else {
+        } else if (!this.isMultiplayer) {
             // Move the sprite of the current player
             if (spriteType == "WoodSprite") {
                 this.woodSprite.move();
@@ -387,21 +402,31 @@ public class GameTimer extends AnimationTimer {
         // If the game is over, we display the game over screen
         if (this.rankCounter == 3 && this.isMultiplayer) {
             this.stop(); // stop the gametimer
-            Level.setGameOver(this.playerRanking, this.playerTimeFinished, this.isMultiplayer);
 
             // Must close the chat gui and the sockets
-            PickSpriteStage.closeChatGUIStage();
-            this.chat.closeSocket();
+            // PickSpriteStage.closeChatGUIStage();
+            // this.chat.closeSocket();
             try {
+                // Join all threads before closing sockets
+                clientThread.join();
+
                 this.socket.close();
                 System.out.println("Game Client: Closing client socket...");
+
                 if (this.chatType == ChatGUI.SERVER){
                     this.serverSocket.close();
                     System.out.println("Game Server: Closing server socket...");
+                    serverThread.join();
                 }
-            } catch (IOException e) {
+
+                outputWriter.close();
+                inputReader.close();
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            Level.setGameOver(this.playerRanking, this.playerTimeFinished, this.isMultiplayer);
         } 
         
         // Check if the game is over (must get the singleplayer sprite). If it is over, we update the end time

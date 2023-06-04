@@ -21,6 +21,7 @@ public class GameModeController {
         // Create the Enter Address Stage
         EnterAddressStage enterAddressStage = new EnterAddressStage(ChatGUI.CLIENT);
         enterAddressStage.setStage(new Stage());
+        MainGUIController.closeGameModeMenu();
     }
 
     @FXML
@@ -28,8 +29,11 @@ public class GameModeController {
         System.out.println("Create Game Button Clicked");
 
         // Create the Enter Address Stage
-        EnterNameStage enterNameStage = new EnterNameStage(ChatGUI.DEFAULT_SERVER, ChatGUI.SERVER);
-            enterNameStage.setStage(new Stage());
+        EnterAddressStage enterAddressStage = new EnterAddressStage(ChatGUI.SERVER);
+        enterAddressStage.setStage(new Stage());
+        MainGUIController.closeGameModeMenu();
+        // EnterNameStage enterNameStage = new EnterNameStage(ChatGUI.DEFAULT_SERVER, ChatGUI.SERVER);
+        //     enterNameStage.setStage(new Stage());
 
         
     }
