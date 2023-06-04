@@ -55,7 +55,7 @@ public class ChatGUI {
         this.chatName = chatName;
         this.chatType = chatType;
 
-        if (chatType.equals(SERVER)) {
+        if (this.chatType.equals(SERVER)) {
             if (isServerRunning(this.serverIP)){
                 System.out.println("Chat: Server is already running!");
                 return;  
@@ -67,7 +67,7 @@ public class ChatGUI {
                 // Set-up the GUI
                 this.setStage(stage);
             }
-        } else if (chatType.equals(CLIENT)) {
+        } else if (this.chatType.equals(CLIENT)) {
             if (isServerRunning(this.serverIP)){
                 clientThread = new Thread(this::clientListen);
                 clientThread.start();
