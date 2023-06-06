@@ -284,11 +284,9 @@ public class GameTimer extends AnimationTimer {
                                 spriteTypeOfPlayer = spriteTypeMatcher.group(1);
                             }
 
-                            System.out.println(nameOfPlayer + ' ' + spriteTypeOfPlayer);
-
                             // let's find all instances of <TYPE: ... in the pressed list
-   
-                            for (String key : pressed) {
+                            String[] pressedArray = pressed.toArray(new String[pressed.size()]);
+                            for (String key : pressedArray) {
                                 if (key.contains("<TYPE: ")) {
                                     // extract the sprite type in the current key
                                     String spriteTypeInPressed = "";
