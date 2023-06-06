@@ -87,7 +87,7 @@ public class Level {
     public static final int GOAL_ARROW_PNG_WIDTH = 150;
     public static final int GOAL_ARROW_PNG_HEIGHT = 200;
     // Start Sign Png
-    public static final int START_FLAG_PNG_X = 19;
+    public static final int START_FLAG_PNG_X = 21;
     public static final int START_FLAG_PNG_Y = 674;
     public static final int START_FLAG_PNG_WIDTH = 60;
     public static final int START_FLAG_PNG_HEIGHT = 30;
