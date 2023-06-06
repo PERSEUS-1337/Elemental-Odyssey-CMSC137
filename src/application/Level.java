@@ -86,6 +86,11 @@ public class Level {
     public static final int GOAL_ARROW_PNG_Y = 380;
     public static final int GOAL_ARROW_PNG_WIDTH = 150;
     public static final int GOAL_ARROW_PNG_HEIGHT = 200;
+    // Start Sign Png
+    public static final int START_FLAG_PNG_X = 19;
+    public static final int START_FLAG_PNG_Y = 674;
+    public static final int START_FLAG_PNG_WIDTH = 60;
+    public static final int START_FLAG_PNG_HEIGHT = 30;
 
     // Music and sounds stuff
     public static final String TRACK_01 = setGameMusicPath();
@@ -193,11 +198,15 @@ public class Level {
                 goalArrowPng.setX(GOAL_ARROW_PNG_X);
                 goalArrowPng.setY(GOAL_ARROW_PNG_Y);
                 
-
-
+                // Start Sign
+                ImageView startFlagPng = new ImageView(new Image(getClass().getResourceAsStream("../assets/objects/startFlag.gif")));
+                startFlagPng.setFitWidth(START_FLAG_PNG_WIDTH);
+                startFlagPng.setFitHeight(START_FLAG_PNG_HEIGHT);
+                startFlagPng.setX(START_FLAG_PNG_X);
+                startFlagPng.setY(START_FLAG_PNG_Y);
 
                 // add instructional assets to the root
-                this.root.getChildren().addAll(tutorialHeader, moveText, leftRightKey, jumpText, jumpKeyGif, goalText, goalArrowPng);
+                this.root.getChildren().addAll(tutorialHeader, moveText, leftRightKey, jumpText, jumpKeyGif, goalText, goalArrowPng, startFlagPng);
 
 
 
