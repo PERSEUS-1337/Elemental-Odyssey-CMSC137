@@ -19,26 +19,6 @@ public class PlayerSprite extends Sprite {
     public final static int MAX_SPRITE_STRENGTH = 150;
 	public final static int MIN_SPRITE_STRENGTH = 100;
 
-	private int speed = 0;
-	private boolean shield = false;
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-	public boolean getShield() {
-        return shield;
-    }
-
-    public void setShield(boolean shield) {
-        this.shield = shield;
-    }
-
-
 	public PlayerSprite(String name, int x, int y){
 		super(x,y);
 		this.name = name;
@@ -94,7 +74,7 @@ public class PlayerSprite extends Sprite {
 
 	// Jump method sets vertical speed
 	public void jump(){
-		if (!inAir && this.speed!= 4){
+		if (!inAir){
 			this.inAir = true;
 			this.dy = JUMPSPEED;
 		} 

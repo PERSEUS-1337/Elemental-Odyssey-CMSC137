@@ -15,8 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -50,47 +48,6 @@ public class Level {
     public static final int WINDOW_HEIGHT = Sprite.SPRITE_WIDTH * LEVEL_HEIGHT;
     public static final int BUTTON_X = WINDOW_WIDTH - 80;
     public static final int BUTTON_Y = 15;
-
-    // Instructional Stage stuff
-    public static final int TUTORIAL_LEVEL_HEADER_X = 350;
-    public static final int TUTORIAL_LEVEL_HEADER_Y = -50;
-    public static final int TUTORIAL_LEVEL_HEADER_WIDTH = 590;
-    public static final int TUTORIAL_LEVEL_HEADER_HEIGHT = 270;
-    // Move Text
-    public static final int MOVE_TEXT_X = 150;
-    public static final int MOVE_TEXT_Y = 300;
-    public static final int MOVE_TEXT_WIDTH = 160;
-    public static final int MOVE_TEXT_HEIGHT = 120;
-    // Left-Right Key Gif
-    public static final int LEFT_RIGHT_KEY_X = 150;
-    public static final int LEFT_RIGHT_KEY_Y = 380;
-    public static final int LEFT_RIGHT_KEY_WIDTH = 160;
-    public static final int LEFT_RIGHT_KEY_HEIGHT = 120;
-    // Jump Text
-    public static final int JUMP_TEXT_X = 580;
-    public static final int JUMP_TEXT_Y = 300;
-    public static final int JUMP_TEXT_WIDTH = 160;
-    public static final int JUMP_TEXT_HEIGHT = 120;
-    // Jump Key Gif
-    public static final int JUMP_KEY_GIF_X = 620;
-    public static final int JUMP_KEY_GIF_Y = 380;
-    public static final int JUMP_KEY_GIF_WIDTH = 77;
-    public static final int JUMP_KEY_GIF_HEIGHT = 117;
-    // Goal Text
-    public static final int GOAL_TEXT_X = 1000;
-    public static final int GOAL_TEXT_Y = 300;
-    public static final int GOAL_TEXT_WIDTH = 160;
-    public static final int GOAL_TEXT_HEIGHT = 120;
-    // Goal Arrow Png
-    public static final int GOAL_ARROW_PNG_X = 1020;
-    public static final int GOAL_ARROW_PNG_Y = 380;
-    public static final int GOAL_ARROW_PNG_WIDTH = 150;
-    public static final int GOAL_ARROW_PNG_HEIGHT = 200;
-    // Start Sign Png
-    public static final int START_FLAG_PNG_X = 21;
-    public static final int START_FLAG_PNG_Y = 674;
-    public static final int START_FLAG_PNG_WIDTH = 60;
-    public static final int START_FLAG_PNG_HEIGHT = 30;
 
     // Music and sounds stuff
     public static final String TRACK_01 = setGameMusicPath();
@@ -146,81 +103,9 @@ public class Level {
             }
     
             if(!isMultiplayer){
-
-                // for the singleplayer (or tutorial level), we include the instructional assets
-
-                // Level Header Title
-                ImageView tutorialHeader = new ImageView(new Image(getClass().getResourceAsStream("../assets/texts/tutorialText.png")));
-                tutorialHeader.setFitWidth(TUTORIAL_LEVEL_HEADER_WIDTH);
-                tutorialHeader.setFitHeight(TUTORIAL_LEVEL_HEADER_HEIGHT);
-                tutorialHeader.setX(TUTORIAL_LEVEL_HEADER_X);
-                tutorialHeader.setY(TUTORIAL_LEVEL_HEADER_Y);
-
-                // Move Text
-                ImageView moveText = new ImageView(new Image(getClass().getResourceAsStream("../assets/texts/moveText.png")));
-                moveText.setFitWidth(MOVE_TEXT_WIDTH);
-                moveText.setFitHeight(MOVE_TEXT_HEIGHT);
-                moveText.setX(MOVE_TEXT_X);
-                moveText.setY(MOVE_TEXT_Y);
-
-                // Left-Right Key Gif
-                ImageView leftRightKey = new ImageView(new Image(getClass().getResourceAsStream("../assets/objects/leftRightKeys.gif")));
-                leftRightKey.setFitWidth(LEFT_RIGHT_KEY_WIDTH);
-                leftRightKey.setFitHeight(LEFT_RIGHT_KEY_HEIGHT);
-                leftRightKey.setX(LEFT_RIGHT_KEY_X);
-                leftRightKey.setY(LEFT_RIGHT_KEY_Y);
-
-                // Jump Text
-                ImageView jumpText = new ImageView(new Image(getClass().getResourceAsStream("../assets/texts/jumpText.png")));
-                jumpText.setFitWidth(JUMP_TEXT_WIDTH);
-                jumpText.setFitHeight(JUMP_TEXT_HEIGHT);
-                jumpText.setX(JUMP_TEXT_X);
-                jumpText.setY(JUMP_TEXT_Y);
-
-                // Jump Key Gif
-                ImageView jumpKeyGif = new ImageView(new Image(getClass().getResourceAsStream("../assets/objects/jumpKey.gif")));
-                jumpKeyGif.setFitWidth(JUMP_KEY_GIF_WIDTH);
-                jumpKeyGif.setFitHeight(JUMP_KEY_GIF_HEIGHT);
-                jumpKeyGif.setX(JUMP_KEY_GIF_X);
-                jumpKeyGif.setY(JUMP_KEY_GIF_Y);
-
-                // Goal Text
-                ImageView goalText = new ImageView(new Image(getClass().getResourceAsStream("../assets/texts/goalText.png")));
-                goalText.setFitWidth(GOAL_TEXT_WIDTH);
-                goalText.setFitHeight(GOAL_TEXT_HEIGHT);
-                goalText.setX(GOAL_TEXT_X);
-                goalText.setY(GOAL_TEXT_Y);
-
-                // Goal Arrow
-                ImageView goalArrowPng = new ImageView(new Image(getClass().getResourceAsStream("../assets/objects/goalArrow.png")));
-                goalArrowPng.setFitWidth(GOAL_ARROW_PNG_WIDTH);
-                goalArrowPng.setFitHeight(GOAL_ARROW_PNG_HEIGHT);
-                goalArrowPng.setX(GOAL_ARROW_PNG_X);
-                goalArrowPng.setY(GOAL_ARROW_PNG_Y);
-                
-                // Start Sign
-                ImageView startFlagPng = new ImageView(new Image(getClass().getResourceAsStream("../assets/objects/startFlag.gif")));
-                startFlagPng.setFitWidth(START_FLAG_PNG_WIDTH);
-                startFlagPng.setFitHeight(START_FLAG_PNG_HEIGHT);
-                startFlagPng.setX(START_FLAG_PNG_X);
-                startFlagPng.setY(START_FLAG_PNG_Y);
-
-                // add instructional assets to the root
-                this.root.getChildren().addAll(tutorialHeader, moveText, leftRightKey, jumpText, jumpKeyGif, goalText, goalArrowPng, startFlagPng);
-
-
-
                 //instantiate an animation timer for single player
                 this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, isMultiplayer, null, null, null, this.spriteType, null);
             } else {
-                // Start Sign
-                ImageView startFlagPng = new ImageView(new Image(getClass().getResourceAsStream("../assets/objects/startFlag.gif")));
-                startFlagPng.setFitWidth(START_FLAG_PNG_WIDTH);
-                startFlagPng.setFitHeight(START_FLAG_PNG_HEIGHT);
-                startFlagPng.setX(START_FLAG_PNG_X);
-                startFlagPng.setY(START_FLAG_PNG_Y);
-                this.root.getChildren().addAll(startFlagPng);
-
                 //instantiate an animation timer for multiplayer
                 this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, this.isMultiplayer, this.chatType, this.nameOfUser, this.ipAddress, this.spriteType, this.chat);
             }
@@ -390,6 +275,7 @@ public class Level {
                     chat.closeChatClient();
                     if (chatType == ChatGUI.SERVER) chat.closeChatServer();
                 }
+
                 // Stop the timer
                 gametimer.stop();
                 // Close the music
