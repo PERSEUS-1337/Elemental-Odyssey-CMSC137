@@ -15,6 +15,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sprites.players.WoodSprite;
 import user.Main;
 
 public class MainGUIController {
@@ -22,7 +23,7 @@ public class MainGUIController {
 
     public static final String GAME_NAME = "Elemental Odyssey: Beyond the Horizon";
     // Get the mainThemeMusic.wav file, get its targetPath, and filename
-    public static final String MENU_MUSIC = "src\\sounds\\mainThemeMusic.wav";
+    public static final String MENU_MUSIC = setMenuMusicPath();
     public static final Double DEFAULT_MASTER_VOLUME = 0.5;
     public static final Integer WINDOW_WIDTH = 800;
     public static final Integer WINDOW_HEIGHT = 600;
@@ -71,23 +72,9 @@ public class MainGUIController {
     void onInstructionsButtonClicked(ActionEvent event) {
         System.out.println("Instructions Button Clicked");
 
-        TutorialLevel tutorialLevel = new TutorialLevel();
-        tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, TutorialLevel.tutorialWindowSize);
-
-         // Play the background music for tutorial
-         try {
-            TutorialLevel.playBackgroundMusic(TutorialLevel.TRACK_01, SettingsStage.musicVolume);
-           } catch (Exception e) {
-            System.out.println("Error playing music: " + e.getMessage());
-           }
-
-        // if the tutorial level window is closed, play the background music for the menu and stop its music
-        Level.getStage().setOnCloseRequest(e -> {
-            TutorialLevel.stopBackgroundMusic();
-            MainGUIController.playBackgroundMusic(MainGUIController.MENU_MUSIC, SettingsStage.musicVolume);
-            // also stop the game timer
-            tutorialLevel.stopTimer();
-        });
+        // Most of the parameters are null because the tutorial level is not multiplayer
+        Level tutorialLevel = new TutorialLevel(false, null, null, null, WoodSprite.SPRITE_NAME, null);
+        tutorialLevel.setStage(new Stage(), MovingBackground.blueColor, Level.WINDOW_WIDTH);
 
         // Stop the background music if tutorial level window is open
         MainGUIController.stopBackgroundMusic();
@@ -233,12 +220,26 @@ public class MainGUIController {
         mediaPlayer.stop();
     }
 
+    // Method to change the volume of the music
     public static void changeMusicVolume(double volume) {
         mediaPlayer.setVolume(volume);
     }
 
+    // Method to get the path of the main menu music
     public static void closeGameModeMenu() {
         gameModeStage.close();
+    }
+
+    // Method to get the path of the main menu music
+    private static String setMenuMusicPath(){
+        String musicPath = "";
+        try {
+            musicPath = "src/sounds/mainThemeMusic.wav";
+        } catch (Exception e) {
+        } finally{
+            musicPath = "src\\sounds\\mainThemeMusic.wav";
+        }
+        return musicPath;
     }
 
 }

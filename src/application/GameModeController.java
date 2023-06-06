@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 public class GameModeController {
     public static final Integer WINDOW_WIDTH = 538;
     public static final Integer WINDOW_HEIGHT = 235;
+    private Stage enterAddressStage;
 
     @FXML
     private Button btnMultiPlayer;
@@ -17,35 +18,28 @@ public class GameModeController {
 
     @FXML
     void onJoinGameButtonClicked(ActionEvent event) {
-        System.out.println("Join Game Button Clicked");
-        // So the chat server will be created first
-        ChatGUI chatGUI = new ChatGUI(ChatGUI.CLIENT, "Player Two");
-        chatGUI.setStage(new Stage());
-
-        // Close the Game Mode Menu
+        // Create the Enter Address Stage
+        EnterAddressStage enterAddressStage = new EnterAddressStage(ChatGUI.CLIENT);
+        enterAddressStage.setStage(new Stage());
         MainGUIController.closeGameModeMenu();
-
-        // If the chat gui has been closed, close its socket
-        chatGUI.getStage().setOnCloseRequest(e -> {
-            chatGUI.closeSocket();
-        });
     }
 
     @FXML
     void onCreateGameButtonClicked(ActionEvent event) {
         System.out.println("Create Game Button Clicked");
 
-        // The chat server will be created first
-        ChatGUI chatGUI = new ChatGUI(ChatGUI.SERVER, "Player One");
-        chatGUI.setStage(new Stage());
-
-        // Close the Game Mode Menu
+        // Create the Enter Address Stage
+        EnterAddressStage enterAddressStage = new EnterAddressStage(ChatGUI.SERVER);
+        enterAddressStage.setStage(new Stage());
         MainGUIController.closeGameModeMenu();
+        // EnterNameStage enterNameStage = new EnterNameStage(ChatGUI.DEFAULT_SERVER, ChatGUI.SERVER);
+        //     enterNameStage.setStage(new Stage());
 
-        // If the chat gui has been closed, close its socket
-        chatGUI.getStage().setOnCloseRequest(e -> {
-            chatGUI.closeSocket();
-        });
+        
+    }
+
+    Stage getEnterAddressStage() {
+        return this.enterAddressStage;
     }
 
 }

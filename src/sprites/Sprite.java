@@ -7,6 +7,15 @@ import javafx.scene.image.Image;
 public class Sprite {
 	protected Image img;
 	protected int x, y;
+	protected boolean flipped;
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
 	protected double dx, dy;
 	protected boolean visible;
 	protected double width;
@@ -14,7 +23,7 @@ public class Sprite {
 
 	public static final int SPRITE_DEFAULT_WIDTH = 32;
 	public static final int SPRITE_DEFAULT_HEIGHT = 32;
-	public static final float SCALE = 1.5f;
+	public static final float SCALE = 1.0f;
 	public static final int SPRITE_WIDTH = (int) (SPRITE_DEFAULT_WIDTH * SCALE);
 	public static final int SPRITE_HEIGHT = (int) (SPRITE_DEFAULT_HEIGHT * SCALE);
 	
@@ -22,6 +31,12 @@ public class Sprite {
 		this.x = xPos;
 		this.y = yPos;
 		this.visible = true;
+		this.flipped = false;
+	}
+
+	// method to make the sprite face either left or right
+	public void setFlipped(boolean flipped){
+		this.flipped = flipped;
 	}
 	
 	//method to set the object's image
@@ -34,8 +49,14 @@ public class Sprite {
 	
 	//method to set the image to the image view node
 	public void render(GraphicsContext gc){
-		gc.drawImage(this.img, this.x, this.y);
-        
+        if (flipped) { // flip the image
+            gc.save();
+            gc.scale(-1, 1);
+            gc.drawImage(this.img, -this.x - this.width, this.y);
+            gc.restore();
+        } else { // render normally
+            gc.drawImage(this.img, this.x, this.y);
+        }
     }
 	
 	//method to set the object's width and height properties
@@ -74,11 +95,11 @@ public class Sprite {
 	}
 	
 	public int getCenterX(){
-		return this.x + (Sprite.SPRITE_WIDTH / 2);
+		return this.x + ((int) this.width / 2);
 	}
 
 	public int getCenterY(){
-		return this.y + (Sprite.SPRITE_HEIGHT / 2);
+		return this.y + ((int) this.height / 2);
 	}
 
 	public double getWidth(){
