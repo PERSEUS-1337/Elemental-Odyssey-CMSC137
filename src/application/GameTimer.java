@@ -25,16 +25,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import sprites.players.PlayerSprite;
-import sprites.players.PowerUp;
-import sprites.players.FreezePowerUp;
-import sprites.players.BarrierPowerUp;
-import sprites.players.StickyPowerUp;
-import sprites.players.SpeedPowerUp;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-
-import javafx.util.Duration;
 
 public class GameTimer extends AnimationTimer {
     private GraphicsContext gc;
@@ -72,8 +62,6 @@ public class GameTimer extends AnimationTimer {
     private static List<PrintWriter> clientWriters = new ArrayList<>();
     private BufferedReader inputReader;
     private PrintWriter outputWriter;
-    private Timeline powerupTimer;
-    private PowerUp activePowerUp;
     private Thread serverThread;
     private Thread clientThread;
 
@@ -163,26 +151,6 @@ public class GameTimer extends AnimationTimer {
         }
 
     } // end of constructor
-
-    public void applyPowerUp(PowerUp powerUp, PlayerSprite player) {
-        if (activePowerUp != null) {
-            activePowerUp.deactivate(player);
-        }
-        activePowerUp = powerUp;
-        powerUp.activate(player);
-        int powerUpDuration = 5000; // Duration in milliseconds (e.g., 5 seconds)
-
-        if (powerupTimer != null) {
-            powerupTimer.stop();
-        }
-
-        powerupTimer = new Timeline(new KeyFrame(Duration.millis(powerUpDuration), e -> {
-            powerUp.deactivate(player);
-            activePowerUp = null;
-        }));
-        powerupTimer.setCycleCount(1);
-        powerupTimer.play();
-    }
 
     // method to handle the key press events for the player
     private void handleKeyPressEvent() {
@@ -552,21 +520,6 @@ public class GameTimer extends AnimationTimer {
         switch (spriteType) {
             case WoodSprite.SPRITE_NAME:
                 // Wood Sprite movement
-                if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.Z)) {
-                    System.out.println("wood freeze");
-                    PowerUp freezePowerUpApplyWood = new FreezePowerUp();
-                    applyPowerUp(freezePowerUpApplyWood, this.woodSprite);
-                }
-                if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.X)) {
-                    System.out.println("wood slow");
-                    PowerUp stickyPowerUpApplyWood = new StickyPowerUp();
-                    applyPowerUp(stickyPowerUpApplyWood, this.woodSprite);
-                }
-                if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.C)) {
-                    System.out.println("wood shield");
-                    PowerUp barrierPowerUp = new BarrierPowerUp();
-                    applyPowerUp(barrierPowerUp, this.woodSprite);
-                }
                 if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.W))
                     this.woodSprite.jump();
                 if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.A)
@@ -574,12 +527,13 @@ public class GameTimer extends AnimationTimer {
                             this.woodSprite.setDX(0);
                             this.woodSprite.setFlipped(false); // set the sprite to face right
                         }
+                    
                 else if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.A)){
-                    this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.woodSprite.getSpeed());
+                    this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
                     this.woodSprite.setFlipped(true); // set the sprite to face left
                 }
                 else if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.D)){
-                    this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.woodSprite.getSpeed());
+                    this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
                     this.woodSprite.setFlipped(false); // set the sprite to face right
                 }
                 else
@@ -587,23 +541,6 @@ public class GameTimer extends AnimationTimer {
                 break;
             case SlimeSprite.SPRITE_NAME:
                 // Slime Sprite movement
-
-                if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.Z)) {
-                    System.out.println("slime freeze");
-                    PowerUp slimefreezePowerUp = new FreezePowerUp();
-                    applyPowerUp(slimefreezePowerUp, this.slimeSprite);
-                }
-                if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.X)) {
-                    System.out.println("slime slow");
-                    PowerUp slimestickyPowerUp = new StickyPowerUp();
-                    applyPowerUp(slimestickyPowerUp, this.slimeSprite);
-                }
-                if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.V)) {
-                    System.out.println("slime speed");
-                    PowerUp speedPowerUp = new SpeedPowerUp();
-                    applyPowerUp(speedPowerUp, this.slimeSprite);
-                }
-
                 if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.W))
                     this.slimeSprite.jump();
                 if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.A)
@@ -613,11 +550,11 @@ public class GameTimer extends AnimationTimer {
                         }
                     
                 else if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.A)){
-                    this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.slimeSprite.getSpeed());
+                    this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
                     this.slimeSprite.setFlipped(true); // set the sprite to face left
                 }
                 else if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.D)){
-                    this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.slimeSprite.getSpeed());
+                    this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE);
                     this.slimeSprite.setFlipped(false); // set the sprite to face right
                 }
                 else
@@ -626,11 +563,6 @@ public class GameTimer extends AnimationTimer {
                 break;
             case CandySprite.SPRITE_NAME:
                 // Candy Sprite movement
-                if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.Z)) {
-                    System.out.println("candy freeze!");
-                    PowerUp candyfreezePowerUp = new FreezePowerUp();
-                    applyPowerUp(candyfreezePowerUp, this.candySprite);
-                }
                 if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.W))
                     this.candySprite.jump();
                 if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.A)
@@ -639,11 +571,11 @@ public class GameTimer extends AnimationTimer {
                             this.candySprite.setFlipped(false); // set the sprite to face right
                         }
                 else if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.A)){
-                    this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.candySprite.getSpeed());
+                    this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
                     this.candySprite.setFlipped(true); // set the sprite to face left
                 }
                 else if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.D)){
-                    this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE-this.candySprite.getSpeed());
+                    this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE);
                     this.candySprite.setFlipped(false); // set the sprite to face right
                 }
                 else
@@ -652,11 +584,6 @@ public class GameTimer extends AnimationTimer {
                 break;
             case IceSprite.SPRITE_NAME:
                 // Ice Sprite movement
-                if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.X)) {
-                    System.out.println("ice slow");
-                    PowerUp iceSticky = new StickyPowerUp();
-                    applyPowerUp(iceSticky, this.iceSprite);
-                }
                 if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.W))
                     this.iceSprite.jump();
                 if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.A)
@@ -665,11 +592,11 @@ public class GameTimer extends AnimationTimer {
                             this.iceSprite.setFlipped(false); // set the sprite to face right
                         }
                 else if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.A)){
-                    this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.candySprite.getSpeed());
+                    this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
                     this.iceSprite.setFlipped(true); // set the sprite to face left
                 }
                 else if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.D)){
-                    this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.candySprite.getSpeed());
+                    this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE);
                     this.iceSprite.setFlipped(false); // set the sprite to face right
                 }
                 else
