@@ -390,7 +390,6 @@ public class Level {
                     chat.closeChatClient();
                     if (chatType == ChatGUI.SERVER) chat.closeChatServer();
                 }
-
                 // Stop the timer
                 gametimer.stop();
                 // Close the music
