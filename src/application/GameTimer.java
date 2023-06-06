@@ -323,6 +323,7 @@ public class GameTimer extends AnimationTimer {
                             }
                             
                         }
+
                         if (!pressed.contains(spriteType) && !pressed.contains(message)
                                 && !pressed.contains("released")) {
                                 // if the key pressed is not from our own sprite
