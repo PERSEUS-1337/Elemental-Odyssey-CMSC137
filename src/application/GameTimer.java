@@ -25,6 +25,16 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import sprites.players.PlayerSprite;
+import sprites.players.PowerUp;
+import sprites.players.FreezePowerUp;
+import sprites.players.BarrierPowerUp;
+import sprites.players.StickyPowerUp;
+import sprites.players.SpeedPowerUp;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+
+import javafx.util.Duration;
 
 public class GameTimer extends AnimationTimer {
     private GraphicsContext gc;
@@ -57,10 +67,13 @@ public class GameTimer extends AnimationTimer {
     private String ipAddress;
     private ChatGUI chat;
     private Integer serverPort = 53412;     // Port number for the game server 
+    private Integer playerCounter;
     private static String spriteType;
     private static List<PrintWriter> clientWriters = new ArrayList<>();
     private BufferedReader inputReader;
     private PrintWriter outputWriter;
+    private Timeline powerupTimer;
+    private PowerUp activePowerUp;
     private Thread serverThread;
     private Thread clientThread;
 
@@ -80,6 +93,7 @@ public class GameTimer extends AnimationTimer {
         this.ipAddress = ipAddress;
         spriteType = type;
         this.chat = chat;
+        this.playerCounter = 0;
 
         // Initialize GameOver-related variables
         this.playerRanking = new ArrayList<String>();
@@ -150,6 +164,26 @@ public class GameTimer extends AnimationTimer {
 
     } // end of constructor
 
+    public void applyPowerUp(PowerUp powerUp, PlayerSprite player) {
+        if (activePowerUp != null) {
+            activePowerUp.deactivate(player);
+        }
+        activePowerUp = powerUp;
+        powerUp.activate(player);
+        int powerUpDuration = 5000; // Duration in milliseconds (e.g., 5 seconds)
+
+        if (powerupTimer != null) {
+            powerupTimer.stop();
+        }
+
+        powerupTimer = new Timeline(new KeyFrame(Duration.millis(powerUpDuration), e -> {
+            powerUp.deactivate(player);
+            activePowerUp = null;
+        }));
+        powerupTimer.setCycleCount(1);
+        powerupTimer.play();
+    }
+
     // method to handle the key press events for the player
     private void handleKeyPressEvent() {
         this.theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -182,6 +216,7 @@ public class GameTimer extends AnimationTimer {
             while (this.rankCounter < 3) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Game Server: Player connected.");
+                this.playerCounter++;
 
                 PrintWriter clientWriter = new PrintWriter(clientSocket.getOutputStream(), true);
                 clientWriters.add(clientWriter);
@@ -260,6 +295,66 @@ public class GameTimer extends AnimationTimer {
 
                         String message = inputReader.readLine(); // read the message sent by the server
 
+                        // First, let's check the message if it contains the name of the player and its sprite type
+                        // which is in the format of "<TYPE: spriteType><NAME: nameOfUser>"
+                       
+                        // Insert the name of the player and its sprite type to the "pressed" list only if the sprite type is not the same as the other players
+                        if (message.contains("<TYPE: ")) {
+                            // Extract the name of the player
+                            String nameOfPlayer = "";
+                            Pattern namePattern = Pattern.compile("NAME: (\\w+)");
+                            Matcher nameMatcher = namePattern.matcher(message);
+                            if (nameMatcher.find()) {
+                                nameOfPlayer = nameMatcher.group(1);
+                            }
+
+                            // Extract the sprite type of the player
+                            String spriteTypeOfPlayer = "";
+                            Pattern spriteTypePattern = Pattern.compile("TYPE: (\\w+)");
+                            Matcher spriteTypeMatcher = spriteTypePattern.matcher(message);
+                            if (spriteTypeMatcher.find()) {
+                                spriteTypeOfPlayer = spriteTypeMatcher.group(1);
+                            }
+
+                            // let's find all instances of <TYPE: ... in the pressed list
+                            String[] pressedArray = pressed.toArray(new String[pressed.size()]);
+                            for (String key : pressedArray) {
+                                if (key.contains("<TYPE: ")) {
+                                    // extract the sprite type in the current key
+                                    String spriteTypeInPressed = "";
+                                    Pattern spriteTypePatternInPressed = Pattern.compile("TYPE: (\\w+)");
+                                    Matcher spriteTypeMatcherInPressed = spriteTypePatternInPressed.matcher(key);
+                                    if (spriteTypeMatcherInPressed.find()) {
+                                        spriteTypeInPressed = spriteTypeMatcherInPressed.group(1);
+                                    }
+
+
+                                    // extract the name of the player in the current key
+                                    String nameOfPlayerInPressed = "";
+                                    Pattern namePatternInPressed = Pattern.compile("NAME: (\\w+)");
+                                    Matcher nameMatcherInPressed = namePatternInPressed.matcher(key);
+                                    if (nameMatcherInPressed.find()) {
+                                        nameOfPlayerInPressed = nameMatcherInPressed.group(1);
+                                    }
+
+                                    // if the sprite type of the current key is the same as the sprite type of the player but has a different name, then it is invalid
+                                    if (spriteTypeInPressed.equals(spriteTypeOfPlayer) && !nameOfPlayerInPressed.equals(nameOfPlayer)) {
+                                        // Game invalid closing the game
+                                        
+                                        if(nameOfPlayer.equals(this.nameOfUser)){
+                                            System.out.println("Game Client: Invalid game. Closing the game...");
+                                            System.exit(0);
+                                        }
+                                    } else if (spriteTypeInPressed.equals(spriteTypeOfPlayer) && nameOfPlayerInPressed.equals(nameOfPlayer)) {
+                                        // don't re-add
+                                    } else {
+                                        pressed.add(message);
+                                    }
+
+                                }
+                            }
+                            
+                        }
                         if (!pressed.contains(spriteType) && !pressed.contains(message)
                                 && !pressed.contains("released")) {
                                 // if the key pressed is not from our own sprite
@@ -307,8 +402,8 @@ public class GameTimer extends AnimationTimer {
                             this.woodSprite.setX(Integer.parseInt(xCoordinate));
                             this.woodSprite.setY(Integer.parseInt(yCoordinate));
                         }
-                        // Remove the message from the pressed list after it has been processed
-                        pressed.remove(message);
+                        // Remove the "coordinate" messages from the pressed list
+                        pressed.removeIf(key -> key.contains("Coord"));
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -360,18 +455,23 @@ public class GameTimer extends AnimationTimer {
             if (spriteType == "WoodSprite") {
                 this.woodSprite.move();
                 outputWriter.println("woodSprite Coord = x: " + this.woodSprite.getX() + " y: " + this.woodSprite.getY());
+                // Send the name of the player and its sprite type to the server
+                outputWriter.println("<TYPE: " + spriteType+"><NAME: " + this.nameOfUser+">");
             } else if (spriteType == "SlimeSprite") {
                 this.slimeSprite.move();
                 outputWriter
                         .println("slimeSprite Coord = x: " + this.slimeSprite.getX() + " y: " + this.slimeSprite.getY());
+                        outputWriter.println("<TYPE: " + spriteType+"><NAME: " + this.nameOfUser+">");
             } else if (spriteType == "CandySprite") {
                 this.candySprite.move();
                 outputWriter
                         .println("candySprite Coord = x: " + this.candySprite.getX() + " y: " + this.candySprite.getY());
+                        outputWriter.println("<TYPE: " + spriteType+"><NAME: " + this.nameOfUser+">");
             } else {
                 this.iceSprite.move();
                 outputWriter.println("iceSprite Coord = x: " + this.iceSprite.getX() + " y: " + this.iceSprite.getY());
-        }
+                outputWriter.println("<TYPE: " + spriteType+"><NAME: " + this.nameOfUser+">");
+            }
         } else if (!this.isMultiplayer) {
             // Move the sprite of the current player
             if (spriteType == "WoodSprite") {
@@ -452,6 +552,21 @@ public class GameTimer extends AnimationTimer {
         switch (spriteType) {
             case WoodSprite.SPRITE_NAME:
                 // Wood Sprite movement
+                if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.Z)) {
+                    System.out.println("wood freeze");
+                    PowerUp freezePowerUpApplyWood = new FreezePowerUp();
+                    applyPowerUp(freezePowerUpApplyWood, this.woodSprite);
+                }
+                if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.X)) {
+                    System.out.println("wood slow");
+                    PowerUp stickyPowerUpApplyWood = new StickyPowerUp();
+                    applyPowerUp(stickyPowerUpApplyWood, this.woodSprite);
+                }
+                if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.C)) {
+                    System.out.println("wood shield");
+                    PowerUp barrierPowerUp = new BarrierPowerUp();
+                    applyPowerUp(barrierPowerUp, this.woodSprite);
+                }
                 if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.W))
                     this.woodSprite.jump();
                 if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.A)
@@ -459,13 +574,12 @@ public class GameTimer extends AnimationTimer {
                             this.woodSprite.setDX(0);
                             this.woodSprite.setFlipped(false); // set the sprite to face right
                         }
-                    
                 else if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.A)){
-                    this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                    this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.woodSprite.getSpeed());
                     this.woodSprite.setFlipped(true); // set the sprite to face left
                 }
                 else if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.D)){
-                    this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                    this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.woodSprite.getSpeed());
                     this.woodSprite.setFlipped(false); // set the sprite to face right
                 }
                 else
@@ -473,6 +587,23 @@ public class GameTimer extends AnimationTimer {
                 break;
             case SlimeSprite.SPRITE_NAME:
                 // Slime Sprite movement
+
+                if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.Z)) {
+                    System.out.println("slime freeze");
+                    PowerUp slimefreezePowerUp = new FreezePowerUp();
+                    applyPowerUp(slimefreezePowerUp, this.slimeSprite);
+                }
+                if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.X)) {
+                    System.out.println("slime slow");
+                    PowerUp slimestickyPowerUp = new StickyPowerUp();
+                    applyPowerUp(slimestickyPowerUp, this.slimeSprite);
+                }
+                if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.V)) {
+                    System.out.println("slime speed");
+                    PowerUp speedPowerUp = new SpeedPowerUp();
+                    applyPowerUp(speedPowerUp, this.slimeSprite);
+                }
+
                 if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.W))
                     this.slimeSprite.jump();
                 if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.A)
@@ -482,11 +613,11 @@ public class GameTimer extends AnimationTimer {
                         }
                     
                 else if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.A)){
-                    this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                    this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.slimeSprite.getSpeed());
                     this.slimeSprite.setFlipped(true); // set the sprite to face left
                 }
                 else if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.D)){
-                    this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                    this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.slimeSprite.getSpeed());
                     this.slimeSprite.setFlipped(false); // set the sprite to face right
                 }
                 else
@@ -495,6 +626,11 @@ public class GameTimer extends AnimationTimer {
                 break;
             case CandySprite.SPRITE_NAME:
                 // Candy Sprite movement
+                if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.Z)) {
+                    System.out.println("candy freeze!");
+                    PowerUp candyfreezePowerUp = new FreezePowerUp();
+                    applyPowerUp(candyfreezePowerUp, this.candySprite);
+                }
                 if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.W))
                     this.candySprite.jump();
                 if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.A)
@@ -503,11 +639,11 @@ public class GameTimer extends AnimationTimer {
                             this.candySprite.setFlipped(false); // set the sprite to face right
                         }
                 else if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.A)){
-                    this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                    this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.candySprite.getSpeed());
                     this.candySprite.setFlipped(true); // set the sprite to face left
                 }
                 else if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.D)){
-                    this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                    this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE-this.candySprite.getSpeed());
                     this.candySprite.setFlipped(false); // set the sprite to face right
                 }
                 else
@@ -516,6 +652,11 @@ public class GameTimer extends AnimationTimer {
                 break;
             case IceSprite.SPRITE_NAME:
                 // Ice Sprite movement
+                if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.X)) {
+                    System.out.println("ice slow");
+                    PowerUp iceSticky = new StickyPowerUp();
+                    applyPowerUp(iceSticky, this.iceSprite);
+                }
                 if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.W))
                     this.iceSprite.jump();
                 if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.A)
@@ -524,11 +665,11 @@ public class GameTimer extends AnimationTimer {
                             this.iceSprite.setFlipped(false); // set the sprite to face right
                         }
                 else if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.A)){
-                    this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE);
+                    this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.candySprite.getSpeed());
                     this.iceSprite.setFlipped(true); // set the sprite to face left
                 }
                 else if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.D)){
-                    this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE);
+                    this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.candySprite.getSpeed());
                     this.iceSprite.setFlipped(false); // set the sprite to face right
                 }
                 else
