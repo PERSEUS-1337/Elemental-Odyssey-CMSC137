@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AboutStage">
+   <children>
+      <AnchorPane prefHeight="430.0" prefWidth="600.0">
+         <children>
+            <ImageView fitHeight="53.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/blocks/upperLeftCorner_Wood.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="53.0" fitWidth="70.0" layoutY="348.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/blocks/lowerLeftCorner_Wood.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="53.0" fitWidth="70.0" layoutX="530.0" layoutY="348.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/blocks/lowerRightCorner_Wood.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="53.0" fitWidth="70.0" layoutX="530.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/blocks/upperRightCorner_Wood.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="307.0" fitWidth="17.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/blocks/longVerticalWoodBorder.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="307.0" fitWidth="17.0" layoutX="597.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/blocks/longVerticalWoodBorder.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="5.0" fitWidth="495.0" layoutX="69.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/blocks/longHorizontalWoodBorder.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="5.0" fitWidth="495.0" layoutX="69.0" layoutY="395.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/blocks/longHorizontalWoodBorder.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="157.0" fitWidth="346.0" layoutX="119.0" layoutY="-12.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/texts/aboutTheDevText.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="157.0" fitWidth="442.0" layoutX="112.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/texts/devDescriptionText.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="144.0" fitWidth="315.0" layoutX="143.0" layoutY="179.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/texts/meetTheDevsText.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="191.0" fitWidth="270.0" layoutX="165.0" layoutY="261.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/texts/devNamesText.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
