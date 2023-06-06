@@ -20,6 +20,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,8 @@ public class ChatGUI {
     private String serverIP;
     private List<Socket> clientSockets = new ArrayList<>();
     private List<OutputStreamWriter> clientWriters = new ArrayList<>();
+    private Thread serverThread;
+    private Thread clientThread;
 
     private String chatName;
     private String chatType;
@@ -52,20 +55,29 @@ public class ChatGUI {
         this.chatName = chatName;
         this.chatType = chatType;
 
-        if (chatType.equals(SERVER)) {
-            Thread serverThread = new Thread(this::startServer);
-            serverThread.start();
-            clientListen();
-            // Set-up the GUI
-            this.setStage(stage);
-        } else if (chatType.equals(CLIENT) && isServerRunning(this.serverIP)) {
-            clientListen();
-            // Set-up the GUI
-            this.setStage(stage);
-        } else {
-            System.out.println("Chat: Server is already running!");
-            return;
-        }
+        if (this.chatType.equals(SERVER)) {
+            if (isServerRunning(this.serverIP)){
+                System.out.println("Chat: Server is already running!");
+                return;  
+            } else {
+                serverThread = new Thread(this::startServer);
+                serverThread.start();
+                clientThread = new Thread(this::clientListen);
+                clientThread.start();
+                // Set-up the GUI
+                this.setStage(stage);
+            }
+        } else if (this.chatType.equals(CLIENT)) {
+            if (isServerRunning(this.serverIP)){
+                clientThread = new Thread(this::clientListen);
+                clientThread.start();
+                // Set-up the GUI
+                this.setStage(stage);
+            } else {
+                System.out.println("Chat: Server is not running yet");
+                return;
+            }
+        } 
     }
 
 
@@ -100,23 +112,20 @@ public class ChatGUI {
                             // Forward the message to all connected clients
                             sendMessageToAllClients(message, clientWriter);
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        if (!(e instanceof SocketException))
+                            e.printStackTrace();
                     } finally {
-                        // // Remove the client writer from the list when the client disconnects
-                        // clientWriters.remove(clientWriter);
-                        // try {
-                        //     clientSocket.close();
-                        // } catch (IOException e) {
-                        //     e.printStackTrace();
-                        // }
+                        // Remove the client writer from the list when the client disconnects
+                        clientWriters.remove(clientWriter);
                     }
                 });
                 receivingThread.start();
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            if (!(e instanceof SocketException))
+                e.printStackTrace();
         }
     }
 
@@ -166,19 +175,21 @@ public class ChatGUI {
                         }
                         appendMessage(message);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        socket.close();
-                    } catch (IOException e) {
+                } catch (Exception e) {
+                    if (!(e instanceof SocketException))
                         e.printStackTrace();
-                    }
+                } finally {
+                    // try {
+                    //     socket.close();
+                    // } catch (IOException e) {
+                    //     e.printStackTrace();
+                    // }
                 }
             });
             receivingThread.start();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            if (!(e instanceof SocketException))
+                e.printStackTrace();
         }
     }
 
@@ -203,22 +214,40 @@ public class ChatGUI {
     }
 
     // method to close the socket
-    void closeSocket() {
-        System.out.println("Chat: Closing socket...");
+    // void closeSocket() {
+    //     System.out.println("Chat: Closing socket...");
 
-        if (this.chatType.equals(SERVER)) {
-            try {
-                this.server.close();
-                this.socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (this.chatType.equals(CLIENT)) {
-            try {
-                this.socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    //     if (this.chatType.equals(SERVER)) {
+    //         try {
+    //             this.socket.close();
+    //             this.server.close();
+    //         } catch (IOException e) {
+    //             e.printStackTrace();
+    //         }
+    //     } else if (this.chatType.equals(CLIENT)) {
+    //         try {
+    //             this.socket.close();
+    //         } catch (IOException e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    // }
+
+    void closeChatServer(){
+        System.out.println("Chat: Closing server socket");
+        try{
+            this.server.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void closeChatClient(){
+        System.out.println("Chat: Closing client socket");
+        try{
+            this.socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

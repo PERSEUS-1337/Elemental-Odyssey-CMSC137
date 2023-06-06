@@ -176,12 +176,13 @@ public class PickSpriteStage extends VBox {
 
         // Create the basic level
         Level levelOne = new LevelOne(true, chatType, nameOfUser, ipAddress, spriteType, chatGUI);
+        // Level levelOne = new LevelOne(true, chatType, nameOfUser, ipAddress, spriteType, null);
         levelOne.setStage(new Stage(), MovingBackground.purpleColor, TutorialLevel.tutorialWindowSize);
 
         // Stop the music from MainGUIController
         MainGUIController.stopBackgroundMusic();
         //  Close the Game Mode Menu
-        MainGUIController.closeGameModeMenu();
+        // MainGUIController.closeGameModeMenu();
         // Close the Main Menu
         Main.closeMainGUI();
         // Close the Pick Sprite Stage
@@ -189,7 +190,8 @@ public class PickSpriteStage extends VBox {
 
         // If the chat gui has been closed, close its socket
         chatGUI.getStage().setOnCloseRequest(e -> {
-            chatGUI.closeSocket();
+            chatGUI.closeChatClient();
+            if (chatType == ChatGUI.SERVER) chatGUI.closeChatServer();
         });
     }
 
