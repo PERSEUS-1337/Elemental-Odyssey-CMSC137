@@ -411,7 +411,6 @@ public class GameTimer extends AnimationTimer {
 
     @Override
     public void handle(long currentNanoTime) {
-        System.out.println(pressed);
         this.gc.clearRect(0, 0, Level.WINDOW_WIDTH, Level.WINDOW_HEIGHT);
 
         // Update the time
