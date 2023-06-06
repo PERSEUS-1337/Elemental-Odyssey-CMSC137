@@ -57,7 +57,6 @@ public class GameTimer extends AnimationTimer {
     private String ipAddress;
     private ChatGUI chat;
     private Integer serverPort = 53412;     // Port number for the game server 
-    private Integer playerCounter;
     private static String spriteType;
     private static List<PrintWriter> clientWriters = new ArrayList<>();
     private BufferedReader inputReader;
@@ -81,7 +80,6 @@ public class GameTimer extends AnimationTimer {
         this.ipAddress = ipAddress;
         spriteType = type;
         this.chat = chat;
-        this.playerCounter = 0;
 
         // Initialize GameOver-related variables
         this.playerRanking = new ArrayList<String>();
@@ -184,7 +182,6 @@ public class GameTimer extends AnimationTimer {
             while (this.rankCounter < 3) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Game Server: Player connected.");
-                this.playerCounter++;
 
                 PrintWriter clientWriter = new PrintWriter(clientSocket.getOutputStream(), true);
                 clientWriters.add(clientWriter);
@@ -263,82 +260,21 @@ public class GameTimer extends AnimationTimer {
 
                         String message = inputReader.readLine(); // read the message sent by the server
 
-                        // First, let's check the message if it contains the name of the player and its sprite type
-                        // which is in the format of "<TYPE: spriteType><NAME: nameOfUser>"
-                       
-                        // Insert the name of the player and its sprite type to the "pressed" list only if the sprite type is not the same as the other players
-                        if (message.contains("<TYPE: ")) {
-                            // Extract the name of the player
-                            String nameOfPlayer = "";
-                            Pattern namePattern = Pattern.compile("NAME: (\\w+)");
-                            Matcher nameMatcher = namePattern.matcher(message);
-                            if (nameMatcher.find()) {
-                                nameOfPlayer = nameMatcher.group(1);
-                            }
-
-                            // Extract the sprite type of the player
-                            String spriteTypeOfPlayer = "";
-                            Pattern spriteTypePattern = Pattern.compile("TYPE: (\\w+)");
-                            Matcher spriteTypeMatcher = spriteTypePattern.matcher(message);
-                            if (spriteTypeMatcher.find()) {
-                                spriteTypeOfPlayer = spriteTypeMatcher.group(1);
-                            }
-
-                            // let's find all instances of <TYPE: ... in the pressed list
-                            String[] pressedArray = pressed.toArray(new String[pressed.size()]);
-                            for (String key : pressedArray) {
-                                if (key.contains("<TYPE: ")) {
-                                    // extract the sprite type in the current key
-                                    String spriteTypeInPressed = "";
-                                    Pattern spriteTypePatternInPressed = Pattern.compile("TYPE: (\\w+)");
-                                    Matcher spriteTypeMatcherInPressed = spriteTypePatternInPressed.matcher(key);
-                                    if (spriteTypeMatcherInPressed.find()) {
-                                        spriteTypeInPressed = spriteTypeMatcherInPressed.group(1);
-                                    }
-
-
-                                    // extract the name of the player in the current key
-                                    String nameOfPlayerInPressed = "";
-                                    Pattern namePatternInPressed = Pattern.compile("NAME: (\\w+)");
-                                    Matcher nameMatcherInPressed = namePatternInPressed.matcher(key);
-                                    if (nameMatcherInPressed.find()) {
-                                        nameOfPlayerInPressed = nameMatcherInPressed.group(1);
-                                    }
-
-                                    // if the sprite type of the current key is the same as the sprite type of the player but has a different name, then it is invalid
-                                    if (spriteTypeInPressed.equals(spriteTypeOfPlayer) && !nameOfPlayerInPressed.equals(nameOfPlayer)) {
-                                        // Game invalid closing the game
-                                        
-                                        if(nameOfPlayer.equals(this.nameOfUser)){
-                                            System.out.println("Game Client: Invalid game. Closing the game...");
-                                            System.exit(0);
-                                        }
-                                    } else if (spriteTypeInPressed.equals(spriteTypeOfPlayer) && nameOfPlayerInPressed.equals(nameOfPlayer)) {
-                                        // don't re-add
-                                    } else {
-                                        pressed.add(message);
-                                    }
-
-                                }
-                            }
-                            
-                        }
-
-                        if (!pressed.contains(spriteType) && !pressed.contains(message)
-                                && !pressed.contains("released")) {
-                                // if the key pressed is not from our own sprite
-                                // type, then we can add it to the pressed list
-                            pressed.add(message);
-                        } 
+                        // if (!pressed.contains(spriteType) && !pressed.contains(message)
+                        //         && !pressed.contains("released")) {
+                        //         // if the key pressed is not from our own sprite
+                        //         // type, then we can add it to the pressed list
+                        //     pressed.add(message);
+                        // } 
                         
-                        if (message.contains("released")) {
-                            // if the key pressed is released, then we need to remove it from the pressed list
-                            // the key pressed is in the format of "spriteType: keyName released"
-                            String[] messageSplit = message.split(" ");
-                            String keyName = messageSplit[1];
-                            String spriteType = messageSplit[0];
-                            pressed.removeIf(key -> key.contains(keyName) && key.contains(spriteType));
-                        }
+                        // if (message.contains("released")) {
+                        //     // if the key pressed is released, then we need to remove it from the pressed list
+                        //     // the key pressed is in the format of "spriteType: keyName released"
+                        //     String[] messageSplit = message.split(" ");
+                        //     String keyName = messageSplit[1];
+                        //     String spriteType = messageSplit[0];
+                        //     pressed.removeIf(key -> key.contains(keyName) && key.contains(spriteType));
+                        // }
 
                         // Extract x coordinate of the sprite
                         String xCoordinate = "";
@@ -424,22 +360,17 @@ public class GameTimer extends AnimationTimer {
             if (spriteType == "WoodSprite") {
                 this.woodSprite.move();
                 outputWriter.println("woodSprite Coord = x: " + this.woodSprite.getX() + " y: " + this.woodSprite.getY());
-                // Send the name of the player and its sprite type to the server
-                outputWriter.println("<TYPE: " + spriteType+"><NAME: " + this.nameOfUser+">");
             } else if (spriteType == "SlimeSprite") {
                 this.slimeSprite.move();
                 outputWriter
                         .println("slimeSprite Coord = x: " + this.slimeSprite.getX() + " y: " + this.slimeSprite.getY());
-                        outputWriter.println("<TYPE: " + spriteType+"><NAME: " + this.nameOfUser+">");
             } else if (spriteType == "CandySprite") {
                 this.candySprite.move();
                 outputWriter
                         .println("candySprite Coord = x: " + this.candySprite.getX() + " y: " + this.candySprite.getY());
-                        outputWriter.println("<TYPE: " + spriteType+"><NAME: " + this.nameOfUser+">");
             } else {
                 this.iceSprite.move();
                 outputWriter.println("iceSprite Coord = x: " + this.iceSprite.getX() + " y: " + this.iceSprite.getY());
-                outputWriter.println("<TYPE: " + spriteType+"><NAME: " + this.nameOfUser+">");
             }
         } else if (!this.isMultiplayer) {
             // Move the sprite of the current player
