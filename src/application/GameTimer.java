@@ -260,21 +260,21 @@ public class GameTimer extends AnimationTimer {
 
                         String message = inputReader.readLine(); // read the message sent by the server
 
-                        if (!pressed.contains(spriteType) && !pressed.contains(message)
-                                && !pressed.contains("released")) {
-                                // if the key pressed is not from our own sprite
-                                // type, then we can add it to the pressed list
-                            pressed.add(message);
-                        } 
+                        // if (!pressed.contains(spriteType) && !pressed.contains(message)
+                        //         && !pressed.contains("released")) {
+                        //         // if the key pressed is not from our own sprite
+                        //         // type, then we can add it to the pressed list
+                        //     pressed.add(message);
+                        // } 
                         
-                        if (message.contains("released")) {
-                            // if the key pressed is released, then we need to remove it from the pressed list
-                            // the key pressed is in the format of "spriteType: keyName released"
-                            String[] messageSplit = message.split(" ");
-                            String keyName = messageSplit[1];
-                            String spriteType = messageSplit[0];
-                            pressed.removeIf(key -> key.contains(keyName) && key.contains(spriteType));
-                        }
+                        // if (message.contains("released")) {
+                        //     // if the key pressed is released, then we need to remove it from the pressed list
+                        //     // the key pressed is in the format of "spriteType: keyName released"
+                        //     String[] messageSplit = message.split(" ");
+                        //     String keyName = messageSplit[1];
+                        //     String spriteType = messageSplit[0];
+                        //     pressed.removeIf(key -> key.contains(keyName) && key.contains(spriteType));
+                        // }
 
                         // Extract x coordinate of the sprite
                         String xCoordinate = "";
