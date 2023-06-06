@@ -213,6 +213,14 @@ public class Level {
                 //instantiate an animation timer for single player
                 this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, isMultiplayer, null, null, null, this.spriteType, null);
             } else {
+                // Start Sign
+                ImageView startFlagPng = new ImageView(new Image(getClass().getResourceAsStream("../assets/objects/startFlag.gif")));
+                startFlagPng.setFitWidth(START_FLAG_PNG_WIDTH);
+                startFlagPng.setFitHeight(START_FLAG_PNG_HEIGHT);
+                startFlagPng.setX(START_FLAG_PNG_X);
+                startFlagPng.setY(START_FLAG_PNG_Y);
+                this.root.getChildren().addAll(startFlagPng);
+
                 //instantiate an animation timer for multiplayer
                 this.gametimer = new GameTimer(this.gc, this.scene, lvlSprites, this.isMultiplayer, this.chatType, this.nameOfUser, this.ipAddress, this.spriteType, this.chat);
             }
