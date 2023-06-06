@@ -4,6 +4,8 @@ import application.Level;
 import sprites.Sprite;
 import sprites.objects.CrateSprite;
 import sprites.objects.TerrainSprite;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerSprite extends Sprite {
     protected String name;
@@ -21,6 +23,8 @@ public class PlayerSprite extends Sprite {
 
 	private int speed = 0;
 	private boolean shield = false;
+
+	private HashMap<PowerUp, Integer> activePowerUps = new HashMap<>();
 
     public int getSpeed() {
         return speed;
@@ -136,5 +140,24 @@ public class PlayerSprite extends Sprite {
 	public String getName(){
 		return this.name;
 	}
-    
+ 
+	
+	public void updatePowerUps() {
+        HashMap<PowerUp, Integer> updatedPowerUps = new HashMap<>();
+        for (Map.Entry<PowerUp, Integer> entry : activePowerUps.entrySet()) {
+            PowerUp powerUp = entry.getKey();
+            int remainingDuration = entry.getValue() - 1;
+
+            if (remainingDuration > 0) {
+                updatedPowerUps.put(powerUp, remainingDuration);
+            } else {
+                powerUp.deactivate(this);
+            }
+        }
+        activePowerUps = updatedPowerUps;
+    }
+
+	public void addActivePowerUp(PowerUp powerUp, int duration) {
+        activePowerUps.put(powerUp, duration);
+    }
 }

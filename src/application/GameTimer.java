@@ -417,6 +417,10 @@ public class GameTimer extends AnimationTimer {
 
         // Move the sprites
         moveMySprite(this.isMultiplayer, spriteType);
+        this.woodSprite.updatePowerUps();
+        this.iceSprite.updatePowerUps();
+        this.slimeSprite.updatePowerUps();
+        this.candySprite.updatePowerUps();
 
         if(this.isMultiplayer && this.outputWriter != null){
             // Move only the sprite of the current player based on the updated coordinates
