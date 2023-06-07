@@ -343,17 +343,23 @@ public class GameTimer extends AnimationTimer {
                             System.out.println("Slow All");
                             PowerUp stickyPowerUpApplyIce = new StickyPowerUp();
                             PowerUp stickyPowerUpApplySlime = new StickyPowerUp();
-                            PowerUp stickyPowerUpApplyWood = new StickyPowerUp();
+                            if(!this.woodSprite.getShield()){
+                                PowerUp stickyPowerUpApplyWood = new StickyPowerUp();
+                                applyPowerUp(stickyPowerUpApplyWood, this.woodSprite);
+                            }
                             applyPowerUp(stickyPowerUpApplyIce, this.iceSprite);
                             applyPowerUp(stickyPowerUpApplySlime, this.slimeSprite);
-                            applyPowerUp(stickyPowerUpApplyWood, this.woodSprite);
                         } else if (message.contains("iceSprite") && message.contains("activate")) {
                             PowerUp freezePowerUpApplyCandy = new FreezePowerUp();
                             PowerUp freezePowerUpApplySlime = new FreezePowerUp();
-                            PowerUp freezePowerUpApplyWood = new FreezePowerUp();
+                            
+                            if(!this.woodSprite.getShield()){
+                                PowerUp freezePowerUpApplyWood = new FreezePowerUp();
+                                applyPowerUp(freezePowerUpApplyWood, this.woodSprite);
+                            }
                             applyPowerUp(freezePowerUpApplyCandy, this.candySprite);
                             applyPowerUp(freezePowerUpApplySlime, this.slimeSprite);
-                            applyPowerUp(freezePowerUpApplyWood, this.woodSprite);
+                            
                             System.out.println("Freeze All");
                         } else if (message.contains("slimeSprite") && message.contains("activate")) {
                             PowerUp speedPowerUp = new SpeedPowerUp();
