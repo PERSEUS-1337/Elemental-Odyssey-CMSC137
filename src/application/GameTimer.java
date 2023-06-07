@@ -527,7 +527,7 @@ public class GameTimer extends AnimationTimer {
             switch (spriteType) {
                 case WoodSprite.SPRITE_NAME:
                     // Wood Sprite movement
-                    if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.Z)){outputWriter.println("woodSprite activate");}
+                    if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.Z) && this.woodSprite.getnumPowerups()>0){outputWriter.println("woodSprite activate");this.woodSprite.setnumPowerups();}
                     if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.W))
                         this.woodSprite.jump();
                     if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.A)
@@ -552,7 +552,7 @@ public class GameTimer extends AnimationTimer {
                     break;
                 case SlimeSprite.SPRITE_NAME:
                     // Slime Sprite movement
-                    if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.Z)){outputWriter.println("slimeSprite activate");}
+                    if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.Z) && this.slimeSprite.getnumPowerups()>0 ){outputWriter.println("slimeSprite activate");this.slimeSprite.setnumPowerups();}
                     if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.W))
                         this.slimeSprite.jump();
                     if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.A)
@@ -578,7 +578,7 @@ public class GameTimer extends AnimationTimer {
                     break;
                 case CandySprite.SPRITE_NAME:
                     // Candy Sprite movement
-                    if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.Z)){outputWriter.println("candySprite activate");}
+                    if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.Z) && this.candySprite.getnumPowerups()>0){outputWriter.println("candySprite activate");this.candySprite.setnumPowerups();}
                     if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.W))
                         this.candySprite.jump();
                     if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.A)
@@ -603,7 +603,7 @@ public class GameTimer extends AnimationTimer {
                     break;
                 case IceSprite.SPRITE_NAME:
                     // Ice Sprite movement
-                    if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.Z)){outputWriter.println("iceSprite activate");}
+                    if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.Z) && this.iceSprite.getnumPowerups()>0){outputWriter.println("iceSprite activate");this.iceSprite.setnumPowerups();}
                     if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.W))
                         this.iceSprite.jump();
                     if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.A)

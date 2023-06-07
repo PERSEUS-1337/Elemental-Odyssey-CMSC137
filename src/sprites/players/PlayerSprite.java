@@ -24,6 +24,8 @@ public class PlayerSprite extends Sprite {
 	private int speed = 0;
 	private boolean shield = false;
 
+	private int numPowerups = 1;
+
 	private HashMap<PowerUp, Integer> activePowerUps = new HashMap<>();
 
 	// Getters
@@ -39,6 +41,10 @@ public class PlayerSprite extends Sprite {
 		return this.name;
 	}
 
+	public int getnumPowerups() {
+		return this.numPowerups;
+	}
+
 	// Setters
     public void setSpeed(int speed) {
         this.speed = speed;
@@ -47,6 +53,10 @@ public class PlayerSprite extends Sprite {
     public void setShield(boolean shield) {
         this.shield = shield;
     }
+
+	public void setnumPowerups() {
+		this.numPowerups = 0;
+	}
 
 	public PlayerSprite(String name, int x, int y){
 		super(x,y);
