@@ -343,6 +343,31 @@ public class GameTimer extends AnimationTimer {
                             }
                         }
 
+                        // Image flipping
+                        if (message.contains("direction")) {
+                            if(message.contains("right")){
+                                if(message.contains("woodSprite")){
+                                    this.woodSprite.setFlipped(false);}
+                                if(message.contains("slimeSprite")){
+                                    this.slimeSprite.setFlipped(false);}
+                                if(message.contains("candySprite")){
+                                    this.candySprite.setFlipped(false);}
+                                if(message.contains("iceSprite")){
+                                    this.iceSprite.setFlipped(false);}
+                            }
+                            if(message.contains("left")){
+                                if(message.contains("woodSprite")){
+                                    this.woodSprite.setFlipped(true);}
+                                if(message.contains("slimeSprite")){
+                                    this.slimeSprite.setFlipped(true);}
+                                if(message.contains("candySprite")){
+                                    this.candySprite.setFlipped(true);}
+                                if(message.contains("iceSprite")){
+                                    this.iceSprite.setFlipped(true);}
+                            }
+                        }
+
+
                         // PowerUp activation
                         if (message.contains("candySprite") && message.contains("activate")) {
                             System.out.println("Slow All");
@@ -526,15 +551,18 @@ public class GameTimer extends AnimationTimer {
                         && pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.D)){
                             this.woodSprite.setDX(0);
                             this.woodSprite.setFlipped(false); // set the sprite to face right
+                            outputWriter.println("woodSprite direction right");
                         }
                     
                 else if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.A)){
                     this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.woodSprite.getSpeed());
                     this.woodSprite.setFlipped(true); // set the sprite to face left
+                    outputWriter.println("woodSprite direction left");
                 }
                 else if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.D)){
                     this.woodSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.woodSprite.getSpeed());
                     this.woodSprite.setFlipped(false); // set the sprite to face right
+                    outputWriter.println("woodSprite direction right");
                 }
                 else
                     this.woodSprite.setDX(0);
@@ -548,15 +576,18 @@ public class GameTimer extends AnimationTimer {
                         && pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.D)){
                             this.slimeSprite.setDX(0);
                             this.slimeSprite.setFlipped(false); // set the sprite to face right
+                            outputWriter.println("slimeSprite direction right");
                         }
                     
                 else if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.A)){
                     this.slimeSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.slimeSprite.getSpeed());
                     this.slimeSprite.setFlipped(true); // set the sprite to face left
+                    outputWriter.println("slimeSprite direction left");
                 }
                 else if (pressed.contains(SlimeSprite.SPRITE_NAME + ": " + KeyCode.D)){
                     this.slimeSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.slimeSprite.getSpeed());
                     this.slimeSprite.setFlipped(false); // set the sprite to face right
+                    outputWriter.println("slimeSprite direction right");
                 }
                 else
                     this.slimeSprite.setDX(0);
@@ -571,14 +602,17 @@ public class GameTimer extends AnimationTimer {
                         && pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.D)){
                             this.candySprite.setDX(0);
                             this.candySprite.setFlipped(false); // set the sprite to face right
+                            outputWriter.println("candySprite direction right");
                         }
                 else if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.A)){
                     this.candySprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.candySprite.getSpeed());
                     this.candySprite.setFlipped(true); // set the sprite to face left
+                    outputWriter.println("candySprite direction left");
                 }
                 else if (pressed.contains(CandySprite.SPRITE_NAME + ": " + KeyCode.D)){
                     this.candySprite.setDX(PlayerSprite.MOVE_DISTANCE-this.candySprite.getSpeed());
                     this.candySprite.setFlipped(false); // set the sprite to face right
+                    outputWriter.println("candySprite direction right");
                 }
                 else
                     this.candySprite.setDX(0);
@@ -593,14 +627,17 @@ public class GameTimer extends AnimationTimer {
                         && pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.D)){
                             this.iceSprite.setDX(0);
                             this.iceSprite.setFlipped(false); // set the sprite to face right
+                            outputWriter.println("iceSprite direction right");
                         }
                 else if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.A)){
                     this.iceSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.iceSprite.getSpeed());
                     this.iceSprite.setFlipped(true); // set the sprite to face left
+                    outputWriter.println("iceSprite direction left");
                 }
                 else if (pressed.contains(IceSprite.SPRITE_NAME + ": " + KeyCode.D)){
                     this.iceSprite.setDX(PlayerSprite.MOVE_DISTANCE-this.iceSprite.getSpeed());
                     this.iceSprite.setFlipped(false); // set the sprite to face right
+                    outputWriter.println("iceSprite direction right");
                 }
                 else
                     this.iceSprite.setDX(0);
