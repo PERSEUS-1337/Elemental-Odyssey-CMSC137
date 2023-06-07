@@ -28,7 +28,6 @@ public class MovingBackground extends Pane {
     public static final Integer defaultWindowSize = 0;
     public static final Integer adjustedBackgroundSize = 10000; 
 
-
     public MovingBackground(String color, Integer setWidth) {
 
         Image bgImg = null;

@@ -35,7 +35,6 @@ public class PickSpriteStage extends VBox {
         this.nameOfUser = nameOfUser;
         this.ipAddress = ipAddress;
         this.chatType = chatType;
-
     }
 
     // method to close the Pick Sprite Stage
@@ -108,9 +107,6 @@ public class PickSpriteStage extends VBox {
         pickSpriteStage.initModality(Modality.APPLICATION_MODAL);
         // Show the stage
         pickSpriteStage.show();
-
-
-
     }
 
     // method to create a button with an image
@@ -143,7 +139,6 @@ public class PickSpriteStage extends VBox {
         System.out.println("Ice Sprite Clicked");
         // Create the Chat GUI
         this.createChatGUIandLevel(IceSprite.SPRITE_NAME);
-
     }
 
     // method to handle the event when the Slime Sprite button is clicked
@@ -151,7 +146,6 @@ public class PickSpriteStage extends VBox {
         System.out.println("Slime Sprite Clicked");
         // Create the Chat GUI
         this.createChatGUIandLevel(SlimeSprite.SPRITE_NAME);
-
     }
 
     // method to handle the event when the Wood Sprite button is clicked
@@ -159,7 +153,6 @@ public class PickSpriteStage extends VBox {
         System.out.println("Wood Sprite Clicked");
         // Create the Chat GUI
         this.createChatGUIandLevel(WoodSprite.SPRITE_NAME);
-
     }
 
     // method to close the chat gui stage
@@ -181,8 +174,6 @@ public class PickSpriteStage extends VBox {
 
         // Stop the music from MainGUIController
         MainGUIController.stopBackgroundMusic();
-        //  Close the Game Mode Menu
-        // MainGUIController.closeGameModeMenu();
         // Close the Main Menu
         Main.closeMainGUI();
         // Close the Pick Sprite Stage

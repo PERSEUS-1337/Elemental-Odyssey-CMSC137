@@ -26,16 +26,22 @@ public class PlayerSprite extends Sprite {
 
 	private HashMap<PowerUp, Integer> activePowerUps = new HashMap<>();
 
+	// Getters
     public int getSpeed() {
         return speed;
     }
 
+	public boolean getShield() {
+		return shield;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	// Setters
     public void setSpeed(int speed) {
         this.speed = speed;
-    }
-
-	public boolean getShield() {
-        return shield;
     }
 
     public void setShield(boolean shield) {
@@ -47,6 +53,7 @@ public class PlayerSprite extends Sprite {
 		this.name = name;
 	}
 
+	// Player Sprite methods
 	//method called if up/down/left/right arrow key is pressed.
 	public void move() {
 
@@ -137,11 +144,10 @@ public class PlayerSprite extends Sprite {
 		this.lvlSprites = lvlSprites;
 	}
 	
-	public String getName(){
-		return this.name;
-	}
- 
-	
+	/*
+	 * Updates the active power-ups by decrementing their durations. Removes expired
+	 * power-ups and updates the game state.
+	 */
 	public void updatePowerUps() {
         HashMap<PowerUp, Integer> updatedPowerUps = new HashMap<>();
         for (Map.Entry<PowerUp, Integer> entry : activePowerUps.entrySet()) {

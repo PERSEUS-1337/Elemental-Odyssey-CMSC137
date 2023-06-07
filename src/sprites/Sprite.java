@@ -75,31 +75,29 @@ public class Sprite {
 		return rectangle1.intersects(rectangle2);
 	}
 	
-
-	//method that will return the bounds of an image
-	private Rectangle2D getBounds(){
-		return new Rectangle2D(this.x, this.y, this.width, this.height);
+	// Getters
+	public int getX() {
+		return this.x;
 	}
 	
-	//method to return the image
-	Image getImage(){
+	public int getY() {
+		return this.y;
+	}
+	
+	private Rectangle2D getBounds(){
+		return new Rectangle2D(getX(), getY(), getWidth(), getHeight());
+	}
+	
+	public Image getImage(){
 		return this.img;
 	}
-	//getters
-	public int getX() {
-    	return this.x;
-	}
 
-	public int getY() {
-    	return this.y;
-	}
-	
 	public int getCenterX(){
-		return this.x + ((int) this.width / 2);
+		return getX() + ((int) getWidth() / 2);
 	}
 
 	public int getCenterY(){
-		return this.y + ((int) this.height / 2);
+		return getY() + ((int) getHeight() / 2);
 	}
 
 	public double getWidth(){
@@ -114,7 +112,7 @@ public class Sprite {
 		return visible;	
 	}
 	public boolean isVisible(){
-		if(visible) return true;
+		if(getVisible()) return true;
 		return false;
 	}
 	

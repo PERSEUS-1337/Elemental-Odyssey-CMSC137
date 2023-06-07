@@ -38,20 +38,18 @@ public class EnterNameStage {
 
         nameOfUser = txtName.getText();
 
-        // ChatGUI chatGUI = new ChatGUI(chatType, nameOfUser, ipAddress);
-        PickSpriteStage pickSpriteStage = new PickSpriteStage(nameOfUser, ipAddress, chatType);
-        pickSpriteStage.setStage(new Stage());
-
-        // Close the Enter Name Stage
-        this.closeEnterAddressStage();
-
-        // // Close the Game Mode Menu
-        // MainGUIController.closeGameModeMenu();
-
-        // // If the chat gui has been closed, close its socket
-        // chatGUI.getStage().setOnCloseRequest(e -> {
-        //     chatGUI.closeSocket();
-        // });
+        // Name should not be empty
+        if (nameOfUser.isEmpty()){
+            System.out.println("Enter Name Stage: Invalid Name");
+            txtName.clear();
+            return;
+        } else {
+            PickSpriteStage pickSpriteStage = new PickSpriteStage(nameOfUser, ipAddress, chatType);
+            pickSpriteStage.setStage(new Stage());
+    
+            // Close the Enter Name Stage
+            this.closeEnterAddressStage();
+        }
     }
 
      // method to set the stage

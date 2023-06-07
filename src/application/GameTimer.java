@@ -258,7 +258,6 @@ public class GameTimer extends AnimationTimer {
     private static void broadcast(String message) {
         for (PrintWriter writer : clientWriters) {
             writer.println(message);
-            System.out.println(message);
         }
     }
 
