@@ -55,6 +55,13 @@ public class ChatGUI {
         this.chatName = chatName;
         this.chatType = chatType;
 
+        /*
+         * Server is the one initiating the game lobby creation
+         * Client will join that server via the IP Address that the server will be typing
+         * 
+         * Server will create a thread if there is no server yet on the specified address
+         * Then the server will also create a client thread for the chat function to work properly
+         */
         if (this.chatType.equals(SERVER)) {
             if (isServerRunning(this.serverIP)){
                 System.out.println("Chat: Server is already running!");
@@ -90,6 +97,7 @@ public class ChatGUI {
             System.out.println("Chat: Waiting for client(s) to connect...");
 
             while (!this.server.isClosed()) {
+                
                 Socket clientSocket = server.accept();
                 System.out.println("Chat: Client connected");
 
