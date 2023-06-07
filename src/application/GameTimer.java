@@ -440,7 +440,7 @@ public class GameTimer extends AnimationTimer {
             } else {
                 this.iceSprite.move();
                 outputWriter.println("iceSprite Coord = x: " + this.iceSprite.getX() + " y: " + this.iceSprite.getY());
-        }
+            }
         } else if (!this.isMultiplayer) {
             // Move the sprite of the current player
             if (spriteType == "WoodSprite") {
