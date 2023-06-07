@@ -88,7 +88,11 @@ public class ChatGUI {
     }
 
 
-    // method for starting the server. It processes the client sockets and the client writers in separate threads, so that the server can handle multiple clients
+    /*
+     * method for starting the server. It processes the client sockets and the
+     * client writers in separate threads, so that the server can handle multiple
+     * clients
+     */
     private void startServer() {
         try {
             this.server = new ServerSocket();
@@ -187,11 +191,6 @@ public class ChatGUI {
                     if (!(e instanceof SocketException))
                         e.printStackTrace();
                 } finally {
-                    // try {
-                    //     socket.close();
-                    // } catch (IOException e) {
-                    //     e.printStackTrace();
-                    // }
                 }
             });
             receivingThread.start();
@@ -220,26 +219,6 @@ public class ChatGUI {
     Stage getStage() {
         return this.stage;
     }
-
-    // method to close the socket
-    // void closeSocket() {
-    //     System.out.println("Chat: Closing socket...");
-
-    //     if (this.chatType.equals(SERVER)) {
-    //         try {
-    //             this.socket.close();
-    //             this.server.close();
-    //         } catch (IOException e) {
-    //             e.printStackTrace();
-    //         }
-    //     } else if (this.chatType.equals(CLIENT)) {
-    //         try {
-    //             this.socket.close();
-    //         } catch (IOException e) {
-    //             e.printStackTrace();
-    //         }
-    //     }
-    // }
 
     void closeChatServer(){
         System.out.println("Chat: Closing server socket");
