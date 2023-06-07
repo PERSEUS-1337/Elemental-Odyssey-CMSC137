@@ -97,7 +97,7 @@ public class ChatGUI {
             System.out.println("Chat: Waiting for client(s) to connect...");
 
             while (!this.server.isClosed()) {
-                
+                // Sequence of codes to st
                 Socket clientSocket = server.accept();
                 System.out.println("Chat: Client connected");
 

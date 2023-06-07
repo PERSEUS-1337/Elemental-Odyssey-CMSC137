@@ -111,7 +111,7 @@ public class GameTimer extends AnimationTimer {
 
         if(this.isMultiplayer){
 
-                // Get variable reference to player sprites
+            // Get variable reference to player sprites via 2d matrix coordinates
             for (int i = 0; i < Level.LEVEL_HEIGHT; i++) {
                 for (int j = 0; j < Level.LEVEL_WIDTH; j++) {
                     if (lvlSprites[i][j] instanceof WoodSprite)
@@ -157,7 +157,8 @@ public class GameTimer extends AnimationTimer {
             // Create a new thread for the client
             clientThread = new Thread(this::startClient);
             clientThread.start();
-        } else { // if the game is singleplayer, we need to handle the key press events
+        } else { 
+            // if the game is singleplayer, we need to handle the key press events
             this.handleKeyPressEvent();
         }
 
@@ -223,28 +224,10 @@ public class GameTimer extends AnimationTimer {
                 handleClientThreads.add(handleClientThread);
                 handleClientThread.start();
             }
-
-            // for (Thread t : handleClientThreads){
-            //     try {
-            //         t.join();
-            //     } catch (InterruptedException e) {
-            //         e.printStackTrace();
-            //     }
-            // }
-            
         } catch (Exception e) {
             if (!(e instanceof SocketException))
                 e.printStackTrace();
-            // System.exit(0);
         } 
-        // finally { // close the server socket
-        //     try {
-        //         System.out.println("Game Server: Closing server socket...");
-        //         serverSocket.close();
-        //     } catch (Exception e) {
-        //         System.out.println("Game Server: Unable to close server socket - " + e.getMessage());
-        //     }
-        // }
     }
 
     // method to handle the client for multiplayer
@@ -258,8 +241,7 @@ public class GameTimer extends AnimationTimer {
                     // Client disconnected
                     break;
                 }
-
-                // Broadcast the key press to all connected clients
+                // Broadcast to clients
                 broadcast(message);
             }
 
@@ -269,16 +251,21 @@ public class GameTimer extends AnimationTimer {
         }
     }
 
-    // method to broadcast the message to all connected clients (the key pressed by
-    // the player)
+    /*
+     * The method for broadcasting a message to all clients
+     * Broadcasting the coordinate of the sprites for player tracking implementation
+     */
     private static void broadcast(String message) {
         for (PrintWriter writer : clientWriters) {
             writer.println(message);
+            System.out.println(message);
         }
     }
 
-    // method to start the client for multiplayer. It will handle the key press
-    // events for the player and send the key pressed as well to the server
+    /*
+     * Starting the client for multiplayer mode
+     * Handling keypress events for the player
+     */
     private void startClient() {
         try {
             socket = new Socket(ipAddress, this.serverPort);
@@ -287,28 +274,12 @@ public class GameTimer extends AnimationTimer {
             inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             outputWriter = new PrintWriter(socket.getOutputStream(), true);
 
-            Thread receiveThread = new Thread(() -> { // This thread is responsible for receiving the sprite movements
+            Thread receiveThread = new Thread(() -> { // This thread is responsible for receiving the sprite coordinates
                 try {
                     while (this.rankCounter < 3) {
 
-                        String message = inputReader.readLine(); // read the message sent by the server
-                        
-                        if (!pressed.contains(spriteType) && !pressed.contains(message)
-                                && !pressed.contains("released")) {
-                                // if the key pressed is not from our own sprite
-                                // type, then we can add it to the pressed list
-                                
-                            pressed.add(message);
-                        } 
-                        
-                        // if (message.contains("released")) {
-                        //     // if the key pressed is released, then we need to remove it from the pressed list
-                        //     // the key pressed is in the format of "spriteType: keyName released"
-                        //     String[] messageSplit = message.split(" ");
-                        //     String keyName = messageSplit[1];
-                        //     String spriteType = messageSplit[0];
-                        //     pressed.removeIf(key -> key.contains(keyName) && key.contains(spriteType));
-                        // }
+                        // Read the broadcasted coordinates by each client to each other
+                        String message = inputReader.readLine();
 
                         // Extract x coordinate of the sprite
                         String xCoordinate = "";
@@ -369,9 +340,6 @@ public class GameTimer extends AnimationTimer {
                             applyPowerUp(barrierPowerUp, this.woodSprite);
                             System.out.println("Inv Wood");
                         }
-
-                        // Remove the message from the pressed list after it has been processed
-                        // pressed.remove(message);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -379,8 +347,9 @@ public class GameTimer extends AnimationTimer {
             });
             receiveThread.start();
 
-            // this is to handle the key press events for the player. We need to send the
-            // key pressed to the server
+            /*
+             * this is to handle the key press events for the player. 
+             */
             this.theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 public void handle(KeyEvent e) {
                     KeyCode code = e.getCode();
@@ -390,8 +359,9 @@ public class GameTimer extends AnimationTimer {
                 }
             });
 
-            // this is to handle the key release events for the player. We need to send the
-            // key released to the server
+            /*
+             * this is to handle the key release events for the player.
+             */
             this.theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
                 public void handle(KeyEvent e) {
                     KeyCode code = e.getCode();
@@ -422,6 +392,12 @@ public class GameTimer extends AnimationTimer {
         this.slimeSprite.updatePowerUps();
         this.candySprite.updatePowerUps();
 
+        /*
+         * This is the logic for tracking player movements across multiple clients.
+         * 
+         * Each client broadcasts the location of the client's player sprite,
+         * and other clients will set the position of the "other player sprites" in their own client accordingly
+         */
         if(this.isMultiplayer && this.outputWriter != null){
             // Move only the sprite of the current player based on the updated coordinates
             if (spriteType == "WoodSprite") {
@@ -490,7 +466,6 @@ public class GameTimer extends AnimationTimer {
                     serverThread.join();
                     this.chat.closeChatServer();
                 }
-
                 outputWriter.close();
                 inputReader.close();
 
@@ -500,22 +475,28 @@ public class GameTimer extends AnimationTimer {
 
             Level.setGameOver(this.playerRanking, this.playerTimeFinished, this.isMultiplayer);
         } 
-        
-        // Check if the game is over (must get the singleplayer sprite). If it is over, we update the end time
-        // If the game is over, we display the game over screen
+        /*
+         * Check if the game is over (must get the singleplayer sprite). If it is over,
+         * we update the end time
+         * If the game is over, we display the game over screen
+         */
         else if (this.rankCounter == 1 && !this.isMultiplayer) {
                 this.stop(); // stop the gametimer
                 Level.setGameOver(this.playerRanking, this.playerTimeFinished, this.isMultiplayer);
         }
-        // After the sprites have been rendered, check if the player sprites have
-        // reached the end of the level, which is colliding with the Door sprite
-        // Also pass the time it took for the player to reach the end of the level
+
+        /*
+         * After the sprites have been rendered, check if the player sprites have
+         * reached the end of the level, which is colliding with the Door sprite
+         * Also pass the time it took for the player to reach the end of the level
+         */
         this.checkDoorCollision(passedTime);
     } // end of handle method
 
-    // method that will move the sprite depending on the key pressed
+    /*
+     * Method of moving the sprites and activating the powerups
+     */
     private void moveMySprite(Boolean isMultiplayer, String spriteType) {
-
         switch (spriteType) {
             case WoodSprite.SPRITE_NAME:
                 // Wood Sprite movement
@@ -527,7 +508,6 @@ public class GameTimer extends AnimationTimer {
                             this.woodSprite.setDX(0);
                             this.woodSprite.setFlipped(false); // set the sprite to face right
                         }
-                    
                 else if (pressed.contains(WoodSprite.SPRITE_NAME + ": " + KeyCode.A)){
                     this.woodSprite.setDX(-PlayerSprite.MOVE_DISTANCE+this.woodSprite.getSpeed());
                     this.woodSprite.setFlipped(true); // set the sprite to face left
@@ -560,7 +540,6 @@ public class GameTimer extends AnimationTimer {
                 }
                 else
                     this.slimeSprite.setDX(0);
-
                 break;
             case CandySprite.SPRITE_NAME:
                 // Candy Sprite movement
@@ -582,7 +561,6 @@ public class GameTimer extends AnimationTimer {
                 }
                 else
                     this.candySprite.setDX(0);
-
                 break;
             case IceSprite.SPRITE_NAME:
                 // Ice Sprite movement
@@ -604,9 +582,7 @@ public class GameTimer extends AnimationTimer {
                 }
                 else
                     this.iceSprite.setDX(0);
-
                 break;
-
             default:
                 break;
         }
@@ -624,56 +600,61 @@ public class GameTimer extends AnimationTimer {
         }
     }
 
-    // method to check if the sprite is colliding with the door. If it is, add the
-    // sprite to the player ranking and update the time for the sprite to finish the
-    // level
+    /*
+     * Method of checking the sprite is collidng with door
+     * 
+     * If colliding: add sprite to player ranking, update time finished on the level
+     */
     private void checkDoorCollision(int timeFinished) {
         if(this.isMultiplayer){
             // Calculate first the yIndex and xIndex of each player sprite
-        int woodSpriteXCoord = this.woodSprite.getCenterX();
-        int woodSpriteYCoord = this.woodSprite.getCenterY();
-        int woodSpriteXIndex = woodSpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
-        int woodSpriteYIndex = woodSpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
+            int woodSpriteXCoord = this.woodSprite.getCenterX();
+            int woodSpriteYCoord = this.woodSprite.getCenterY();
+            int woodSpriteXIndex = woodSpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+            int woodSpriteYIndex = woodSpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
 
-        int slimeSpriteXCoord = this.slimeSprite.getCenterX();
-        int slimeSpriteYCoord = this.slimeSprite.getCenterY();
-        int slimeSpriteXIndex = slimeSpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
-        int slimeSpriteYIndex = slimeSpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
+            int slimeSpriteXCoord = this.slimeSprite.getCenterX();
+            int slimeSpriteYCoord = this.slimeSprite.getCenterY();
+            int slimeSpriteXIndex = slimeSpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+            int slimeSpriteYIndex = slimeSpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
 
-        int candySpriteXCoord = this.candySprite.getCenterX();
-        int candySpriteYCoord = this.candySprite.getCenterY();
-        int candySpriteXIndex = candySpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
-        int candySpriteYIndex = candySpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
+            int candySpriteXCoord = this.candySprite.getCenterX();
+            int candySpriteYCoord = this.candySprite.getCenterY();
+            int candySpriteXIndex = candySpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+            int candySpriteYIndex = candySpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
 
-        int iceSpriteXCoord = this.iceSprite.getCenterX();
-        int iceSpriteYCoord = this.iceSprite.getCenterY();
-        int iceSpriteXIndex = iceSpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
-        int iceSpriteYIndex = iceSpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
+            int iceSpriteXCoord = this.iceSprite.getCenterX();
+            int iceSpriteYCoord = this.iceSprite.getCenterY();
+            int iceSpriteXIndex = iceSpriteXCoord / (Level.WINDOW_WIDTH / Level.LEVEL_WIDTH);
+            int iceSpriteYIndex = iceSpriteYCoord / (Level.WINDOW_HEIGHT / Level.LEVEL_HEIGHT);
 
-        if (woodSpriteYIndex == this.doorIndexY && woodSpriteXIndex == this.doorIndexX
-                && !this.playerRanking.contains(WoodSprite.SPRITE_NAME)) {
-            this.playerRanking.add(WoodSprite.SPRITE_NAME);
-            this.playerTimeFinished.put(WoodSprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
-            this.isWoodSpriteFinished = true;
-        }
-        if (slimeSpriteYIndex == this.doorIndexY && slimeSpriteXIndex == this.doorIndexX
-                && !this.playerRanking.contains(SlimeSprite.SPRITE_NAME)) {
-            this.playerRanking.add(SlimeSprite.SPRITE_NAME);
-            this.playerTimeFinished.put(SlimeSprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
-            this.isSlimeSpriteFinished = true;
-        }
-        if (candySpriteYIndex == this.doorIndexY && candySpriteXIndex == this.doorIndexX
-                && !this.playerRanking.contains(CandySprite.SPRITE_NAME)) {
-            this.playerRanking.add(CandySprite.SPRITE_NAME);
-            this.playerTimeFinished.put(CandySprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
-            this.isCandySpriteFinished = true;
-        }
-        if (iceSpriteYIndex == this.doorIndexY && iceSpriteXIndex == this.doorIndexX
-                && !this.playerRanking.contains(IceSprite.SPRITE_NAME)) {
-            this.playerRanking.add(IceSprite.SPRITE_NAME);
-            this.playerTimeFinished.put(IceSprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
-            this.isIceSpriteFinished = true;
-        }
+            if (woodSpriteYIndex == this.doorIndexY && woodSpriteXIndex == this.doorIndexX
+                    && !this.playerRanking.contains(WoodSprite.SPRITE_NAME)) {
+                this.playerRanking.add(WoodSprite.SPRITE_NAME);
+                this.playerTimeFinished.put(WoodSprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
+                this.isWoodSpriteFinished = true;
+            }
+
+            if (slimeSpriteYIndex == this.doorIndexY && slimeSpriteXIndex == this.doorIndexX
+                    && !this.playerRanking.contains(SlimeSprite.SPRITE_NAME)) {
+                this.playerRanking.add(SlimeSprite.SPRITE_NAME);
+                this.playerTimeFinished.put(SlimeSprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
+                this.isSlimeSpriteFinished = true;
+            }
+
+            if (candySpriteYIndex == this.doorIndexY && candySpriteXIndex == this.doorIndexX
+                    && !this.playerRanking.contains(CandySprite.SPRITE_NAME)) {
+                this.playerRanking.add(CandySprite.SPRITE_NAME);
+                this.playerTimeFinished.put(CandySprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
+                this.isCandySpriteFinished = true;
+            }
+
+            if (iceSpriteYIndex == this.doorIndexY && iceSpriteXIndex == this.doorIndexX
+                    && !this.playerRanking.contains(IceSprite.SPRITE_NAME)) {
+                this.playerRanking.add(IceSprite.SPRITE_NAME);
+                this.playerTimeFinished.put(IceSprite.SPRITE_NAME, Integer.toString(++this.rankCounter));
+                this.isIceSpriteFinished = true;
+            }
         } else {
             // Calculate first the yIndex and xIndex of the single player sprite
             int woodSpriteXCoord = this.woodSprite.getCenterX();
